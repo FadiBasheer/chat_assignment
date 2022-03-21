@@ -16,11 +16,7 @@ void func(int sockfd) {
     int read_check = 0;
     int n;
     for (;;) {
-        printf("buff\n");
-
         bzero(buff, sizeof(buff));
-        printf("buff22\n");
-
         bzero(buff_read, sizeof(buff_read));
         n = 0;
 
