@@ -6,3 +6,4 @@ set(CMAKE_C_STANDARD 11)
 add_executable(client client.c)
 add_executable(server server.c)
 
+TARGET_LINK_LIBRARIES(server pthread)

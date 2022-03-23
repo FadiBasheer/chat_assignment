@@ -9,16 +9,25 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <sys/time.h> //FD_SET, FD_ISSET, FD_ZERO macros
+#include <pthread.h>
 
 #define TRUE   1
 #define FALSE  0
 #define PORT 8080
 
+void *private_chat(void *arg);
+
+int client_socket[30], max_clients = 30;
+pthread_t thread_1;
+
 int main(int argc, char *argv[]) {
     int opt = TRUE;
-    int master_socket, addrlen, new_socket, client_socket[30], max_clients = 30, activity, i, valread, sd;
+    int master_socket, addrlen, new_socket, private_sockets[2], activity, i, valread, sd, p = 0;
     int max_sd;
     struct sockaddr_in address;
+
+    private_sockets[0] = 0;
+    private_sockets[1] = 0;
 
     char buffer[1025];  //data buffer of 1K
 
@@ -48,6 +57,8 @@ int main(int argc, char *argv[]) {
     //type of socket created
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = inet_addr("192.168.0.21");
+    // address.sin_addr.s_addr = inet_addr("localhost");
+
     address.sin_port = htons(PORT);
 
     //bind the socket to localhost port 8080
@@ -62,6 +73,10 @@ int main(int argc, char *argv[]) {
         perror("listen");
         exit(EXIT_FAILURE);
     }
+
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////
 
     //accept the incoming connection
     addrlen = sizeof(address);
@@ -81,7 +96,7 @@ int main(int argc, char *argv[]) {
         for (i = 0; i < max_clients; i++) {
             //socket descriptor
             sd = client_socket[i];
-           // printf("Add child sockets to set: %d\n", i);
+            // printf("Add child sockets to set: %d\n", i);
 
             //if valid socket descriptor then add to read list
             if (sd > 0)
@@ -149,9 +164,97 @@ int main(int argc, char *argv[]) {
                     //Echo back the message that came in
                 else {
                     //set the string terminating NULL byte on the end of the data read
-                    buffer[valread] = '\0';
-                    for (i = 0; i < max_clients; i++) {
-                        sd = client_socket[i];
+                    printf("buffer: %s", buffer);
+
+                    if (strcmp(buffer, "join\n") == 0) {
+                        printf("thread\n");
+                        private_sockets[p] = client_socket[i];
+                        p++;
+                        client_socket[i] = 0;
+                        send(sd, buffer, strlen(buffer), 0);
+
+                        if (pthread_create(&thread_1, NULL, &private_chat, private_sockets) != 0) {
+                            perror("Failed to create thread");
+                        }
+                        //pthread_join(thread_1, NULL);
+                    } else {
+                        for (i = 0; i < max_clients; i++) {
+                            sd = client_socket[i];
+                            send(sd, buffer, strlen(buffer), 0);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return 0;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void *private_chat(void *arg) {
+    int *private_sockets;
+    private_sockets = arg;
+
+
+    fd_set readfds_private;
+    int sd, activity, valread, max_sd = 0;
+    char buffer[1025];
+    FD_ZERO(&readfds_private);
+
+
+    for (int i = 0; i < 2; i++) {
+        //socket descriptor
+        printf("i: %d\n", private_sockets[i]);
+        sd = private_sockets[i];
+        // printf("Add child sockets to set: %d\n", i);
+
+        //if valid socket descriptor then add to read list
+        if (sd > 0) {
+            FD_SET(sd, &readfds_private);
+            printf("sd %d\n", sd);
+        }
+        if (sd > max_sd)
+            max_sd = sd;
+    }
+
+    while (TRUE) {
+        activity = select(max_sd + 1, &readfds_private, NULL, NULL, NULL);
+        printf("after select\n");
+
+        if ((activity < 0) && (errno != EINTR)) {
+            printf("select error");
+        }
+
+        for (int i = 0; i < 2; i++) {
+            sd = private_sockets[i];
+
+            if (FD_ISSET(sd, &readfds_private)) {
+                valread = read(sd, buffer, 1024);
+                buffer[valread] = '\0';
+                if (strcmp(buffer, "leave\n") == 0) {
+                    printf("leave");
+                    for (int p = 0; p < max_clients; p++) {
+                        //if position is empty
+                        if (client_socket[p] == 0) {
+                            client_socket[p] = private_sockets[i];
+                            printf("Adding to list of sockets as %d\n", i);
+                            break;
+                        }
+                    }
+                    private_sockets[i] = 0;
+
+                    int flag = 0;
+                    for (int e = 0; e < 2; e++) {
+                        if (private_sockets[e] > 0) {
+                            flag = 1;
+                        }
+                    }
+                    if (flag == 0) {
+                        pthread_cancel(thread_1);
+                    }
+                } else {
+                    for (i = 0; i < 2; i++) {
+                        sd = private_sockets[i];
                         send(sd, buffer, strlen(buffer), 0);
                     }
                 }
