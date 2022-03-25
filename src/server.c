@@ -18,15 +18,13 @@
 #define MAXCHANSIZE 32
 #define MAXCHAN 32
 
-struct cpt * cpt_builder_init(void);
-
 struct Client {
     int fd;
     int chan_id;
     struct Client *next;
 };
 
-struct Client_Packet {
+struct cpt {
     uint8_t version;
     uint8_t command;
     uint16_t channel_id;
@@ -57,6 +55,7 @@ void cpt_builder_msg(struct cpt * cpt, char * msg);
 struct cpt * cpt_builder_parse(void * packet);
 void * cpt_builder_serialize(struct cpt * cpt);
 int cpt_validate(void * packet);
+
 void push(struct Client** head_ref, int chan_id, int fd);
 void deleteClient(struct Client** head_ref, int chan_id, int fd_key);
 void printList(struct Client* node);
