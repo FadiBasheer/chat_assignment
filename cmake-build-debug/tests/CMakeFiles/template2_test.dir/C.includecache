@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/common.h
+
+/home/charlie/work/Term2/Chat_Assignment/v5/src/common.c
+common.h
+/home/charlie/work/Term2/Chat_Assignment/v5/src/common.h
+stdio.h
+-
+
+/home/charlie/work/Term2/Chat_Assignment/v5/tests/main.c
+tests.h
+/home/charlie/work/Term2/Chat_Assignment/v5/tests/tests.h
+
+/home/charlie/work/Term2/Chat_Assignment/v5/tests/tests.h
+cgreen/cgreen.h
+-
+

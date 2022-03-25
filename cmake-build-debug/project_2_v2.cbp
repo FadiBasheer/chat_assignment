@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="project_2_v2"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\docs\;CMake Files\cmake-build-debug\;CMake Files\src\;CMake Files\tests\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install/strip">
+				<Option working_dir="/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 install/strip"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install">
+				<Option working_dir="/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 install"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="list_install_components">
+				<Option working_dir="/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 list_install_components"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Nightly">
+				<Option working_dir="/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 Nightly"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install/local">
+				<Option working_dir="/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 install/local"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Continuous">
+				<Option working_dir="/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 Continuous"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="test">
+				<Option working_dir="/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 test"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Experimental">
+				<Option working_dir="/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 Experimental"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="docs">
+				<Option working_dir="/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/docs"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/docs/Makefile&quot;  VERBOSE=1 docs"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/docs/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/docs/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/docs/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="server">
+				<Option output="/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/src/server" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/src"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D_POSIX_C_SOURCE=200809L"/>
+					<Add option="-D_XOPEN_SOURCE=700"/>
+					<Add directory="/home/charlie/work/Term2/Chat_Assignment/v3/src/../include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 server"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="server/fast">
+				<Option output="/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/src/server" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/src"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D_POSIX_C_SOURCE=200809L"/>
+					<Add option="-D_XOPEN_SOURCE=700"/>
+					<Add directory="/home/charlie/work/Term2/Chat_Assignment/v3/src/../include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 server/fast"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="client">
+				<Option output="/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/src/client" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/src"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D_POSIX_C_SOURCE=200809L"/>
+					<Add option="-D_XOPEN_SOURCE=700"/>
+					<Add directory="/home/charlie/work/Term2/Chat_Assignment/v3/src/../include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 client"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="client/fast">
+				<Option output="/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/src/client" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/src"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D_POSIX_C_SOURCE=200809L"/>
+					<Add option="-D_XOPEN_SOURCE=700"/>
+					<Add directory="/home/charlie/work/Term2/Chat_Assignment/v3/src/../include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 client/fast"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="format">
+				<Option working_dir="/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/src"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 format"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="template2_test">
+				<Option output="/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/tests/template2_test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/tests"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D_POSIX_C_SOURCE=200809L"/>
+					<Add option="-D_XOPEN_SOURCE=700"/>
+					<Add directory="/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug"/>
+					<Add directory="/home/charlie/work/Term2/Chat_Assignment/v3/tests/../include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 template2_test"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="template2_test/fast">
+				<Option output="/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/tests/template2_test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/tests"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D_POSIX_C_SOURCE=200809L"/>
+					<Add option="-D_XOPEN_SOURCE=700"/>
+					<Add directory="/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug"/>
+					<Add directory="/home/charlie/work/Term2/Chat_Assignment/v3/tests/../include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 template2_test/fast"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/charlie/work/Term2/Chat_Assignment/v3/docs/mainpage.md">
+			<Option target="docs"/>
+		</Unit>
+		<Unit filename="/home/charlie/work/Term2/Chat_Assignment/v3/include/common.h">
+			<Option target="server"/>
+			<Option target="client"/>
+			<Option target="template2_test"/>
+		</Unit>
+		<Unit filename="/home/charlie/work/Term2/Chat_Assignment/v3/src/client.c">
+			<Option target="client"/>
+		</Unit>
+		<Unit filename="/home/charlie/work/Term2/Chat_Assignment/v3/src/common.c">
+			<Option target="server"/>
+			<Option target="client"/>
+			<Option target="template2_test"/>
+		</Unit>
+		<Unit filename="/home/charlie/work/Term2/Chat_Assignment/v3/src/server.c">
+			<Option target="server"/>
+		</Unit>
+		<Unit filename="/home/charlie/work/Term2/Chat_Assignment/v3/tests/main.c">
+			<Option target="template2_test"/>
+		</Unit>
+		<Unit filename="/home/charlie/work/Term2/Chat_Assignment/v3/tests/tests.h">
+			<Option target="template2_test"/>
+		</Unit>
+		<Unit filename="/home/charlie/work/Term2/Chat_Assignment/v3/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/charlie/work/Term2/Chat_Assignment/v3/docs/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\docs\"/>
+		</Unit>
+		<Unit filename="/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/CMakeDoxyfile.in">
+			<Option virtualFolder="CMake Files\cmake-build-debug\"/>
+		</Unit>
+		<Unit filename="/home/charlie/work/Term2/Chat_Assignment/v3/cmake-build-debug/CMakeDoxygenDefaults.cmake">
+			<Option virtualFolder="CMake Files\cmake-build-debug\"/>
+		</Unit>
+		<Unit filename="/home/charlie/work/Term2/Chat_Assignment/v3/src/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\"/>
+		</Unit>
+		<Unit filename="/home/charlie/work/Term2/Chat_Assignment/v3/tests/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\tests\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
