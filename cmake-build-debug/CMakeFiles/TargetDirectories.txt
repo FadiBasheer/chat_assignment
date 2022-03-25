@@ -1,0 +1,4 @@
+/home/fadi/work/for_delete/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/fadi/work/for_delete/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/fadi/work/for_delete/cmake-build-debug/CMakeFiles/client.dir
+/home/fadi/work/for_delete/cmake-build-debug/CMakeFiles/server.dir
