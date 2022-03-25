@@ -26,6 +26,14 @@ int main(int argc, char *argv[]) {
     int max_sd;
     struct sockaddr_in address;
 
+    struct Client_Packet {
+        uint8_t VER;
+        uint8_t CMD_CODE;
+        uint16_t CHAN_ID;
+        uint16_t MSG_LEN;
+        uint8_t *MSG;
+    } Client_Packet;
+
     private_sockets[0] = 0;
     private_sockets[1] = 0;
 
@@ -56,7 +64,7 @@ int main(int argc, char *argv[]) {
 
     //type of socket created
     address.sin_family = AF_INET;
-    address.sin_addr.s_addr = inet_addr("192.168.0.21");
+    address.sin_addr.s_addr = inet_addr("10.65.98.65");
     // address.sin_addr.s_addr = inet_addr("localhost");
 
     address.sin_port = htons(PORT);
@@ -164,7 +172,7 @@ int main(int argc, char *argv[]) {
                     //Echo back the message that came in
                 else {
                     //set the string terminating NULL byte on the end of the data read
-                    printf("buffer: %s", buffer);
+                    printf("public chat: %s", buffer);
 
                     if (strcmp(buffer, "join\n") == 0) {
                         printf("thread\n");
@@ -232,7 +240,7 @@ void *private_chat(void *arg) {
                 valread = read(sd, buffer, 1024);
                 buffer[valread] = '\0';
                 if (strcmp(buffer, "leave\n") == 0) {
-                    printf("leave");
+                    printf("leave\n");
                     for (int p = 0; p < max_clients; p++) {
                         //if position is empty
                         if (client_socket[p] == 0) {
@@ -241,17 +249,26 @@ void *private_chat(void *arg) {
                             break;
                         }
                     }
+                    send(sd, buffer, strlen(buffer), 0);
                     private_sockets[i] = 0;
 
                     int flag = 0;
                     for (int e = 0; e < 2; e++) {
+                        printf("private_sockets[e]: %d\n", private_sockets[e]);
                         if (private_sockets[e] > 0) {
                             flag = 1;
                         }
                     }
+                    printf("flag: %d\n", flag);
+
                     if (flag == 0) {
+                        printf("cancel\n");
                         pthread_cancel(thread_1);
+                        //pthread_join(thread_1, NULL);
+                        return 0;
                     }
+                    printf("flag: %d\n", flag);
+
                 } else {
                     for (i = 0; i < 2; i++) {
                         sd = private_sockets[i];
