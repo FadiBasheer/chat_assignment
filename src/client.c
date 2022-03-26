@@ -32,7 +32,7 @@ struct cpt {
     char *msg;
 };
 
-enum commands_client{
+enum commands_client {
     SEND = 0,
     GET_USERS = 3,
     CREATE_CHANNEL = 4,
@@ -40,47 +40,62 @@ enum commands_client{
     LEAVE_CHANNEL = 7
 };
 
-enum version{
+enum version {
     MAJOR = 1,
     MINOR = 2
 };
 
 void packi16(unsigned char *buf, unsigned int i);
+
 unsigned int pack(unsigned char *buf, char *format, ...);
+
 unsigned int unpacku16(unsigned char *buf);
+
 void unpack(unsigned char *buf, char *format, ...);
 
-struct cpt * cpt_builder_init(void);
-void cpt_builder_destroy(struct cpt * cpt);
-void cpt_builder_cmd(struct cpt * cpt, enum commands_client cmd);
-void cpt_builder_version(struct cpt * cpt, enum version version_major, enum version version_minor);
-void cpt_builder_len(struct cpt * cpt, uint8_t msg_len);
-void cpt_builder_chan(struct cpt * cpt, uint16_t channel_id);
-void cpt_builder_msg(struct cpt * cpt, char * msg);
-struct cpt * cpt_builder_parse(void * packet);
-void * cpt_builder_serialize(struct cpt * cpt);
-int cpt_validate(void * packet);
+struct cpt *cpt_builder_init(void);
 
-int cpt_login(void * cpt);
-int cpt_get_users(void * cpt, void * query_string, void * response_buffer);
-int cpt_send_msg(void * cpt, char * msg, int msg_flag);
-int cpt_logout(void * cpt);
-int cpt_join_channel(void * cpt, int channel_id);
-int cpt_create_channel(void * cpt, void * members, int access_flag);
-int cpt_leave_channel(void * cpt, int channel_id);
+void cpt_builder_destroy(struct cpt *cpt);
 
-int main(void)
-{
+void cpt_builder_cmd(struct cpt *cpt, enum commands_client cmd);
+
+void cpt_builder_version(struct cpt *cpt, enum version version_major, enum version version_minor);
+
+void cpt_builder_len(struct cpt *cpt, uint8_t msg_len);
+
+void cpt_builder_chan(struct cpt *cpt, uint16_t channel_id);
+
+void cpt_builder_msg(struct cpt *cpt, char *msg);
+
+struct cpt *cpt_builder_parse(void *packet);
+
+void *cpt_builder_serialize(struct cpt *cpt);
+
+int cpt_validate(void *packet);
+
+int cpt_login(void *cpt);
+
+int cpt_get_users(void *cpt, void *query_string, void *response_buffer);
+
+int cpt_send_msg(void *cpt, char *msg, int msg_flag);
+
+int cpt_logout(void *cpt);
+
+int cpt_join_channel(void *cpt, int channel_id);
+
+int cpt_create_channel(void *cpt, void *members, int access_flag);
+
+int cpt_leave_channel(void *cpt, int channel_id);
+
+int main(void) {
     int socket_fd;
     struct sockaddr_in server_addr;
 
-    if ((socket_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
-    {
+    if ((socket_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
         perror("Error 1: ");
     }
 
-    if (setsockopt(socket_fd, SOL_SOCKET, SO_REUSEADDR, &(int){1}, sizeof(int)) < 0)
-    {
+    if (setsockopt(socket_fd, SOL_SOCKET, SO_REUSEADDR, &(int) {1}, sizeof(int)) < 0) {
         perror("Error 2: ");
     }
 
@@ -88,8 +103,7 @@ int main(void)
     server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(SERVER_PORT);
 
-    if (connect(socket_fd, (SA *)&server_addr, sizeof(server_addr)) < 0)
-    {
+    if (connect(socket_fd, (SA *) &server_addr, sizeof(server_addr)) < 0) {
         perror("Error 3: ");
     }
 
@@ -119,16 +133,14 @@ int main(void)
     fcntl(0, F_SETFL, flags | O_NONBLOCK);
 
     int exit_code = 1;
-    while(exit_code)
-    {
+    while (exit_code) {
         FD_ZERO(&fd_read_set);
         FD_SET(socket_fd, &fd_read_set);
         FD_SET(1, &fd_read_set);
         FD_ZERO(&fd_write_set);
         FD_SET(socket_fd, &fd_write_set);
 
-        if(max_fd < socket_fd)
-        {
+        if (max_fd < socket_fd) {
             max_fd = socket_fd;
         }
 
@@ -138,24 +150,18 @@ int main(void)
         int fds_selected;
         fds_selected = select(max_fd + 1, &fd_read_accepted_set, NULL, NULL, &timer);
 
-        if(fds_selected > 0)
-        {
-            if (FD_ISSET(socket_fd, &fd_read_set) != 0)
-            {
+        if (fds_selected > 0) {
+            if (FD_ISSET(socket_fd, &fd_read_set) != 0) {
                 nread_all_clients = read(socket_fd, all_clients_buffer, 1024);
-                if(nread_all_clients > 0)
-                {
+                if (nread_all_clients > 0) {
                     printf("From other clients: %s\n", all_clients_buffer);
                 }
             }
 
-            if (FD_ISSET(1, &fd_read_set) != 0)
-            {
+            if (FD_ISSET(1, &fd_read_set) != 0) {
                 nread = read(STDOUT_FILENO, data, 1024);
-                if(nread > 0)
-                {
-                    if(data == "exit")
-                    {
+                if (nread > 0) {
+                    if (data == "exit") {
                         exit_code = 0;
                     }
                     printf("%lu\n", sizeof(data));
@@ -179,8 +185,7 @@ int main(void)
 *
 * @return Pointer to cpt struct.
 */
-struct cpt * cpt_builder_init(void)
-{
+struct cpt *cpt_builder_init(void) {
     struct cpt *cpt = malloc(sizeof(struct cpt));
 
     return cpt;
@@ -191,8 +196,7 @@ struct cpt * cpt_builder_init(void)
 *
 * @param cpt   Pointer to a cpt structure.
 */
-void cpt_builder_destroy(struct cpt *cpt)
-{
+void cpt_builder_destroy(struct cpt *cpt) {
     cpt->version = 0;
     cpt->command = 0;
     cpt->channel_id = 0;
@@ -206,9 +210,8 @@ void cpt_builder_destroy(struct cpt *cpt)
 * @param cpt   Pointer to a cpt structure.
 * @param cmd   From enum commands.
 */
-void cpt_builder_cmd(struct cpt *cpt, enum commands_client cmd)
-{
-    cpt->command = (uint8_t)cmd;
+void cpt_builder_cmd(struct cpt *cpt, enum commands_client cmd) {
+    cpt->command = (uint8_t) cmd;
 }
 
 /**
@@ -218,8 +221,7 @@ void cpt_builder_cmd(struct cpt *cpt, enum commands_client cmd)
 * @param version_major From enum version.
 * @param version_minor From enum version.
 */
-void cpt_builder_version(struct cpt *cpt, enum version version_major, enum version version_minor)
-{
+void cpt_builder_version(struct cpt *cpt, enum version version_major, enum version version_minor) {
     cpt->version = (uint8_t) version_major;
 }
 
@@ -229,8 +231,7 @@ void cpt_builder_version(struct cpt *cpt, enum version version_major, enum versi
 * @param cpt       Pointer to a cpt structure.
 * @param msg_len   An 8-bit integer.
 */
-void cpt_builder_len(struct cpt *cpt, uint8_t msg_len)
-{
+void cpt_builder_len(struct cpt *cpt, uint8_t msg_len) {
     cpt->msg_len = msg_len;
 }
 
@@ -240,8 +241,7 @@ void cpt_builder_len(struct cpt *cpt, uint8_t msg_len)
 * @param cpt           Pointer to a cpt structure.
 * @param channel_id    A 16-bit integer.
 */
-void cpt_builder_chan(struct cpt *cpt, uint16_t channel_id)
-{
+void cpt_builder_chan(struct cpt *cpt, uint16_t channel_id) {
     cpt->channel_id = channel_id;
 }
 
@@ -252,8 +252,7 @@ void cpt_builder_chan(struct cpt *cpt, uint16_t channel_id)
 * @param cpt  Pointer to a cpt structure.
 * @param msg  Pointer to an array of characters.
 */
-void cpt_builder_msg(struct cpt *cpt, char *msg)
-{
+void cpt_builder_msg(struct cpt *cpt, char *msg) {
     cpt->msg = malloc(cpt->msg_len * sizeof(char));
     cpt->msg = msg;
 }
@@ -264,8 +263,7 @@ void cpt_builder_msg(struct cpt *cpt, char *msg)
 * @param packet    A serialized cpt protocol message.
 * @return          A pointer to a cpt struct.
 */
-struct cpt * cpt_builder_parse(void *packet)
-{
+struct cpt *cpt_builder_parse(void *packet) {
     struct cpt *cpt;
     char msg_rcv[1024];
 
@@ -283,11 +281,11 @@ struct cpt * cpt_builder_parse(void *packet)
 * @param packet    A serialized cpt protocol message.
 * @return          A pointer to a cpt struct.
 */
-void * cpt_builder_serialize(struct cpt * cpt)
-{
+void *cpt_builder_serialize(struct cpt *cpt) {
     unsigned char *buf;
     buf = malloc(1024 * sizeof(char));
-    pack(buf, "CCHCs", (uint8_t) cpt->version, (uint8_t) cpt->command, (uint16_t) cpt->channel_id, (uint8_t) cpt->msg_len, cpt->msg);
+    pack(buf, "CCHCs", (uint8_t) cpt->version, (uint8_t) cpt->command, (uint16_t) cpt->channel_id,
+         (uint8_t) cpt->msg_len, cpt->msg);
 
     return buf;
 }
@@ -298,8 +296,7 @@ void * cpt_builder_serialize(struct cpt * cpt)
 * @param packet    A serialized cpt protocol message.
 * @return          0 if no issues, otherwise CPT error code.
 */
-int cpt_validate(void * packet)
-{
+int cpt_validate(void *packet) {
 
 }
 
@@ -318,8 +315,7 @@ int cpt_validate(void * packet)
 * @param cpt   CPT packet and any additional information.
 * @return      A status code.  Either from the server, or user defined.
 */
-int cpt_login(void * cpt)
-{
+int cpt_login(void *cpt) {
 
 }
 
@@ -340,8 +336,7 @@ int cpt_login(void * cpt)
 					server.
 * @return A status code.  	Either from the server, or user defined.
 */
-int cpt_get_users(void * cpt, void * query_string, void * response_buffer)
-{
+int cpt_get_users(void *cpt, void *query_string, void *response_buffer) {
 
 }
 
@@ -367,8 +362,7 @@ int cpt_get_users(void * cpt, void * query_string, void * response_buffer)
 * @param msg  	A string to be sent as a message.
 * @return A status code.  Either from the server, or user defined.
 */
-int cpt_send_msg(void * cpt, char * msg, int msg_flag)
-{
+int cpt_send_msg(void *cpt, char *msg, int msg_flag) {
 
 }
 
@@ -383,8 +377,7 @@ int cpt_send_msg(void * cpt, char * msg, int msg_flag)
 * @param cpt   CPT packet and any additional information.
 * @return      A status code. Either from the server, or user defined.
 */
-int cpt_logout(void * cpt)
-{
+int cpt_logout(void *cpt) {
 
 }
 
@@ -406,8 +399,7 @@ int cpt_logout(void * cpt)
 * @param channel_id  The ID of the intended channel to be removed from.
 * @return 		   A status code. Either from the server, or user defined.
 */
-int cpt_join_channel(void * cpt, int channel_id)
-{
+int cpt_join_channel(void *cpt, int channel_id) {
 
 }
 
@@ -439,8 +431,7 @@ int cpt_join_channel(void * cpt, int channel_id)
 * @param  is_private  Set the created channel to private or public.
 * @return A status code. Either from the server, or user defined.
 */
-int cpt_create_channel(void * cpt, void * members, int access_flag)
-{
+int cpt_create_channel(void *cpt, void *members, int access_flag) {
 
 }
 
@@ -466,17 +457,16 @@ int cpt_create_channel(void * cpt, void * members, int access_flag)
 * @param channel_id  The ID of the intended channel to be removed from.
 * @return 		   A status code. Either from the server, or user defined.
 */
-int cpt_leave_channel(void * cpt, int channel_id)
-{
+int cpt_leave_channel(void *cpt, int channel_id) {
 
 }
 
 /*
 ** packi16() -- store a 16-bit int into a char buffer (like htons())
 */
-void packi16(unsigned char *buf, unsigned int i)
-{
-    *buf++ = i>>8; *buf++ = i;
+void packi16(unsigned char *buf, unsigned int i) {
+    *buf++ = i >> 8;
+    *buf++ = i;
 }
 
 /*
@@ -493,8 +483,7 @@ void packi16(unsigned char *buf, unsigned int i)
 **  (16-bit unsigned length is automatically prepended to strings)
 */
 
-unsigned int pack(unsigned char *buf, char *format, ...)
-{
+unsigned int pack(unsigned char *buf, char *format, ...) {
     va_list ap;
 
     signed char c;              // 8-bit
@@ -510,12 +499,12 @@ unsigned int pack(unsigned char *buf, char *format, ...)
 
     va_start(ap, format);
 
-    for(; *format != '\0'; format++) {
-        switch(*format) {
+    for (; *format != '\0'; format++) {
+        switch (*format) {
 
             case 'C': // 8-bit unsigned
                 size += 1;
-                C = (unsigned char)va_arg(ap, unsigned int); // promoted
+                C = (unsigned char) va_arg(ap, unsigned int); // promoted
                 *buf++ = C;
                 break;
 
@@ -537,15 +526,12 @@ unsigned int pack(unsigned char *buf, char *format, ...)
                 break;
         }
     }
-
     va_end(ap);
-
     return size;
 }
 
-unsigned int unpacku16(unsigned char *buf)
-{
-    return ((unsigned int)buf[0]<<8) | buf[1];
+unsigned int unpacku16(unsigned char *buf) {
+    return ((unsigned int) buf[0] << 8) | buf[1];
 }
 
 /*
@@ -562,8 +548,7 @@ unsigned int unpacku16(unsigned char *buf)
 **  (string is extracted based on its stored length, but 's' can be
 **  prepended with a max length)
 */
-void unpack(unsigned char *buf, char *format, ...)
-{
+void unpack(unsigned char *buf, char *format, ...) {
     va_list ap;
 
     signed char *c;              // 8-bit
@@ -584,16 +569,16 @@ void unpack(unsigned char *buf, char *format, ...)
     unsigned long long int fhold;
 
     char *s;
-    unsigned int len, maxstrlen=0, count;
+    unsigned int len, maxstrlen = 0, count;
 
     va_start(ap, format);
 
-    for(; *format != '\0'; format++) {
-        switch(*format) {
+    for (; *format != '\0'; format++) {
+        switch (*format) {
             case 'c': // 8-bit
                 c = va_arg(ap, signed char*);
-                if (*buf <= 0x7f) { *c = *buf;} // re-sign
-                else { *c = -1 - (unsigned char)(0xffu - *buf); }
+                if (*buf <= 0x7f) { *c = *buf; } // re-sign
+                else { *c = -1 - (unsigned char) (0xffu - *buf); }
                 buf++;
                 break;
 
@@ -621,12 +606,10 @@ void unpack(unsigned char *buf, char *format, ...)
 
             default:
                 if (isdigit(*format)) { // track max str len
-                    maxstrlen = maxstrlen * 10 + (*format-'0');
+                    maxstrlen = maxstrlen * 10 + (*format - '0');
                 }
         }
-
         if (!isdigit(*format)) maxstrlen = 0;
     }
-
     va_end(ap);
 }
