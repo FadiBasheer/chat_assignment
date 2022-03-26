@@ -29,21 +29,25 @@ struct cpt {
     uint8_t command;
     uint16_t channel_id;
     uint8_t msg_len;
-    char *msg;
+    char msg[1024];
 };
 
-enum commands_client{
-    SEND = 0,
-    GET_USERS = 3,
-    CREATE_CHANNEL = 4,
-    JOIN_CHANNEL = 6,
-    LEAVE_CHANNEL = 7
+struct commands_client {
+    int send;
+    int join_chan;
+    int leave_chan;
+//    SEND = 1,
+//    GET_USERS = 3,
+//    CREATE_CHANNEL = 4,
+//    JOIN_CHANNEL = 5,
+//    LEAVE_CHANNEL = 6
 };
 
-enum version{
-    MAJOR = 1,
-    MINOR = 2
+struct version {
+    int ver_num;
 };
+
+static void print_menu(void);
 
 void packi16(unsigned char *buf, unsigned int i);
 unsigned int pack(unsigned char *buf, char *format, ...);
@@ -52,8 +56,8 @@ void unpack(unsigned char *buf, char *format, ...);
 
 struct cpt * cpt_builder_init(void);
 void cpt_builder_destroy(struct cpt * cpt);
-void cpt_builder_cmd(struct cpt * cpt, enum commands_client cmd);
-void cpt_builder_version(struct cpt * cpt, enum version version_major, enum version version_minor);
+void cpt_builder_cmd(struct cpt *cpt, struct commands_client cmd);
+void cpt_builder_version(struct cpt *cpt, struct version ver);
 void cpt_builder_len(struct cpt * cpt, uint8_t msg_len);
 void cpt_builder_chan(struct cpt * cpt, uint16_t channel_id);
 void cpt_builder_msg(struct cpt * cpt, char * msg);
@@ -99,19 +103,39 @@ int main(void)
     char server_msg_buf[1024];
     char all_clients_buffer[1024];
 
+    memset(server_msg_buf, 0, 1024);
     recv(socket_fd, server_msg_buf, 21, 0);
     printf("%s\n", server_msg_buf);
+    print_menu();
 
     int max_fd;
     max_fd = socket_fd;
     fd_set fd_read_set;
     fd_set fd_read_accepted_set;
-    fd_set fd_write_set;
-    fd_set fd_write_accepted_set;
 
     struct timeval timer;
     timer.tv_sec = 1;
     timer.tv_usec = 0;
+
+    char msg[1024];
+    size_t len;
+
+    char chan[5];
+    long chan_id;
+
+    struct cpt cpt;
+    cpt.channel_id = 0;
+
+    unsigned char buf[1024];
+    size_t packet_size;
+
+    struct commands_client cmd;
+    cmd.send = 1;
+    cmd.join_chan = 5;
+    cmd.leave_chan = 6;
+
+    struct version version;
+    version.ver_num = 1;
 
     int flags = fcntl(socket_fd, F_GETFL);
     fcntl(socket_fd, F_SETFL, flags | O_NONBLOCK);
@@ -124,8 +148,6 @@ int main(void)
         FD_ZERO(&fd_read_set);
         FD_SET(socket_fd, &fd_read_set);
         FD_SET(1, &fd_read_set);
-        FD_ZERO(&fd_write_set);
-        FD_SET(socket_fd, &fd_write_set);
 
         if(max_fd < socket_fd)
         {
@@ -133,7 +155,6 @@ int main(void)
         }
 
         fd_read_accepted_set = fd_read_set;
-        fd_write_accepted_set = fd_write_set;
 
         int fds_selected;
         fds_selected = select(max_fd + 1, &fd_read_accepted_set, NULL, NULL, &timer);
@@ -151,20 +172,96 @@ int main(void)
 
             if (FD_ISSET(1, &fd_read_set) != 0)
             {
+                memset(msg, 0, 1024);
+                memset(cpt.msg, 0, 1024);
+                memset(buf, 0, 1024);
                 nread = read(STDOUT_FILENO, data, 1024);
                 if(nread > 0)
                 {
-                    if(data == "exit")
+                    ssize_t i;
+                    for (i = 0; i < nread; i++)
+                    {
+                        msg[i] = data[i];
+
+                    }
+                    msg[nread] = '\0';
+
+                    if(msg[0] == 'j' && msg[1] == 'o' && msg[2] == 'i'
+                        && msg[3] == 'n' && msg[4] == ' ' && msg[5] != ' ')
+                    {
+                        cpt.version = (uint8_t) version.ver_num;
+                        cpt.command = (uint8_t) cmd.join_chan;
+                        cpt.msg_len = 0;
+                        cpt.msg[0] = ' ';
+
+                        chan[0] = msg[5];
+                        chan[1] = msg[6];
+                        chan[2] = msg[7];
+                        chan[3] = msg[8];
+                        chan[4] = msg[9];
+
+                        chan_id = strtol(chan, NULL, 10);
+                        cpt.channel_id = (uint16_t) chan_id;
+
+                        fflush(stdout);
+                        printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n", cpt.version, cpt.command, cpt.channel_id, cpt.msg_len, cpt.msg);
+                        fflush(stdout);
+                        packet_size = pack(buf, "CCHCs", (uint8_t) cpt.version, (uint8_t) cpt.command, (uint16_t) cpt.channel_id, (uint8_t) cpt.msg_len, cpt.msg);
+                        send(socket_fd, buf, packet_size,0);
+                    }
+                    else if(msg[0] == 'l' && msg[1] == 'e' && msg[2] == 'a'
+                        && msg[3] == 'v' && msg[4] == 'e' && msg[5] == ' ' && msg[6] != ' ')
+                    {
+                        cpt.version = (uint8_t) version.ver_num;
+                        cpt.command = (uint8_t) cmd.leave_chan;
+                        cpt.msg_len = 0;
+                        cpt.msg[0] = ' ';
+
+                        chan[0] = msg[6];
+                        chan[1] = msg[7];
+                        chan[2] = msg[8];
+                        chan[3] = msg[9];
+                        chan[4] = msg[10];
+
+                        chan_id = strtol(chan, NULL, 10);
+                        cpt.channel_id = (uint16_t) chan_id;
+                        fflush(stdout);
+                        printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n", cpt.version, cpt.command, cpt.channel_id, cpt.msg_len, cpt.msg);
+                        fflush(stdout);
+                        packet_size = pack(buf, "CCHCs", (uint8_t) cpt.version, (uint8_t) cpt.command, (uint16_t) cpt.channel_id, (uint8_t) cpt.msg_len, cpt.msg);
+                        send(socket_fd, buf, packet_size,0);
+                        cpt.channel_id = 0;
+                        printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n", cpt.version, cpt.command, cpt.channel_id, cpt.msg_len, cpt.msg);
+                    }
+                    else if(msg[0] == 'm' && msg[1] == 'e' && msg[2] == 'n' && msg[3] == 'u')
+                    {
+                        print_menu();
+                        printf("\n");
+                    }
+                    else if(msg[0] == 'e' && msg[1] == 'x' && msg[2] == 'i' && msg[3] == 't')
                     {
                         exit_code = 0;
+                        printf("GoodBye!\n");
+
                     }
-                    printf("%lu\n", sizeof(data));
-                    write(socket_fd, data, (size_t) nread);
+                    else {
+                        cpt.version = (uint8_t) version.ver_num;
+                        cpt.command = (uint8_t) cmd.send;
+                        cpt.msg_len = (uint8_t) nread;
+
+                        strncpy(cpt.msg, msg, (size_t)nread);
+
+                        fflush(stdout);
+                        printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n", cpt.version, cpt.command, cpt.channel_id, cpt.msg_len, cpt.msg);
+                        fflush(stdout);
+                        packet_size = pack(buf, "CCHCs", (uint8_t) cpt.version, (uint8_t) cpt.command, (uint16_t) cpt.channel_id, (uint8_t) cpt.msg_len, cpt.msg);
+
+                        send(socket_fd , buf , packet_size , 0);
+                    }
                 }
             }
         }
     }
-
 }
 
 //##############################################################################################################
@@ -206,9 +303,9 @@ void cpt_builder_destroy(struct cpt *cpt)
 * @param cpt   Pointer to a cpt structure.
 * @param cmd   From enum commands.
 */
-void cpt_builder_cmd(struct cpt *cpt, enum commands_client cmd)
+void cpt_builder_cmd(struct cpt *cpt, struct commands_client cmd)
 {
-    cpt->command = (uint8_t)cmd;
+    cpt->command = (uint8_t)cmd.send;
 }
 
 /**
@@ -218,9 +315,9 @@ void cpt_builder_cmd(struct cpt *cpt, enum commands_client cmd)
 * @param version_major From enum version.
 * @param version_minor From enum version.
 */
-void cpt_builder_version(struct cpt *cpt, enum version version_major, enum version version_minor)
+void cpt_builder_version(struct cpt *cpt, struct version ver)
 {
-    cpt->version = (uint8_t) version_major;
+    cpt->version = (uint8_t) ver.ver_num;
 }
 
 /**
@@ -254,8 +351,8 @@ void cpt_builder_chan(struct cpt *cpt, uint16_t channel_id)
 */
 void cpt_builder_msg(struct cpt *cpt, char *msg)
 {
-    cpt->msg = malloc(cpt->msg_len * sizeof(char));
-    cpt->msg = msg;
+//    cpt->msg = malloc(cpt->msg_len * sizeof(char));
+//    cpt->msg = msg;
 }
 
 /**
@@ -271,7 +368,7 @@ struct cpt * cpt_builder_parse(void *packet)
 
     unpack(packet, "CCHCs", &cpt->version, &cpt->command, &cpt->channel_id, &cpt->msg_len, &msg_rcv);
 
-    cpt->msg = malloc(cpt->msg_len * sizeof(char));
+//    cpt->msg = malloc(cpt->msg_len * sizeof(char));
     strncpy(cpt->msg, msg_rcv, cpt->msg_len);
 
     return cpt;
@@ -629,4 +726,17 @@ void unpack(unsigned char *buf, char *format, ...)
     }
 
     va_end(ap);
+}
+
+static void print_menu()
+{
+    printf("Welcome to Global Channel 0\n");
+    printf("Current Channel: 0\n\n");
+
+    printf("########## Chat Commands ##########\n");
+    printf("1) Send Message to Current Channel (eg. Hello, World!)\n");
+    printf("2) Join Channel (eg. join 3)\n");
+    printf("3) Leave Channel (eg. leave 3)\n");
+    printf("4) Print Menu Options (eg. menu)\n");
+    printf("5) Exit Chat (eg. exit)\n\n");
 }
