@@ -49,24 +49,39 @@ static void print_menu(void);
 //unsigned int unpacku16(unsigned char *buf);
 //void unpack(unsigned char *buf, char *format, ...);
 
-struct cpt * cpt_builder_init(void);
-void cpt_builder_destroy(struct cpt * cpt);
-void cpt_builder_cmd(struct cpt *cpt, struct commands_client cmd);
-void cpt_builder_version(struct cpt *cpt, struct version ver);
-void cpt_builder_len(struct cpt * cpt, uint8_t msg_len);
-void cpt_builder_chan(struct cpt * cpt, uint16_t channel_id);
-void cpt_builder_msg(struct cpt * cpt, char * msg);
-struct cpt * cpt_builder_parse(void * packet);
-void * cpt_builder_serialize(struct cpt * cpt);
-int cpt_validate(void * packet);
+struct cpt *cpt_builder_init(void);
 
-int cpt_login(void * cpt);
-int cpt_get_users(void * cpt, void * query_string, void * response_buffer);
-int cpt_send_msg(void * cpt, char * msg, int msg_flag);
-int cpt_logout(void * cpt);
-int cpt_join_channel(void * cpt, int channel_id);
-int cpt_create_channel(void * cpt, void * members, int access_flag);
-int cpt_leave_channel(void * cpt, int channel_id);
+void cpt_builder_destroy(struct cpt *cpt);
+
+void cpt_builder_cmd(struct cpt *cpt, struct commands_client cmd);
+
+void cpt_builder_version(struct cpt *cpt, struct version ver);
+
+void cpt_builder_len(struct cpt *cpt, uint8_t msg_len);
+
+void cpt_builder_chan(struct cpt *cpt, uint16_t channel_id);
+
+void cpt_builder_msg(struct cpt *cpt, char *msg);
+
+struct cpt *cpt_builder_parse(void *packet);
+
+void *cpt_builder_serialize(struct cpt *cpt);
+
+int cpt_validate(void *packet);
+
+int cpt_login(void *cpt);
+
+int cpt_get_users(void *cpt, void *query_string, void *response_buffer);
+
+int cpt_send_msg(void *cpt, char *msg, int msg_flag);
+
+int cpt_logout(void *cpt);
+
+int cpt_join_channel(void *cpt, int channel_id);
+
+int cpt_create_channel(void *cpt, void *members, int access_flag);
+
+int cpt_leave_channel(void *cpt, int channel_id);
 
 
 int main(void) {
@@ -149,6 +164,7 @@ int main(void) {
         int fds_selected;
         fds_selected = select(max_fd + 1, &fd_read_accepted_set, NULL, NULL, &timer);
 
+        //read from server
         if (fds_selected > 0) {
             if (FD_ISSET(socket_fd, &fd_read_set) != 0) {
                 nread_all_clients = read(socket_fd, all_clients_buffer, 1024);
@@ -157,6 +173,7 @@ int main(void) {
                 }
             }
 
+            //read from keyboard
             if (FD_ISSET(1, &fd_read_set) != 0) {
                 memset(msg, 0, 1024);
                 memset(cpt.msg, 0, 1024);
@@ -221,11 +238,9 @@ int main(void) {
                         print_menu();
                         printf("\n");
                     } else if (msg[0] == 'e' && msg[1] == 'x' && msg[2] == 'i' && msg[3] == 't') {
-                                    exit_code = 0;
-                                    printf("GoodBye!\n");
-                    }
-                    else
-                    {
+                        exit_code = 0;
+                        printf("GoodBye!\n");
+                    } else {
                         cpt.version = (uint8_t) version.ver_num;
                         cpt.command = (uint8_t) cmd.send;
                         cpt.msg_len = (uint8_t) nread;
@@ -534,8 +549,7 @@ int main(void) {
 //
 //}
 
-static void print_menu()
-{
+static void print_menu() {
     printf("Welcome to Global Channel 0\n");
     printf("Current Channel: 0\n\n");
 

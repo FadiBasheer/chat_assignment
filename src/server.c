@@ -13,8 +13,6 @@
 #define SERVER_PORT 8000
 #define BUFSIZE 1024
 #define SA struct sockaddr
-#define MAXCHANSIZE 32
-#define MAXCHAN 32
 
 typedef struct Client Client;
 struct Client {
