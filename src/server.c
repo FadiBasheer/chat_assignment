@@ -16,6 +16,7 @@
 #define MAXCHANSIZE 32
 #define MAXCHAN 32
 
+typedef struct Client Client;
 struct Client {
     int fd;
     int chan_id;
@@ -28,6 +29,12 @@ struct cpt {
     uint16_t channel_id;
     uint8_t msg_len;
     char *msg;
+};
+
+struct CptResponse {
+    uint8_t code;
+    uint16_t data_size;
+    char *data;
 };
 
 enum commands_client {
@@ -69,9 +76,27 @@ void deleteClient(struct Client **head_ref, int chan_id, int fd_key);
 
 void printList(struct Client *node);
 
+int cpt_login_response(void *server_info, char *name);
+
+int cpt_logout_response(void *server_info);
+
+int cpt_get_users_response(void *server_info, uint16_t channel_id);
+
+int cpt_join_channel_response(void *server_info, uint16_t channel_id, int fd);
+
+int cpt_create_channel_response(void *server_info, char *id_list);
+
+int cpt_leave_channel_response(void *server_info, uint16_t channel_id, int fd);
+
+int cpt_send_response(void *server_info, char *name);
+
+struct Client *chanels[5] = {0};
+
+
 int main(void) {
     int server_fd, client_fd;
     struct sockaddr_in server_addr;
+
 
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
         perror("Error 1: ");
@@ -191,6 +216,21 @@ int main(void) {
                     ssize_t nread = read(head_client->fd, &client_buffer, BUFSIZE);
 
                     if (nread != 0) {
+                        // Parse the packet
+                        struct cpt *temp;
+
+                        temp = cpt_builder_parse(client_buffer);
+                        // If command is get users
+                        if (temp->command == 3) {
+                            cpt_get_users_response(NULL, temp->channel_id);
+                        }
+
+                        if (temp->command == 6) {
+                            cpt_join_channel_response(NULL, temp->channel_id, client_fd);
+                        }
+                        if (temp->command == 7) {
+                            cpt_leave_channel_response(NULL, temp->channel_id, client_fd);
+                        }
                         struct Client *head_client_write = client;
                         while (head_client_write != NULL) {
                             write(head_client_write->fd, client_buffer, BUFSIZE);
@@ -311,7 +351,7 @@ struct cpt *cpt_builder_parse(void *packet) {
 void *cpt_builder_serialize(struct cpt *cpt) {
     unsigned char *buf;
     buf = malloc(1024 * sizeof(char));
-    pack(buf, "CCHCs", (uint8_t) cpt->version, (uint8_t) cpt->command, (uint16_t) cpt->channel_id,
+    pack(buf, "CHs", (uint8_t) cpt->version, (uint8_t) cpt->command, (uint16_t) cpt->channel_id,
          (uint8_t) cpt->msg_len, cpt->msg);
 
     return buf;
@@ -353,3 +393,69 @@ void printList(struct Client *node) {
         node = node->next;
     }
 }
+
+/**
+ * Handle a received 'LOGOUT' protocol message.
+ *
+ * Uses information in a received CptRequest to handle
+ * a GET_USERS protocol message from a connected client.
+ *
+ * If successful, the function should collect user information
+ * from the channel in the CHAN_ID field of the request packet
+ * in the following format:
+ *
+ *  <user_id><whitespace><username><newline>
+ *
+ * Example given:
+ *      1 'Clark Kent'
+ *      2 'Bruce Wayne'
+ *      3 'Fakey McFakerson'
+ *
+ * @param server_info   Server data structures and information.
+ * @param channel_id    Target channel ID.
+ * @return Status Code (SUCCESS if successful, other if failure).
+ */
+int cpt_get_users_response(void *server_info, uint16_t channel_id) {
+    for (Client *current = &chanels[channel_id]; current != NULL; current = current->next) {
+        printf("%c ", current->fd);
+    }
+    return 0;
+}
+
+/**
+ * Handle a received 'JOIN_CHANNEL' protocol message.
+ *
+ * Uses information in a received CptRequest to handle
+ * a JOIN_CHANNEL protocol message from a connected client.
+ * If successful, function should add the requesting client
+ * user into the channel specified by the CHANNEL_ID field
+ * in the CptPacket <channel_id>.
+ *
+ * @param server_info   Server data structures and information.
+ * @param channel_id    Target channel ID.
+ * @return Status Code (SUCCESS if successful, other if failure).
+ */
+int cpt_join_channel_response(void *server_info, uint16_t channel_id, int fd) {
+    push(&chanels[channel_id], channel_id, fd);
+    return 0;
+}
+
+int cpt_create_channel_response(void *server_info, char *id_list) {
+
+}
+
+int cpt_leave_channel_response(void *server_info, uint16_t channel_id, int fd) {
+    for (Client *current = &chanels[channel_id]; current != NULL; current = current->next) {
+        if (current->next->fd == fd) {
+            current->next = current->next->next;
+        }
+        printf("%c ", current->fd);
+    }
+    return 0;
+}
+
+int cpt_send_response(void *server_info, char *name) {
+
+}
+
+// SEND, JOIN_CHANNEL, and LEAVE_CHANNEL
