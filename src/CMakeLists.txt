@@ -12,6 +12,9 @@ ENDIF ()
 # Make an executable
 add_executable(server ${COMMON_SOURCE_LIST}  ${SERVER_SOURCE_LIST} ${SERVER_MAIN_SOURCE} ${HEADER_LIST})
 add_executable(client ${COMMON_SOURCE_LIST}  ${CLIENT_SOURCE_LIST} ${CLIENT_MAIN_SOURCE} ${HEADER_LIST})
+add_executable(serialization serialization.c)
+
+
 
 # We need this directory, and users of our library will need it too
 target_include_directories(server PRIVATE ../include)

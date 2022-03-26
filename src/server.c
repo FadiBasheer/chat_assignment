@@ -1,16 +1,14 @@
-#include <errno.h>
 #include <fcntl.h>
-#include <netdb.h>
 #include <arpa/inet.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h>
-#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
 #include <sys/select.h>
+#include "serialization.c"
+
 
 #define SERVER_PORT 8000
 #define BUFSIZE 1024
@@ -293,7 +291,15 @@ void cpt_builder_msg(struct cpt *cpt, char *msg) {
 * @return          A pointer to a cpt struct.
 */
 struct cpt *cpt_builder_parse(void *packet) {
+    struct cpt *cpt;
+    char msg_rcv[1024];
 
+    unpack(packet, "CCHCs", &cpt->version, &cpt->command, &cpt->channel_id, &cpt->msg_len, &msg_rcv);
+
+    cpt->msg = malloc(cpt->msg_len * sizeof(char));
+    strncpy(cpt->msg, msg_rcv, cpt->msg_len);
+
+    return cpt;
 }
 
 /**
@@ -303,7 +309,12 @@ struct cpt *cpt_builder_parse(void *packet) {
 * @return          A pointer to a cpt struct.
 */
 void *cpt_builder_serialize(struct cpt *cpt) {
+    unsigned char *buf;
+    buf = malloc(1024 * sizeof(char));
+    pack(buf, "CCHCs", (uint8_t) cpt->version, (uint8_t) cpt->command, (uint16_t) cpt->channel_id,
+         (uint8_t) cpt->msg_len, cpt->msg);
 
+    return buf;
 }
 
 /**
