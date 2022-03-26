@@ -1,16 +1,14 @@
-#include <errno.h>
 #include <fcntl.h>
-#include <netdb.h>
 #include <arpa/inet.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h>
-#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
 #include <sys/select.h>
+#include "serialization.c"
+
 
 #define SERVER_PORT 8000
 #define BUFSIZE 1024
@@ -32,7 +30,7 @@ struct cpt {
     char *msg;
 };
 
-enum commands_client{
+enum commands_client {
     SEND = 0,
     GET_USERS = 3,
     CREATE_CHANNEL = 4,
@@ -40,38 +38,46 @@ enum commands_client{
     LEAVE_CHANNEL = 7
 };
 
-enum version{
+enum version {
     MAJOR = 1,
     MINOR = 2
 };
 
-struct cpt * cpt_builder_init(void);
-void cpt_builder_destroy(struct cpt * cpt);
-void cpt_builder_cmd(struct cpt * cpt, enum commands_client cmd);
-void cpt_builder_version(struct cpt * cpt, enum version version_major, enum version version_minor);
-void cpt_builder_len(struct cpt * cpt, uint8_t msg_len);
-void cpt_builder_chan(struct cpt * cpt, uint16_t channel_id);
-void cpt_builder_msg(struct cpt * cpt, char * msg);
-struct cpt * cpt_builder_parse(void * packet);
-void * cpt_builder_serialize(struct cpt * cpt);
-int cpt_validate(void * packet);
+struct cpt *cpt_builder_init(void);
 
-void push(struct Client** head_ref, int chan_id, int fd);
-void deleteClient(struct Client** head_ref, int chan_id, int fd_key);
-void printList(struct Client* node);
+void cpt_builder_destroy(struct cpt *cpt);
 
-int main(void)
-{
+void cpt_builder_cmd(struct cpt *cpt, enum commands_client cmd);
+
+void cpt_builder_version(struct cpt *cpt, enum version version_major, enum version version_minor);
+
+void cpt_builder_len(struct cpt *cpt, uint8_t msg_len);
+
+void cpt_builder_chan(struct cpt *cpt, uint16_t channel_id);
+
+void cpt_builder_msg(struct cpt *cpt, char *msg);
+
+struct cpt *cpt_builder_parse(void *packet);
+
+void *cpt_builder_serialize(struct cpt *cpt);
+
+int cpt_validate(void *packet);
+
+void push(struct Client **head_ref, int chan_id, int fd);
+
+void deleteClient(struct Client **head_ref, int chan_id, int fd_key);
+
+void printList(struct Client *node);
+
+int main(void) {
     int server_fd, client_fd;
     struct sockaddr_in server_addr;
 
-    if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
-    {
+    if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
         perror("Error 1: ");
     }
 
-    if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &(int){1}, sizeof(int)) < 0)
-    {
+    if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &(int) {1}, sizeof(int)) < 0) {
         perror("Error 2: ");
     }
 
@@ -80,21 +86,17 @@ int main(void)
     server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
     server_addr.sin_port = htons(SERVER_PORT);
 
-    if ((bind(server_fd, (SA *)&server_addr, sizeof(server_addr))) < 0)
-    {
+    if ((bind(server_fd, (SA *) &server_addr, sizeof(server_addr))) < 0) {
         perror("Error 3: ");
-        if(close(server_fd) < 0)
-        {
+        if (close(server_fd) < 0) {
             perror("Error 8: ");
         }
         exit(EXIT_FAILURE);
     }
 
-    if ((listen(server_fd, 10)) < 0)
-    {
+    if ((listen(server_fd, 10)) < 0) {
         perror("Error 4: ");
-        if(close(server_fd) < 0)
-        {
+        if (close(server_fd) < 0) {
             perror("Error 8: ");
         }
         exit(EXIT_FAILURE);
@@ -112,8 +114,7 @@ int main(void)
     //Linked-list for channels
     struct Client *client = NULL;
 
-    while (1)
-    {
+    while (1) {
         FD_ZERO(&fd_read_set);
         FD_SET(server_fd, &fd_read_set);
 
@@ -121,8 +122,7 @@ int main(void)
         timer.tv_sec = 5;
         timer.tv_usec = 0;
 
-        if (max_fd < server_fd)
-        {
+        if (max_fd < server_fd) {
             max_fd = server_fd;
         }
 
@@ -132,30 +132,27 @@ int main(void)
 
         int fds_selected;
         fds_selected = select(max_fd + 1, &fd_accepted_set, NULL, NULL, &timer);
-        if(fds_selected > 0)
-        {
+        if (fds_selected > 0) {
             struct sockaddr_in client_addr;
             socklen_t client_addr_len = sizeof(client_addr);
 
-            client_fd = accept(server_fd, (SA *)&client_addr, &client_addr_len);
-            if (client_fd < 0)
-            {
+            client_fd = accept(server_fd, (SA *) &client_addr, &client_addr_len);
+            if (client_fd < 0) {
                 perror("Error 6: ");
 //                exit_code = 0;
-                if(close(server_fd) < 0)
-                {
+                if (close(server_fd) < 0) {
                     perror("Error 8: ");
                 }
                 exit(EXIT_FAILURE);
             }
-            printf("Client Connected, ip: %s, port: %d\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
+            printf("Client Connected, ip: %s, port: %d\n", inet_ntoa(client_addr.sin_addr),
+                   ntohs(client_addr.sin_port));
 
-            if (FD_ISSET(server_fd, &fd_read_set) != 0)
-            {
+            if (FD_ISSET(server_fd, &fd_read_set) != 0) {
                 char client_connected_msg[] = "Connected to Server!";
 
-                if (send(client_fd, client_connected_msg, strlen(client_connected_msg), 0) != (ssize_t)strlen(client_connected_msg))
-                {
+                if (send(client_fd, client_connected_msg, strlen(client_connected_msg), 0) !=
+                    (ssize_t) strlen(client_connected_msg)) {
                     perror("Error 7: ");
                 }
 
@@ -172,11 +169,9 @@ int main(void)
         }
 
         struct Client *head_client = client;
-        while (head_client != NULL)
-        {
+        while (head_client != NULL) {
             FD_SET(head_client->fd, &fd_read_set);
-            if(head_client->fd > 0 && max_fd < head_client->fd)
-            {
+            if (head_client->fd > 0 && max_fd < head_client->fd) {
                 max_fd = head_client->fd;
             }
             head_client = head_client->next;
@@ -188,21 +183,16 @@ int main(void)
 
         fds_selected = select(max_fd + 1, &fd_read_set, NULL, NULL, &timer);
 
-        if (fds_selected > 0)
-        {
+        if (fds_selected > 0) {
             head_client = client;
-            while (head_client != NULL)
-            {
-                if(FD_ISSET(head_client->fd, &fd_read_set) != 0)
-                {
+            while (head_client != NULL) {
+                if (FD_ISSET(head_client->fd, &fd_read_set) != 0) {
                     memset(client_buffer, 0, BUFSIZE);
                     ssize_t nread = read(head_client->fd, &client_buffer, BUFSIZE);
 
-                    if(nread != 0)
-                    {
+                    if (nread != 0) {
                         struct Client *head_client_write = client;
-                        while (head_client_write != NULL)
-                        {
+                        while (head_client_write != NULL) {
                             write(head_client_write->fd, client_buffer, BUFSIZE);
                             head_client_write = head_client_write->next;
                         }
@@ -211,7 +201,6 @@ int main(void)
                 head_client = head_client->next;
             }
         }
-
     }
 }
 
@@ -223,8 +212,10 @@ int main(void)
 *
 * @return Pointer to cpt struct.
 */
-struct cpt * cpt_builder_init(void)
-{
+struct cpt *cpt_builder_init(void) {
+    struct cpt *cpt = malloc(sizeof(struct cpt));
+
+    return cpt;
 }
 
 /**
@@ -232,9 +223,12 @@ struct cpt * cpt_builder_init(void)
 *
 * @param cpt   Pointer to a cpt structure.
 */
-void cpt_builder_destroy(struct cpt * cpt)
-{
-
+void cpt_builder_destroy(struct cpt *cpt) {
+    cpt->version = 0;
+    cpt->command = 0;
+    cpt->channel_id = 0;
+    cpt->msg_len = 0;
+    free(cpt->msg);
 }
 
 /**
@@ -243,9 +237,8 @@ void cpt_builder_destroy(struct cpt * cpt)
 * @param cpt   Pointer to a cpt structure.
 * @param cmd   From enum commands.
 */
-void cpt_builder_cmd(struct cpt * cpt, enum commands_client cmd)
-{
-
+void cpt_builder_cmd(struct cpt *cpt, enum commands_client cmd) {
+    cpt->command = (uint8_t) cmd;
 }
 
 /**
@@ -255,9 +248,8 @@ void cpt_builder_cmd(struct cpt * cpt, enum commands_client cmd)
 * @param version_major From enum version.
 * @param version_minor From enum version.
 */
-void cpt_builder_version(struct cpt * cpt, enum version version_major, enum version version_minor)
-{
-
+void cpt_builder_version(struct cpt *cpt, enum version version_major, enum version version_minor) {
+    cpt->version = (uint8_t) version_major;
 }
 
 /**
@@ -266,9 +258,8 @@ void cpt_builder_version(struct cpt * cpt, enum version version_major, enum vers
 * @param cpt       Pointer to a cpt structure.
 * @param msg_len   An 8-bit integer.
 */
-void cpt_builder_len(struct cpt * cpt, uint8_t msg_len)
-{
-
+void cpt_builder_len(struct cpt *cpt, uint8_t msg_len) {
+    cpt->msg_len = msg_len;
 }
 
 /**
@@ -277,9 +268,8 @@ void cpt_builder_len(struct cpt * cpt, uint8_t msg_len)
 * @param cpt           Pointer to a cpt structure.
 * @param channel_id    A 16-bit integer.
 */
-void cpt_builder_chan(struct cpt * cpt, uint16_t channel_id)
-{
-
+void cpt_builder_chan(struct cpt *cpt, uint16_t channel_id) {
+    cpt->channel_id = channel_id;
 }
 
 /**
@@ -289,9 +279,9 @@ void cpt_builder_chan(struct cpt * cpt, uint16_t channel_id)
 * @param cpt  Pointer to a cpt structure.
 * @param msg  Pointer to an array of characters.
 */
-void cpt_builder_msg(struct cpt * cpt, char * msg)
-{
-
+void cpt_builder_msg(struct cpt *cpt, char *msg) {
+    cpt->msg = malloc(cpt->msg_len * sizeof(char));
+    cpt->msg = msg;
 }
 
 /**
@@ -300,9 +290,16 @@ void cpt_builder_msg(struct cpt * cpt, char * msg)
 * @param packet    A serialized cpt protocol message.
 * @return          A pointer to a cpt struct.
 */
-struct cpt * cpt_builder_parse(void * packet)
-{
+struct cpt *cpt_builder_parse(void *packet) {
+    struct cpt *cpt;
+    char msg_rcv[1024];
 
+    unpack(packet, "CCHCs", &cpt->version, &cpt->command, &cpt->channel_id, &cpt->msg_len, &msg_rcv);
+
+    cpt->msg = malloc(cpt->msg_len * sizeof(char));
+    strncpy(cpt->msg, msg_rcv, cpt->msg_len);
+
+    return cpt;
 }
 
 /**
@@ -311,9 +308,13 @@ struct cpt * cpt_builder_parse(void * packet)
 * @param packet    A serialized cpt protocol message.
 * @return          A pointer to a cpt struct.
 */
-void * cpt_builder_serialize(struct cpt * cpt)
-{
+void *cpt_builder_serialize(struct cpt *cpt) {
+    unsigned char *buf;
+    buf = malloc(1024 * sizeof(char));
+    pack(buf, "CCHCs", (uint8_t) cpt->version, (uint8_t) cpt->command, (uint16_t) cpt->channel_id,
+         (uint8_t) cpt->msg_len, cpt->msg);
 
+    return buf;
 }
 
 /**
@@ -322,39 +323,31 @@ void * cpt_builder_serialize(struct cpt * cpt)
 * @param packet    A serialized cpt protocol message.
 * @return          0 if no issues, otherwise CPT error code.
 */
-int cpt_validate(void * packet)
-{
+int cpt_validate(void *packet) {
 
 }
 
-void push(struct Client** head_ref, int chan_id, int fd)
-{
-    struct Client* new_node = (struct Client*)malloc(sizeof(struct Client));
+void push(struct Client **head_ref, int chan_id, int fd) {
+    struct Client *new_node = (struct Client *) malloc(sizeof(struct Client));
     new_node->fd = fd;
     new_node->chan_id = chan_id;
     new_node->next = (*head_ref);
     (*head_ref) = new_node;
 }
 
-void deleteClient(struct Client** head_ref, int chan_id, int fd_key)
-{
-    while (*head_ref)
-    {
-        if ((*head_ref)->fd == fd_key && (*head_ref)->chan_id == chan_id)
-        {
+void deleteClient(struct Client **head_ref, int chan_id, int fd_key) {
+    while (*head_ref) {
+        if ((*head_ref)->fd == fd_key && (*head_ref)->chan_id == chan_id) {
             struct Client *tmp = *head_ref;
             *head_ref = (*head_ref)->next;
-            free( tmp );
-        }
-        else
-        {
+            free(tmp);
+        } else {
             head_ref = &(*head_ref)->next;
         }
     }
 }
 
-void printList(struct Client* node)
-{
+void printList(struct Client *node) {
     while (node != NULL) {
         printf("chan_id:%d, fd:%d\n", node->chan_id, node->fd);
         node = node->next;
