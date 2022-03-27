@@ -13,9 +13,8 @@
 #define SERVER_PORT 8000
 #define BUFSIZE 1024
 #define SA struct sockaddr
-#define MAXCHANSIZE 32
-#define MAXCHAN 32
 
+//typedef struct Client Client;
 struct Client {
     int fd;
     int chan_id;
@@ -28,6 +27,12 @@ struct cpt {
     uint16_t channel_id;
     uint8_t msg_len;
     char *msg;
+};
+
+struct CptResponse {
+    uint8_t code;
+    uint16_t data_size;
+    char *data;
 };
 
 enum commands_client {
@@ -58,9 +63,24 @@ void push(struct Client **head_ref, int chan_id, int fd);
 void deleteClient(struct Client **head_ref, int chan_id, int fd_key);
 void printList(struct Client *node);
 
+int cpt_login_response(void *server_info, char *name);
+
+int cpt_logout_response(void *server_info);
+
+int cpt_get_users_response(void *server_info, struct Client *node, uint16_t channel_id);
+
+int cpt_join_channel_response(void *server_info, struct Client *node, uint16_t channel_id, int fd);
+
+int cpt_create_channel_response(void *server_info, struct Client *node, char *id_list);
+
+int cpt_leave_channel_response(void *server_info, struct Client *node, int fd);
+
+int cpt_send_response(void *server_info, char *name);
+
 int main(void) {
     int server_fd, client_fd;
     struct sockaddr_in server_addr;
+
 
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
         perror("Error 1: ");
@@ -102,6 +122,9 @@ int main(void) {
 
     //Linked-list for channels
     struct Client *client = NULL;
+    struct CptResponse *response = NULL;
+
+
 
     while (1) {
         FD_ZERO(&fd_read_set);
@@ -121,14 +144,16 @@ int main(void) {
 
         int fds_selected;
         fds_selected = select(max_fd + 1, &fd_accepted_set, NULL, NULL, &timer);
+
         if (fds_selected > 0) {
             struct sockaddr_in client_addr;
             socklen_t client_addr_len = sizeof(client_addr);
 
+            //accepting new connection
             client_fd = accept(server_fd, (SA *) &client_addr, &client_addr_len);
             if (client_fd < 0) {
                 perror("Error 6: ");
-//                exit_code = 0;
+                //exit_code = 0;
                 if (close(server_fd) < 0) {
                     perror("Error 8: ");
                 }
@@ -147,7 +172,7 @@ int main(void) {
 
                 fcntl(client_fd, F_SETFL, flags | O_NONBLOCK);
 
-                //add client FD to main channel linked-list
+                //Add client FD to main channel (0) linked-list
                 push(&client, 0, client_fd);
 
                 printf("------ Clients Currently Connected! ------\n");
@@ -156,8 +181,11 @@ int main(void) {
                 FD_SET(client_fd, &fd_read_set);
             }
         }
+        ///////////////////////////////////////////////////////////////////////////////////////////
 
         struct Client *head_client = client;
+
+        // Find max file descriptor in main channel
         while (head_client != NULL) {
             FD_SET(head_client->fd, &fd_read_set);
             if (head_client->fd > 0 && max_fd < head_client->fd) {
@@ -167,7 +195,7 @@ int main(void) {
         }
 
         char client_buffer[BUFSIZE];
-        timer.tv_sec = 5;
+        timer.tv_sec = 1;
         timer.tv_usec = 0;
 
         fds_selected = select(max_fd + 1, &fd_read_set, NULL, NULL, &timer);
@@ -180,6 +208,26 @@ int main(void) {
                     ssize_t nread = read(head_client->fd, &client_buffer, BUFSIZE);
 
                     if (nread != 0) {
+                        // Parse the packet
+                        struct cpt *temp;
+                        temp = cpt_builder_parse(client_buffer);
+
+                        // If command is get users
+                        if (temp->command == 3) {
+                            cpt_get_users_response(NULL, client, temp->channel_id);
+                        }
+
+                        // join channel
+                        if (temp->command == 6) {
+                            cpt_join_channel_response(NULL, client, temp->channel_id, client_fd);
+                        }
+
+                        //LEAVE_CHANNEL = 6
+                        if (temp->command == 7) {
+                            cpt_leave_channel_response(NULL, temp->channel_id, client_fd);
+                        }
+
+                        //writing on all files ( needs to be changed)
                         struct Client *head_client_write = client;
                         while (head_client_write != NULL) {
                             write(head_client_write->fd, client_buffer, BUFSIZE);
@@ -276,6 +324,8 @@ void cpt_builder_msg(struct cpt *cpt, char *msg) {
 /**
 * Create a cpt struct from a cpt packet.
 *
+}
+
 * @param packet    A serialized cpt protocol message.
 * @return          A pointer to a cpt struct.
 */
@@ -300,7 +350,7 @@ struct cpt *cpt_builder_parse(void *packet) {
 void *cpt_builder_serialize(struct cpt *cpt) {
     unsigned char *buf;
     buf = malloc(1024 * sizeof(char));
-    pack(buf, "CCHCs", (uint8_t) cpt->version, (uint8_t) cpt->command, (uint16_t) cpt->channel_id,
+    pack(buf, "CHs", (uint8_t) cpt->version, (uint8_t) cpt->command, (uint16_t) cpt->channel_id,
          (uint8_t) cpt->msg_len, cpt->msg);
 
     return buf;
@@ -316,6 +366,7 @@ int cpt_validate(void *packet) {
 
 }
 
+
 void push(struct Client **head_ref, int chan_id, int fd) {
     struct Client *new_node = (struct Client *) malloc(sizeof(struct Client));
     new_node->fd = fd;
@@ -323,6 +374,7 @@ void push(struct Client **head_ref, int chan_id, int fd) {
     new_node->next = (*head_ref);
     (*head_ref) = new_node;
 }
+
 
 void deleteClient(struct Client **head_ref, int chan_id, int fd_key) {
     while (*head_ref) {
@@ -341,4 +393,82 @@ void printList(struct Client *node) {
         printf("chan_id:%d, fd:%d\n", node->chan_id, node->fd);
         node = node->next;
     }
+}
+
+/**
+ * Handle a received 'LOGOUT' protocol message.
+ *
+ * Uses information in a received CptRequest to handle
+ * a GET_USERS protocol message from a connected client.
+ *
+ * If successful, the function should collect user information
+ * from the channel in the CHAN_ID field of the request packet
+ * in the following format:
+ *
+ *  <user_id><whitespace><username><newline>
+ *
+ * Example given:
+ *      1 'Clark Kent'
+ *      2 'Bruce Wayne'
+ *      3 'Fakey McFakerson'
+ *
+ * @param server_info   Server data structures and information.
+ * @param channel_id    Target channel ID.
+ * @return Status Code (SUCCESS if successful, other if failure).
+ */
+int cpt_get_users_response(void *server_info, struct Client *node, uint16_t channel_id) {
+    while (node != NULL) {
+        if (node->chan_id == channel_id) {
+            printf("chan_id:%d, fd:%d\n", node->chan_id, node->fd);
+        }
+        node = node->next;
+    }
+    return 0;
+}
+
+/**
+ * Handle a received 'JOIN_CHANNEL' protocol message.
+ *
+ * Uses information in a received CptRequest to handle
+ * a JOIN_CHANNEL protocol message from a connected client.
+ * If successful, function should add the requesting client
+ * user into the channel specified by the CHANNEL_ID field
+ * in the CptPacket <channel_id>.
+ *
+ * @param server_info   Server data structures and information.
+ * @param channel_id    Target channel ID.
+ * @return Status Code (SUCCESS if successful, other if failure).
+ */
+int cpt_join_channel_response(void *server_info, struct Client *node, uint16_t channel_id, int fd) {
+    while (node != NULL) {
+        if (node->fd == fd) {
+            node->chan_id = channel_id;
+        }
+        node = node->next;
+    }
+    return 0;
+}
+
+int cpt_create_channel_response(void *server_info, struct Client *node, char *id_list) {
+//    while (node != NULL) {
+//        if (node->fd == fd) {
+//            node->chan_id = 0;
+//        }
+//        node = node->next;
+//    }
+    return 0;
+}
+
+int cpt_leave_channel_response(void *server_info, struct Client *node, int fd) {
+    while (node != NULL) {
+        if (node->fd == fd) {
+            node->chan_id = 0;
+        }
+        node = node->next;
+    }
+    return 0;
+}
+
+int cpt_send_response(void *server_info, char *name) {
+
 }
