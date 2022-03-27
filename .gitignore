@@ -1,1 +1,3 @@
 /cmake-build-debug/
+./src/for_delete.c
+./src/main.c

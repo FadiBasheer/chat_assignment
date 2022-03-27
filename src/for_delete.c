@@ -14,7 +14,7 @@
 #define BUFSIZE 1024
 #define SA struct sockaddr
 
-//typedef struct Client Client;
+typedef struct Client Client;
 struct Client {
     int fd;
     int chan_id;
@@ -78,15 +78,18 @@ int cpt_login_response(void *server_info, char *name);
 
 int cpt_logout_response(void *server_info);
 
-int cpt_get_users_response(void *server_info, struct Client *node, uint16_t channel_id);
+int cpt_get_users_response(void *server_info, uint16_t channel_id);
 
-int cpt_join_channel_response(void *server_info, struct Client *node, uint16_t channel_id, int fd);
+int cpt_join_channel_response(void *server_info, uint16_t channel_id, int fd);
 
-int cpt_create_channel_response(void *server_info, struct Client *node, char *id_list);
+int cpt_create_channel_response(void *server_info, char *id_list);
 
-int cpt_leave_channel_response(void *server_info, struct Client *node, int fd);
+int cpt_leave_channel_response(void *server_info, uint16_t channel_id, int fd);
 
 int cpt_send_response(void *server_info, char *name);
+
+struct Client *chanels[5] = {0};
+
 
 int main(void) {
     int server_fd, client_fd;
@@ -133,9 +136,6 @@ int main(void) {
 
     //Linked-list for channels
     struct Client *client = NULL;
-    struct CptResponse *response = NULL;
-
-
 
     while (1) {
         FD_ZERO(&fd_read_set);
@@ -225,20 +225,15 @@ int main(void) {
 
                         // If command is get users
                         if (temp->command == 3) {
-                            cpt_get_users_response(NULL, client, temp->channel_id);
+                            cpt_get_users_response(NULL, temp->channel_id);
                         }
 
-                        // join channel
                         if (temp->command == 6) {
-                            cpt_join_channel_response(NULL, client, temp->channel_id, client_fd);
+                            cpt_join_channel_response(NULL, temp->channel_id, client_fd);
                         }
-
-                        //LEAVE_CHANNEL = 6
                         if (temp->command == 7) {
                             cpt_leave_channel_response(NULL, temp->channel_id, client_fd);
                         }
-
-                        //writing on all files ( needs to be changed)
                         struct Client *head_client_write = client;
                         while (head_client_write != NULL) {
                             write(head_client_write->fd, client_buffer, BUFSIZE);
@@ -335,8 +330,6 @@ void cpt_builder_msg(struct cpt *cpt, char *msg) {
 /**
 * Create a cpt struct from a cpt packet.
 *
-}
-
 * @param packet    A serialized cpt protocol message.
 * @return          A pointer to a cpt struct.
 */
@@ -377,7 +370,6 @@ int cpt_validate(void *packet) {
 
 }
 
-
 void push(struct Client **head_ref, int chan_id, int fd) {
     struct Client *new_node = (struct Client *) malloc(sizeof(struct Client));
     new_node->fd = fd;
@@ -385,7 +377,6 @@ void push(struct Client **head_ref, int chan_id, int fd) {
     new_node->next = (*head_ref);
     (*head_ref) = new_node;
 }
-
 
 void deleteClient(struct Client **head_ref, int chan_id, int fd_key) {
     while (*head_ref) {
@@ -427,12 +418,9 @@ void printList(struct Client *node) {
  * @param channel_id    Target channel ID.
  * @return Status Code (SUCCESS if successful, other if failure).
  */
-int cpt_get_users_response(void *server_info, struct Client *node, uint16_t channel_id) {
-    while (node != NULL) {
-        if (node->chan_id == channel_id) {
-            printf("chan_id:%d, fd:%d\n", node->chan_id, node->fd);
-        }
-        node = node->next;
+int cpt_get_users_response(void *server_info, uint16_t channel_id) {
+    for (Client *current = &chanels[channel_id]; current != NULL; current = current->next) {
+        printf("%c ", current->fd);
     }
     return 0;
 }
@@ -450,32 +438,21 @@ int cpt_get_users_response(void *server_info, struct Client *node, uint16_t chan
  * @param channel_id    Target channel ID.
  * @return Status Code (SUCCESS if successful, other if failure).
  */
-int cpt_join_channel_response(void *server_info, struct Client *node, uint16_t channel_id, int fd) {
-    while (node != NULL) {
-        if (node->fd == fd) {
-            node->chan_id = channel_id;
-        }
-        node = node->next;
-    }
+int cpt_join_channel_response(void *server_info, uint16_t channel_id, int fd) {
+    push(&chanels[channel_id], channel_id, fd);
     return 0;
 }
 
-int cpt_create_channel_response(void *server_info, struct Client *node, char *id_list) {
-//    while (node != NULL) {
-//        if (node->fd == fd) {
-//            node->chan_id = 0;
-//        }
-//        node = node->next;
-//    }
-    return 0;
+int cpt_create_channel_response(void *server_info, char *id_list) {
+
 }
 
-int cpt_leave_channel_response(void *server_info, struct Client *node, int fd) {
-    while (node != NULL) {
-        if (node->fd == fd) {
-            node->chan_id = 0;
+int cpt_leave_channel_response(void *server_info, uint16_t channel_id, int fd) {
+    for (Client *current = &chanels[channel_id]; current != NULL; current = current->next) {
+        if (current->next->fd == fd) {
+            current->next = current->next->next;
         }
-        node = node->next;
+        printf("%c ", current->fd);
     }
     return 0;
 }
@@ -483,3 +460,5 @@ int cpt_leave_channel_response(void *server_info, struct Client *node, int fd) {
 int cpt_send_response(void *server_info, char *name) {
 
 }
+
+// SEND, JOIN_CHANNEL, and LEAVE_CHANNEL
