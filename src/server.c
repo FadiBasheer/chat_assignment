@@ -124,7 +124,13 @@ int main(void) {
     struct Client *client = NULL;
     struct CptResponse *response = NULL;
 
-
+    struct cpt cpt;
+    uint8_t version;
+    uint8_t command;
+    uint16_t channel_id;
+    uint8_t msg_len;
+    char *msg;
+    char msg_rcv[1024];
 
     while (1) {
         FD_ZERO(&fd_read_set);
@@ -209,30 +215,52 @@ int main(void) {
 
                     if (nread != 0) {
                         // Parse the packet
-                        struct cpt *temp;
-                        temp = cpt_builder_parse(client_buffer);
+//                        struct cpt *temp;
+//                        temp = cpt_builder_parse(client_buffer);
 
-                        // If command is get users
-                        if (temp->command == 3) {
-                            cpt_get_users_response(NULL, client, temp->channel_id);
+
+//                        unpack(client_buffer, "CCHCs", &version, &command, &channel_id, &msg_len, &msg_rcv);
+                        unpack(client_buffer, "CCHCs", &cpt.version, &cpt.command, &cpt.channel_id, &cpt.msg_len, &msg_rcv);
+                        cpt.msg = malloc(cpt.msg_len * sizeof(char));
+                        strncpy(cpt.msg, msg_rcv, cpt.msg_len);
+
+//                        printf("Versi. %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n", version, command, channel_id, msg_len, msg);
+                        printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n",
+                               cpt.version, cpt.command, cpt.channel_id, cpt.msg_len, cpt.msg);
+
+                        // If command is send
+                        if (cpt.command == 1) {
+                            struct Client *head_client_write = client;
+
+                            while (head_client_write != NULL) {
+                                printf("%d\n", head_client_write->chan_id);
+
+                                if(head_client_write->chan_id == cpt.channel_id)
+                                {
+                                    write(head_client_write->fd, cpt.msg, BUFSIZE);
+                                }
+
+                                head_client_write = head_client_write->next;
+                            }
+//                            cpt_get_users_response(NULL, client, cpt->channel_id);
                         }
 
-                        // join channel
-                        if (temp->command == 6) {
-                            cpt_join_channel_response(NULL, client, temp->channel_id, client_fd);
-                        }
-
-                        //LEAVE_CHANNEL = 6
-                        if (temp->command == 7) {
-                            cpt_leave_channel_response(NULL, temp->channel_id, client_fd);
-                        }
-
-                        //writing on all files ( needs to be changed)
-                        struct Client *head_client_write = client;
-                        while (head_client_write != NULL) {
-                            write(head_client_write->fd, client_buffer, BUFSIZE);
-                            head_client_write = head_client_write->next;
-                        }
+//                        // join channel
+//                        if (cpt.command == 6) {
+////                            cpt_join_channel_response(NULL, client, cpt->channel_id, client_fd);
+//                        }
+//
+//                        //LEAVE_CHANNEL = 6
+//                        if (cpt.command == 7) {
+////                            cpt_leave_channel_response(NULL, cpt->channel_id, client_fd);
+//                        }
+//
+//                        //writing on all files ( needs to be changed)
+//                        struct Client *head_client_write = client;
+//                        while (head_client_write != NULL) {
+//                            write(head_client_write->fd, client_buffer, BUFSIZE);
+//                            head_client_write = head_client_write->next;
+//                        }
                     }
                 }
                 head_client = head_client->next;
