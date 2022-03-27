@@ -49,18 +49,29 @@ enum version {
 };
 
 struct cpt *cpt_builder_init(void);
+
 void cpt_builder_destroy(struct cpt *cpt);
+
 void cpt_builder_cmd(struct cpt *cpt, enum commands_client cmd);
+
 void cpt_builder_version(struct cpt *cpt, enum version version_major, enum version version_minor);
+
 void cpt_builder_len(struct cpt *cpt, uint8_t msg_len);
+
 void cpt_builder_chan(struct cpt *cpt, uint16_t channel_id);
+
 void cpt_builder_msg(struct cpt *cpt, char *msg);
+
 struct cpt *cpt_builder_parse(void *packet);
+
 void *cpt_builder_serialize(struct cpt *cpt);
+
 int cpt_validate(void *packet);
 
 void push(struct Client **head_ref, int chan_id, int fd);
+
 void deleteClient(struct Client **head_ref, int chan_id, int fd_key);
+
 void printList(struct Client *node);
 
 int cpt_login_response(void *server_info, char *name);
@@ -219,16 +230,17 @@ int main(void) {
 //                        temp = cpt_builder_parse(client_buffer);
 
                         // If command is get users
-                        if (temp->command == 3) {
-                            int code = cpt_get_users_response(NULL, client, temp->channel_id);
-                            response->code = (uint8_t) code;
-                            response->data_size = 0;
-                            response->data = " ";
-                        }
+//                        if (temp->command == 3) {
+//                            int code = cpt_get_users_response(NULL, client, temp->channel_id);
+//                            response->code = (uint8_t) code;
+//                            response->data_size = 0;
+//                            response->data = " ";
+//                        }
 
 
 //                        unpack(client_buffer, "CCHCs", &version, &command, &channel_id, &msg_len, &msg_rcv);
-                        unpack(client_buffer, "CCHCs", &cpt.version, &cpt.command, &cpt.channel_id, &cpt.msg_len, &msg_rcv);
+                        unpack(client_buffer, "CCHCs", &cpt.version, &cpt.command, &cpt.channel_id, &cpt.msg_len,
+                               &msg_rcv);
                         cpt.msg = malloc(cpt.msg_len * sizeof(char));
                         strncpy(cpt.msg, msg_rcv, cpt.msg_len);
 
@@ -243,8 +255,7 @@ int main(void) {
                             while (head_client_write != NULL) {
                                 printf("%d\n", head_client_write->chan_id);
 
-                                if(head_client_write->chan_id == cpt.channel_id)
-                                {
+                                if (head_client_write->chan_id == cpt.channel_id) {
                                     write(head_client_write->fd, cpt.msg, BUFSIZE);
                                 }
 
@@ -408,7 +419,7 @@ void push(struct Client **head_ref, int chan_id, int fd) {
     new_node->fd = fd;
     new_node->chan_id = chan_id;
     new_node->next = (*head_ref);
-    (*head_ref) = new_node;<<<<<<< HEAD
+    (*head_ref) = new_node;
 
 }
 
