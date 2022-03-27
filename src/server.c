@@ -44,29 +44,18 @@ enum version {
 };
 
 struct cpt *cpt_builder_init(void);
-
 void cpt_builder_destroy(struct cpt *cpt);
-
 void cpt_builder_cmd(struct cpt *cpt, enum commands_client cmd);
-
 void cpt_builder_version(struct cpt *cpt, enum version version_major, enum version version_minor);
-
 void cpt_builder_len(struct cpt *cpt, uint8_t msg_len);
-
 void cpt_builder_chan(struct cpt *cpt, uint16_t channel_id);
-
 void cpt_builder_msg(struct cpt *cpt, char *msg);
-
 struct cpt *cpt_builder_parse(void *packet);
-
 void *cpt_builder_serialize(struct cpt *cpt);
-
 int cpt_validate(void *packet);
 
 void push(struct Client **head_ref, int chan_id, int fd);
-
 void deleteClient(struct Client **head_ref, int chan_id, int fd_key);
-
 void printList(struct Client *node);
 
 int main(void) {
