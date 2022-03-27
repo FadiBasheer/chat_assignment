@@ -429,8 +429,8 @@ int cpt_send_response(int fd, int code, int msg_length, char *msg) {
     size_t packet_size;
 
     struct CptResponse response;
-    response.code = (uint8_t) code;
-    response.data_size = (uint16_t) msg_length;
+    response.code = code;
+    response.data_size = msg_length;
     response.data = msg;
 
     packet_size = pack(buf, "CHs", (uint8_t) response.code, (uint16_t) response.data_size, response.data);
