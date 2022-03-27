@@ -4,11 +4,20 @@
 
 #include <stdio.h>
 #include <malloc.h>
+#include <stdint-gcc.h>
+#include "serialization.c"
 
 struct Client {
     int fd;
     int chan_id;
     struct Client *next;
+};
+
+
+struct CptResponse {
+    uint8_t code;
+    uint16_t data_size;
+    char *data;
 };
 
 
@@ -28,11 +37,28 @@ void printList(struct Client *n) {
     }
 }
 
+void *cpt_builder_serialize(struct CptResponse *cpt) {
+    unsigned char *buf;
+    buf = malloc(1024 * sizeof(char));
+    pack(buf, "CHs", (uint8_t) cpt->code, (uint16_t) cpt->data_size, cpt->data);
+    return buf;
+}
+
+int cpt_send_response(void *server_info, char *name) {
+
+}
+
 int main() {
     struct Client *client = NULL;
+    struct CptResponse *response = NULL;
 
     push(&client, 0, 4);
     push(&client, 0, 7);
     printList(client);
     printf("heelo");
+
+    response->code = (uint8_t) 8;
+    response->data_size = 0;
+    response->data = " ";
+    cpt_builder_serialize(response);
 }

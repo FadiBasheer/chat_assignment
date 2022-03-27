@@ -136,7 +136,6 @@ int main(void) {
     struct CptResponse *response = NULL;
 
 
-
     while (1) {
         FD_ZERO(&fd_read_set);
         FD_SET(server_fd, &fd_read_set);
@@ -187,7 +186,7 @@ int main(void) {
                 push(&client, 0, client_fd);
 
                 printf("------ Clients Currently Connected! ------\n");
-                printList(client);
+                //  printList(client);
 
                 FD_SET(client_fd, &fd_read_set);
             }
@@ -225,7 +224,10 @@ int main(void) {
 
                         // If command is get users
                         if (temp->command == 3) {
-                            cpt_get_users_response(NULL, client, temp->channel_id);
+                            int code = cpt_get_users_response(NULL, client, temp->channel_id);
+                            response->code = (uint8_t) code;
+                            response->data_size = 0;
+                            response->data = " ";
                         }
 
                         // join channel
