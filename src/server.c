@@ -327,19 +327,6 @@ void push(struct Client **head_ref, int chan_id, int fd) {
 
 }
 
-
-void deleteClient(struct Client **head_ref, int chan_id, int fd_key) {
-    while (*head_ref) {
-        if ((*head_ref)->fd == fd_key && (*head_ref)->chan_id == chan_id) {
-            struct Client *tmp = *head_ref;
-            *head_ref = (*head_ref)->next;
-            free(tmp);
-        } else {
-            head_ref = &(*head_ref)->next;
-        }
-    }
-}
-
 void printList(struct Client *node) {
     while (node != NULL) {
         printf("chan_id:%d, fd:%d\n", node->chan_id, node->fd);
