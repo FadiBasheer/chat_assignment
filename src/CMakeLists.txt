@@ -13,7 +13,7 @@ ENDIF ()
 add_executable(server ${COMMON_SOURCE_LIST}  ${SERVER_SOURCE_LIST} ${SERVER_MAIN_SOURCE} ${HEADER_LIST})
 add_executable(client ${COMMON_SOURCE_LIST}  ${CLIENT_SOURCE_LIST} ${CLIENT_MAIN_SOURCE} ${HEADER_LIST})
 #add_executable(serialization serialization.c)
-add_executable(main main.c)
+#add_executable(main main.c)
 add_executable(test_server test.c)
 
 
