@@ -1,4 +1,4 @@
-/home/charlie/work/clion-2021.2.3/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/home/charlie/work/clion-2021.2.3/bin/ninja/linux/ninja -G Ninja /home/charlie/work/Term2/Chat_Assignment/assign_3/source
+/home/fadi/Downloads/CLion-2021.3.2/clion-2021.3.2/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles" /home/fadi/work/chat_assignment
 -- The C compiler identification is GNU 9.4.0
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
@@ -8,4 +8,4 @@
 -- Found Doxygen: /usr/bin/doxygen (found version "1.8.17") found components: doxygen dot 
 -- Configuring done
 -- Generating done
--- Build files have been written to: /home/charlie/work/Term2/Chat_Assignment/assign_3/source/cmake-build-debug
+-- Build files have been written to: /home/fadi/work/chat_assignment/cmake-build-debug

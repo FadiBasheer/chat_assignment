@@ -1,0 +1,1 @@
+/usr/bin/cc -g CMakeFiles/serialization.dir/serialization.c.o -o serialization 

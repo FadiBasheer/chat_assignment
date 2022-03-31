@@ -160,8 +160,7 @@ int main(void) {
 
                 if (nread_all_clients > 0) {
                     unpack(all_clients_buffer, "CHs", &res_code, &channel_id, &all_client_data);
-                    if (res_code == 0 && current_channel == channel_id)
-                    {
+                    if (res_code == 0 && current_channel == channel_id) {
                         printf("From other clients: %s\n", all_client_data);
                     }
                 }

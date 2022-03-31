@@ -75,7 +75,8 @@ void print_client_list(struct Client *node);
  * @param fd file descriptor of new client.
  * @return 9 if successful 7 if failure.
  */
-int cpt_join_channel_response(void *server_info, struct Client *node, struct Client **ref_node, uint16_t channel_id, int fd);
+int cpt_join_channel_response(void *server_info, struct Client *node, struct Client **ref_node, uint16_t channel_id,
+                              int fd);
 
 /**
  * Takes the client channel_id and fd to creates a new node in the client linked-list.
@@ -85,7 +86,8 @@ int cpt_join_channel_response(void *server_info, struct Client *node, struct Cli
  * @param fd file descriptor of new client.
  * @return 10 if successful 5 if failure.
  */
-int cpt_leave_channel_response(void *server_info, struct Client *node, struct Client **ref_node, uint16_t channel_id, int fd) ;
+int cpt_leave_channel_response(void *server_info, struct Client *node, struct Client **ref_node, uint16_t channel_id,
+                               int fd);
 
 /**
  *
@@ -244,9 +246,9 @@ int main(void) {
 //                                printf("%d\n", head_client_write->chan_id);
 
                                 if (head_client_write->chan_id == cpt.channel_id) {
-                                    if(head_client_write->fd != head_client->fd)
-                                    {
-                                        cpt_send_response(head_client_write->fd, 0, cpt.msg_len, cpt.msg, cpt.channel_id);
+                                    if (head_client_write->fd != head_client->fd) {
+                                        cpt_send_response(head_client_write->fd, 0, cpt.msg_len, cpt.msg,
+                                                          cpt.channel_id);
                                     }
                                 }
                                 head_client_write = head_client_write->next;
@@ -255,14 +257,16 @@ int main(void) {
 
                         // join channel
                         if (cpt.command == 5) {
-                            function_response = cpt_join_channel_response(NULL, client, &client, cpt.channel_id, client_fd);
+                            function_response = cpt_join_channel_response(NULL, client, &client, cpt.channel_id,
+                                                                          client_fd);
                             cpt_send_response(head_client->fd, function_response, 0, "", cpt.channel_id);
                             print_client_list(client);
                         }
 
                         //LEAVE_CHANNEL
                         if (cpt.command == 6) {
-                            function_response = cpt_leave_channel_response(NULL, client, &client,cpt.channel_id, client_fd);
+                            function_response = cpt_leave_channel_response(NULL, client, &client, cpt.channel_id,
+                                                                           client_fd);
                             cpt_send_response(head_client->fd, function_response, 0, "", cpt.channel_id);
                             print_client_list(client);
                         }
@@ -287,7 +291,6 @@ void push(struct Client **head_ref, int chan_id, int fd) {
     new_node->chan_id = chan_id;
     new_node->next = (*head_ref);
     (*head_ref) = new_node;
-
 }
 
 /**
@@ -311,7 +314,8 @@ void print_client_list(struct Client *node) {
  * @param fd file descriptor of new client.
  * @return 9 if successful 7 if failure.
  */
-int cpt_join_channel_response(void *server_info, struct Client *node, struct Client **ref_node, uint16_t channel_id, int fd) {
+int cpt_join_channel_response(void *server_info, struct Client *node, struct Client **ref_node, uint16_t channel_id,
+                              int fd) {
     int flag = 0;
 //    printf("chan_id: %d, fd: %d\n", channel_id, fd);
     while (node != NULL) {
@@ -335,24 +339,20 @@ int cpt_join_channel_response(void *server_info, struct Client *node, struct Cli
  * @param chan_id channel id of the new client.
  * @param fd_key file descriptor of the new client.
  */
-void delete_client(struct Client** head_ref, int chan_id, int fd_key)
-{
-    while (*head_ref)
-    {
-        if ((*head_ref)->fd == fd_key && (*head_ref)->chan_id == chan_id)
-        {
+void delete_client(struct Client **head_ref, int chan_id, int fd_key) {
+    while (*head_ref) {
+        if ((*head_ref)->fd == fd_key && (*head_ref)->chan_id == chan_id) {
             struct Client *tmp = *head_ref;
             *head_ref = (*head_ref)->next;
-            free( tmp );
-        }
-        else
-        {
+            free(tmp);
+        } else {
             head_ref = &(*head_ref)->next;
         }
     }
 }
 
-int cpt_leave_channel_response(void *server_info, struct Client *node, struct Client **ref_node, uint16_t channel_id, int fd) {
+int cpt_leave_channel_response(void *server_info, struct Client *node, struct Client **ref_node, uint16_t channel_id,
+                               int fd) {
     int flag = 0;
     while (node != NULL) {
         if (node->fd == fd && node->chan_id == channel_id) {
@@ -365,7 +365,6 @@ int cpt_leave_channel_response(void *server_info, struct Client *node, struct Cl
     if (flag == 1) {
         delete_client(ref_node, channel_id, fd);
     }
-
     return 10;
 }
 
