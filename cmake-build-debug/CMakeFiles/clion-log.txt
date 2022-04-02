@@ -1,11 +1,43 @@
-/home/fadi/Downloads/CLion-2021.3.2/clion-2021.3.2/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles" /home/fadi/work/chat_assignment
--- The C compiler identification is GNU 9.4.0
+/home/fadi/Downloads/CLion-2021.3.2/clion-2021.3.2/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=/home/fadi/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/arm-none-eabi-gcc -DCMAKE_CXX_COMPILER=/home/fadi/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/arm-none-eabi-g++ -G "Unix Makefiles" /home/fadi/work/chat_assignment
+-- The C compiler identification is GNU 7.2.1
 -- Detecting C compiler ABI info
--- Detecting C compiler ABI info - done
--- Check for working C compiler: /usr/bin/cc - skipped
--- Detecting C compile features
--- Detecting C compile features - done
--- Found Doxygen: /usr/bin/doxygen (found version "1.8.17") found components: doxygen dot 
--- Configuring done
--- Generating done
--- Build files have been written to: /home/fadi/work/chat_assignment/cmake-build-debug
+-- Detecting C compiler ABI info - failed
+-- Check for working C compiler: /home/fadi/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/arm-none-eabi-gcc
+-- Check for working C compiler: /home/fadi/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/arm-none-eabi-gcc - broken
+CMake Error at /home/fadi/Downloads/CLion-2021.3.2/clion-2021.3.2/bin/cmake/linux/share/cmake-3.21/Modules/CMakeTestCCompiler.cmake:69 (message):
+  The C compiler
+
+    "/home/fadi/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/arm-none-eabi-gcc"
+
+  is not able to compile a simple test program.
+
+  It fails with the following output:
+
+    Change Dir: /home/fadi/work/chat_assignment/cmake-build-debug/CMakeFiles/CMakeTmp
+    
+    Run Build Command(s):/usr/bin/make -f Makefile cmTC_15f0e/fast && /usr/bin/make  -f CMakeFiles/cmTC_15f0e.dir/build.make CMakeFiles/cmTC_15f0e.dir/build
+    make[1]: Entering directory '/home/fadi/work/chat_assignment/cmake-build-debug/CMakeFiles/CMakeTmp'
+    Building C object CMakeFiles/cmTC_15f0e.dir/testCCompiler.c.o
+    /home/fadi/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/arm-none-eabi-gcc    -o CMakeFiles/cmTC_15f0e.dir/testCCompiler.c.o -c /home/fadi/work/chat_assignment/cmake-build-debug/CMakeFiles/CMakeTmp/testCCompiler.c
+    Linking C executable cmTC_15f0e
+    /home/fadi/Downloads/CLion-2021.3.2/clion-2021.3.2/bin/cmake/linux/bin/cmake -E cmake_link_script CMakeFiles/cmTC_15f0e.dir/link.txt --verbose=1
+    /home/fadi/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/arm-none-eabi-gcc CMakeFiles/cmTC_15f0e.dir/testCCompiler.c.o -o cmTC_15f0e 
+    /home/fadi/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/libc.a(lib_a-exit.o): In function `exit':
+    exit.c:(.text.exit+0x2c): undefined reference to `_exit'
+    collect2: error: ld returned 1 exit status
+    make[1]: *** [CMakeFiles/cmTC_15f0e.dir/build.make:99: cmTC_15f0e] Error 1
+    make[1]: Leaving directory '/home/fadi/work/chat_assignment/cmake-build-debug/CMakeFiles/CMakeTmp'
+    make: *** [Makefile:127: cmTC_15f0e/fast] Error 2
+    
+    
+
+  
+
+  CMake will not be able to correctly generate this project.
+Call Stack (most recent call first):
+  CMakeLists.txt:6 (project)
+
+
+-- Configuring incomplete, errors occurred!
+See also "/home/fadi/work/chat_assignment/cmake-build-debug/CMakeFiles/CMakeOutput.log".
+See also "/home/fadi/work/chat_assignment/cmake-build-debug/CMakeFiles/CMakeError.log".

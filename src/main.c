@@ -23,7 +23,7 @@ struct Client {
     char *name;
     int chan_id;
     struct Client *next;
-};
+} client;
 
 /**
  * Chat protocol client request packet specified by COMP4981 chat protocol.
@@ -51,9 +51,16 @@ struct CptResponse {
  * @param chan_id channel id of the new client.
  * @param fd file descriptor of the new client.
  */
-void push(struct Client **head_ref, int chan_id, int fd);
+void push(struct Client **head_ref, int chan_id, int fd, char *name);
 
-int cpt_login_response(struct Client **head_ref, int chan_id, int fd, char *name);
+int cpt_login_response(struct Client *node, struct Client **head, int fd, char *name);
+
+int cpt_create_channel_response(struct Client *node, struct Client **ref_node, uint16_t channel_id,
+                                int fdd, char *message);
+
+int get_uesrs_list(struct Client *node);
+
+int cpt_logout_response(struct Client **head, int fd);
 
 /**
  * Deletes a specific client from the client linked-list if the channel id
@@ -78,9 +85,8 @@ void print_client_list(struct Client *node);
  * @param fd file descriptor of new client.
  * @return 9 if successful 7 if failure.
  */
-int cpt_join_channel_response(void *server_info, struct Client *node, struct Client **ref_node,
-                              uint16_t channel_id,
-                              int fd);
+int cpt_join_channel_response(struct Client *node, struct Client **ref_node, uint16_t channel_id, int fd,
+                              char *name);
 
 /**
  * Takes the client channel_id and fd to creates a new node in the client linked-list.
@@ -91,8 +97,7 @@ int cpt_join_channel_response(void *server_info, struct Client *node, struct Cli
  * @return 10 if successful 5 if failure.
  */
 int cpt_leave_channel_response(void *server_info, struct Client *node, struct Client **ref_node,
-                               uint16_t channel_id,
-                               int fd);
+                               uint16_t channel_id, int fd);
 
 /**
  *
@@ -203,10 +208,10 @@ int main(void) {
 
                 fcntl(client_fd, F_SETFL, flags | O_NONBLOCK);
 
-                //Add client FD to main channel (0) linked-list
-                push(&client, 0, client_fd);
+//                //Add client FD to main channel (0) linked-list
+                //         push(&client, 0, client_fd);
 
-                print_client_list(client);
+//                print_client_list(client);
 
                 FD_SET(client_fd, &fd_read_set);
             }
@@ -248,8 +253,6 @@ int main(void) {
                             struct Client *head_client_write = client;
 
                             while (head_client_write != NULL) {
-//                                printf("%d\n", head_client_write->chan_id);
-
                                 if (head_client_write->chan_id == cpt.channel_id) {
                                     if (head_client_write->fd != head_client->fd) {
                                         cpt_send_response(head_client_write->fd, 0, cpt.msg_len, cpt.msg,
@@ -260,18 +263,32 @@ int main(void) {
                             }
                         }
 
-
-                        // login
+                        // logout
                         if (cpt.command == 2) {
-                            function_response = cpt_login_response(client, cpt.channel_id, client_fd, cpt.msg);
+                            function_response = cpt_logout_response(&client, client_fd);
+                            cpt_send_response(head_client->fd, function_response, 0, "", cpt.channel_id);
+                            print_client_list(client);
+                        }
+
+                        //get users
+                        if (cpt.command == 3) {
+                            function_response = get_uesrs_list(client);
+                            cpt_send_response(head_client->fd, function_response, 0, "", cpt.channel_id);
+                            print_client_list(client);
+                        }
+
+                        // create channel
+                        if (cpt.command == 4) {
+                            function_response = cpt_create_channel_response(client, &client, cpt.channel_id,
+                                                                            client_fd, cpt.msg);
                             cpt_send_response(head_client->fd, function_response, 0, "", cpt.channel_id);
                             print_client_list(client);
                         }
 
                         // join channel
                         if (cpt.command == 5) {
-                            function_response = cpt_join_channel_response(NULL, client, &client, cpt.channel_id,
-                                                                          client_fd);
+                            function_response = cpt_join_channel_response(client, &client, cpt.channel_id,
+                                                                          client_fd, client->name);
                             cpt_send_response(head_client->fd, function_response, 0, "", cpt.channel_id);
                             print_client_list(client);
                         }
@@ -283,6 +300,13 @@ int main(void) {
                             cpt_send_response(head_client->fd, function_response, 0, "", cpt.channel_id);
                             print_client_list(client);
                         }
+
+                        // login
+                        if (cpt.command == 7) {
+                            function_response = cpt_login_response(client, &client, client_fd, cpt.msg);
+                            cpt_send_response(head_client->fd, function_response, 0, "", cpt.channel_id);
+                            print_client_list(client);
+                        }
                     }
                 }
                 head_client = head_client->next;
@@ -291,32 +315,89 @@ int main(void) {
     }
 }
 
+
+//int main() {
+//
+//    struct Client *client2 = NULL;
+//
+//    push(&client2, 1, 1, "fadi");
+//    push(&client2, 1, 2, "hey");
+//    //print_client_list(client2);
+//    cpt_login_response(client2, &client2, 1, 1, "fadi");
+//    cpt_login_response(client2, &client2, 1, 3, "mina");
+//    print_client_list(client2);
+//}
+
+
+
 /**
  * Adds a new client node to the client linked-list.
  * @param head_ref reference to client linked-list.
  * @param chan_id channel id of the new client.
  * @param fd file descriptor of the new client.
  */
-void push(struct Client **head_ref, int chan_id, int fd) {
-//    printf("chan_id: %d, fd:%d\n", chan_id, fd);
+///////////////////////////////////////// co ///////////////////////////////////////////////
+void push(struct Client **head_ref, int chan_id, int fd, char *name) {
     struct Client *new_node = (struct Client *) malloc(sizeof(struct Client));
     new_node->fd = fd;
     new_node->chan_id = chan_id;
+    new_node->name = name;
     new_node->next = (*head_ref);
     (*head_ref) = new_node;
 }
 
 /**
+ * Adds a new client node to the client linked-list.
+ * @param head_ref reference to client linked-list.
+ * @param chan_id channel id of the new client.
+ * @param fd file descriptor of the new client.
+ */
+///////////////////////////////////////// co ///////////////////////////////////////////////
+int cpt_login_response(struct Client *node, struct Client **head, int fd, char *name) {
+    int flag = 0;
+    while (node != NULL) {
+        if (node->fd == fd) {
+            printf("user already exist\n");
+            flag = 1;
+        }
+        node = node->next;
+    }
+    if (flag == 0) {
+        //Add client FD to main channel (0) linked-list
+        push(head, 0, fd, name);
+    }
+    return 0;
+}
+
+
+int cpt_logout_response(struct Client **head, int fd) {
+    int flag = 0;
+    delete_client(head, -1, fd);
+    return 0;
+}
+/**
  * Prints a list of all currently unique client file descriptor and channel id combination.
  * @param node reference to client linked-list.
  */
+///////////////////////////////////////// co /////////////////////////////////////////////////////
 void print_client_list(struct Client *node) {
     printf("------ Clients Currently Connected! ------\n");
     printf("Client list:\n");
     while (node != NULL) {
-        printf("chan_id: %d, fd: %d\n", node->chan_id, node->fd);
+        printf("chan_id: %d, fd: %d, name: %s\n", node->chan_id, node->fd, node->name);
         node = node->next;
     }
+}
+
+
+int get_uesrs_list(struct Client *node) {
+    printf("------ Clients Currently Connected! ------\n");
+    printf("Client list:\n");
+    while (node != NULL) {
+        printf("chan_id: %d, fd: %d, name: %s\n", node->chan_id, node->fd, node->name);
+        node = node->next;
+    }
+    return 0;
 }
 
 /**
@@ -327,8 +408,8 @@ void print_client_list(struct Client *node) {
  * @param fd file descriptor of new client.
  * @return 9 if successful 7 if failure.
  */
-int cpt_join_channel_response(void *server_info, struct Client *node, struct Client **ref_node, uint16_t channel_id,
-                              int fd) {
+int cpt_join_channel_response(struct Client *node, struct Client **ref_node, uint16_t channel_id,
+                              int fd, char *name) {
     int flag = 0;
     while (node != NULL) {
         if (node->fd == fd && node->chan_id == channel_id) {
@@ -339,7 +420,25 @@ int cpt_join_channel_response(void *server_info, struct Client *node, struct Cli
     }
 
     if (flag == 0) {
-        push(ref_node, channel_id, fd);
+        push(ref_node, channel_id, fd, name);
+    }
+    return 9;
+}
+
+
+int cpt_create_channel_response(struct Client *node, struct Client **ref_node, uint16_t channel_id,
+                                int fd, char *message) {
+    int flag = 0;
+    while (node != NULL) {
+        if (node->chan_id == channel_id) {
+            flag = 1;
+            printf("Channel already exist\n");
+        }
+        node = node->next;
+    }
+
+    if (flag == 0) {
+//        push(ref_node, channel_id, fd);
     }
     return 9;
 }
@@ -353,12 +452,22 @@ int cpt_join_channel_response(void *server_info, struct Client *node, struct Cli
  */
 void delete_client(struct Client **head_ref, int chan_id, int fd_key) {
     while (*head_ref) {
-        if ((*head_ref)->fd == fd_key && (*head_ref)->chan_id == chan_id) {
-            struct Client *tmp = *head_ref;
-            *head_ref = (*head_ref)->next;
-            free(tmp);
+        if (chan_id == -1) {
+            if ((*head_ref)->fd == fd_key) {
+                struct Client *tmp = *head_ref;
+                *head_ref = (*head_ref)->next;
+                free(tmp);
+            } else {
+                head_ref = &(*head_ref)->next;
+            }
         } else {
-            head_ref = &(*head_ref)->next;
+            if ((*head_ref)->fd == fd_key && (*head_ref)->chan_id == chan_id) {
+                struct Client *tmp = *head_ref;
+                *head_ref = (*head_ref)->next;
+                free(tmp);
+            } else {
+                head_ref = &(*head_ref)->next;
+            }
         }
     }
 }
