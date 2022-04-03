@@ -55,8 +55,8 @@ void push(struct Client **head_ref, int chan_id, int fd, char *name);
 
 int cpt_login_response(struct Client *node, struct Client **head, int fd, char *name);
 
-int cpt_create_channel_response(struct Client *node, struct Client **ref_node, uint16_t channel_id,
-                                int fdd, char *message);
+int cpt_create_channel_response(struct Client *node, struct Client **ref_node, uint16_t channel_id, int msg_len,
+                                int fdd, const char *message);
 
 int get_uesrs_list(struct Client *node);
 
@@ -280,6 +280,7 @@ int main(void) {
                         // create channel
                         if (cpt.command == 4) {
                             function_response = cpt_create_channel_response(client, &client, cpt.channel_id,
+                                                                            cpt.msg_len,
                                                                             client_fd, cpt.msg);
                             cpt_send_response(head_client->fd, function_response, 0, "", cpt.channel_id);
                             print_client_list(client);
@@ -414,7 +415,7 @@ int cpt_join_channel_response(struct Client *node, struct Client **ref_node, uin
     while (node != NULL) {
         if (node->fd == fd && node->chan_id == channel_id) {
             flag = 1;
-            printf("Channel already exist\n");
+            printf("You are a member of this channel\n");
         }
         node = node->next;
     }
@@ -426,19 +427,32 @@ int cpt_join_channel_response(struct Client *node, struct Client **ref_node, uin
 }
 
 
-int cpt_create_channel_response(struct Client *node, struct Client **ref_node, uint16_t channel_id,
-                                int fd, char *message) {
+int cpt_create_channel_response(struct Client *node, struct Client **ref_node, uint16_t channel_id, int msg_len,
+                                int fd, const char *message) {
+    struct Client *node1, *node2;
+    node1 = node;
+
     int flag = 0;
-    while (node != NULL) {
-        if (node->chan_id == channel_id) {
+    while (node1 != NULL) {
+        if (node1->chan_id == channel_id) {
             flag = 1;
             printf("Channel already exist\n");
         }
-        node = node->next;
+        node1 = node1->next;
     }
 
     if (flag == 0) {
-//        push(ref_node, channel_id, fd);
+        for (int i = 0; i < msg_len; i += 2) {
+            node2 = node;
+
+            while (node2 != NULL) {
+                if (node2->fd == (int) message[i]) {
+                    push(ref_node, channel_id, node2->fd , node2->name);
+                    break;
+                }
+                node2 = node2->next;
+            }
+        }
     }
     return 9;
 }
