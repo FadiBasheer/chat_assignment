@@ -56,7 +56,7 @@ void push(struct Client **head_ref, int chan_id, int fd, char *name);
 int cpt_login_response(struct Client *node, struct Client **head, int fd, char *name);
 
 int cpt_create_channel_response(struct Client *node, struct Client **ref_node, uint16_t channel_id, int msg_len,
-                                int fdd, const char *message, char *name);
+                                int fd, const char *message, char *name);
 
 int get_uesrs_list(struct Client *node);
 
@@ -326,21 +326,34 @@ int main() {
     //print_client_list(client2);
     cpt_login_response(client2, &client2, 1, "fadi");
     cpt_login_response(client2, &client2, 3, "mina");
+
+    printf("\n---------- Normal print -------------\n");
+    print_client_list(client2);
+
+    printf("\n---------- After Join -------------\n");
     cpt_join_channel_response(client2, &client2, 5, 1, "fadi");
-
+    cpt_join_channel_response(client2, &client2, 0, 5, "Jon");
     print_client_list(client2);
 
-
+    printf("\n---------- After leave channel -------------\n");
     cpt_leave_channel_response(NULL, client2, &client2, 5, 1);
-
     print_client_list(client2);
 
+    printf("\n---------- After logout-------------\n");
     cpt_logout_response(&client2, 1);
-
     print_client_list(client2);
 
+    printf("\n---------- After create channel-------------\n");
     cpt_create_channel_response(client2, &client2, 5, 0, 1, "", "fadi");
+    print_client_list(client2);
 
+    printf("\n---------- After create channel with existing channel-------------\n");
+    cpt_create_channel_response(client2, &client2, 0, 0, 2, "", "hey");
+    print_client_list(client2);
+
+    printf("\n---------- After create channel with existing channel-------------\n");
+    cpt_login_response(client2, &client2, 1, "fadi");
+    cpt_create_channel_response(client2, &client2, 5, 2, 1, "3", "fadi");
     print_client_list(client2);
 }
 
@@ -426,7 +439,23 @@ int get_uesrs_list(struct Client *node) {
 /////////////////////////////////////////////co ////////////////////////////////////////////////////
 int cpt_join_channel_response(struct Client *node, struct Client **ref_node, uint16_t channel_id,
                               int fd, char *name) {
+    struct Client *node1;
+    node1 = node;
+
+    // Check if the client who is asking to join the channel has logged in or not.
     int flag = 0;
+    while (node1 != NULL) {
+        if (node1->fd == fd) {
+            flag = 1;
+        }
+        node1 = node1->next;
+    }
+    if (flag == 0) {
+        printf("You need to login first: %s\n", name);
+        return 0;
+    }
+
+    flag = 0;
     while (node != NULL) {
         if (node->fd == fd && node->chan_id == channel_id) {
             flag = 1;
@@ -448,12 +477,11 @@ int cpt_create_channel_response(struct Client *node, struct Client **ref_node, u
     node1 = node;
     node2 = node;
 
-    // Check if the client who is asking to create the channel if he has login or not.
+    // Check if the client who is asking to create the channel if he has logged or not.
     int flag = 0;
     while (node1 != NULL) {
         if (node1->fd == fd) {
             flag = 1;
-            printf("Channel already exist\n");
         }
         node1 = node1->next;
     }
@@ -462,13 +490,13 @@ int cpt_create_channel_response(struct Client *node, struct Client **ref_node, u
         return 0;
     }
 
-
     // Check if the Channel exist
     flag = 0;
     while (node2 != NULL) {
         if (node2->chan_id == channel_id) {
             flag = 1;
             printf("Channel already exist\n");
+            return 0;
         }
         node2 = node2->next;
     }
@@ -476,15 +504,17 @@ int cpt_create_channel_response(struct Client *node, struct Client **ref_node, u
     // if not, find all fd's in the message and add them to the new channel
     if (flag == 0) {
 
+        //Joining channel alone
         if (msg_len == 0) {
             push(ref_node, channel_id, fd, name);
         } else {
+            push(ref_node, channel_id, fd, name);
             for (int i = 0; i < msg_len; i += 2) {
                 node3 = node;
 
                 // to get the name of the fd
                 while (node3 != NULL) {
-                    if (node3->fd == (int) message[i]) {
+                    if (node3->fd == message[i] - '0') {
                         push(ref_node, channel_id, node3->fd, node3->name);
                         break;
                     }
