@@ -23,7 +23,7 @@ struct Client {
     char *name;
     int chan_id;
     struct Client *next;
-} client;
+};
 
 /**
  * Chat protocol client request packet specified by COMP4981 chat protocol.
@@ -501,25 +501,26 @@ int cpt_create_channel_response(struct Client *node, struct Client **ref_node, u
         node2 = node2->next;
     }
 
-    // if not, find all fd's in the message and add them to the new channel
-    if (flag == 0) {
+    // If Channel not exist, find all fd's in the message and add them to the new channel
 
-        //Joining channel alone
-        if (msg_len == 0) {
-            push(ref_node, channel_id, fd, name);
-        } else {
-            push(ref_node, channel_id, fd, name);
-            for (int i = 0; i < msg_len; i += 2) {
-                node3 = node;
+    //Creating a channel for yourself
+    if (msg_len == 0) {
+        push(ref_node, channel_id, fd, name);
+    }
 
-                // to get the name of the fd
-                while (node3 != NULL) {
-                    if (node3->fd == message[i] - '0') {
-                        push(ref_node, channel_id, node3->fd, node3->name);
-                        break;
-                    }
-                    node3 = node3->next;
+    //Creating a channel for yourself and with users in message.
+    else {
+        push(ref_node, channel_id, fd, name);
+        for (int i = 0; i < msg_len; i += 2) {
+            node3 = node;
+
+            // to get the name of the fd
+            while (node3 != NULL) {
+                if (node3->fd == message[i] - '0') {
+                    push(ref_node, channel_id, node3->fd, node3->name);
+                    break;
                 }
+                node3 = node3->next;
             }
         }
     }
