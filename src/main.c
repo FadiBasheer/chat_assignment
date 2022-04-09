@@ -13,7 +13,7 @@
 #define SERVER_PORT 8000
 #define BUFSIZE 1024
 #define SA struct sockaddr
-
+uint16_t channelId = 0;
 /**
  * Client linked-list, data structure to manage clients connecting to the server
  * in different channels.
@@ -255,7 +255,7 @@ int main(void) {
                             while (head_client_write != NULL) {
                                 if (head_client_write->chan_id == cpt.channel_id &&
                                     head_client_write->fd != head_client->fd) {
-                                    cpt_send_response(head_client_write->fd, 0, cpt.msg_len, cpt.msg,
+                                    cpt_send_response(head_client_write->fd, 1, cpt.msg_len, cpt.msg,
                                                       cpt.channel_id);
                                 }
                                 head_client_write = head_client_write->next;
@@ -278,7 +278,8 @@ int main(void) {
 
                         // create channel
                         if (cpt.command == 4) {
-                            function_response = cpt_create_channel_response(client, &client, cpt.channel_id,
+                            channelId++;
+                            function_response = cpt_create_channel_response(client, &client, channelId,
                                                                             cpt.msg_len,
                                                                             client_fd, cpt.msg, client->name);
                             cpt_send_response(head_client->fd, function_response, 0, "", cpt.channel_id);
@@ -402,7 +403,7 @@ int cpt_login_response(struct Client *node, struct Client **head, int fd, char *
 ///////////////////////////////////////////////////////////////co //////////////////////////////////
 int cpt_logout_response(struct Client **head, int fd) {
     delete_client(head, -1, fd);
-    return 0;
+    return 2;
 }
 
 /**
@@ -429,7 +430,7 @@ int get_uesrs_list(struct Client *node, uint16_t channel_id) {
         }
         node = node->next;
     }
-    return 0;
+    return 3;
 }
 
 /**
@@ -481,7 +482,7 @@ int cpt_create_channel_response(struct Client *node, struct Client **ref_node, u
     node1 = node;
     node2 = node;
 
-    // Check if the client who is asking to create the channel if he has logged or not.
+    // Check if the client who is asking to create the channel has logged in or not.
     int flag = 0;
     while (node1 != NULL) {
         if (node1->fd == fd) {
@@ -494,23 +495,12 @@ int cpt_create_channel_response(struct Client *node, struct Client **ref_node, u
         return 0;
     }
 
-    // Check if the Channel exist
-    while (node2 != NULL) {
-        if (node2->chan_id == channel_id) {
-            printf("Channel already exist\n");
-            return 0;
-        }
-        node2 = node2->next;
-    }
-
-    // If Channel not exist, find all fd's in the message and add them to the new channel
-
     //Creating a channel for yourself
     if (msg_len == 0) {
         push(ref_node, channel_id, fd, name);
     }
 
-        //Creating a channel for yourself and with users in message.
+    //Creating a channel for yourself and with users in message (Find all fd's in the message and add them to the new channel).
     else {
         push(ref_node, channel_id, fd, name);
         for (int i = 0; i < msg_len; i += 2) {
