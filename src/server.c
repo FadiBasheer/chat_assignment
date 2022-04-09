@@ -243,46 +243,50 @@ int main(void) {
                         cpt.msg = malloc(cpt.msg_len * sizeof(char));
                         strncpy(cpt.msg, msg_rcv, cpt.msg_len);
 
-                        // If command is send
-                        if (cpt.command == 1) {
-                            struct Client *head_client_write = client;
+                        printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n",
+                               cpt.version, cpt.command, cpt.channel_id, cpt.msg_len, msg_rcv);
 
-                            while (head_client_write != NULL) {
-//                                printf("%d\n", head_client_write->chan_id);
-
-                                if (head_client_write->chan_id == cpt.channel_id) {
-                                    if (head_client_write->fd != head_client->fd) {
-                                        cpt_send_response(head_client_write->fd, 0, cpt.msg_len, cpt.msg,
-                                                          cpt.channel_id);
-                                    }
-                                }
-                                head_client_write = head_client_write->next;
-                            }
-                        }
-
-
-                        // login
-                        if (cpt.command == 2) {
-                            function_response = cpt_login_response(client, cpt.channel_id, client_fd, cpt.msg);
-                            cpt_send_response(head_client->fd, function_response, 0, "", cpt.channel_id);
-                            print_client_list(client);
-                        }
-
-                        // join channel
-                        if (cpt.command == 5) {
-                            function_response = cpt_join_channel_response(NULL, client, &client, cpt.channel_id,
-                                                                          client_fd);
-                            cpt_send_response(head_client->fd, function_response, 0, "", cpt.channel_id);
-                            print_client_list(client);
-                        }
-
-                        //LEAVE_CHANNEL
-                        if (cpt.command == 6) {
-                            function_response = cpt_leave_channel_response(NULL, client, &client, cpt.channel_id,
-                                                                           client_fd);
-                            cpt_send_response(head_client->fd, function_response, 0, "", cpt.channel_id);
-                            print_client_list(client);
-                        }
+                        cpt_send_response(client->fd, 1, cpt.msg_len, cpt.msg, cpt.channel_id);
+//                        // If command is send
+//                        if (cpt.command == 1) {
+//                            struct Client *head_client_write = client;
+//
+//                            while (head_client_write != NULL) {
+////                                printf("%d\n", head_client_write->chan_id);
+//
+//                                if (head_client_write->chan_id == cpt.channel_id) {
+//                                    if (head_client_write->fd != head_client->fd) {
+//                                        cpt_send_response(head_client_write->fd, 0, cpt.msg_len, cpt.msg,
+//                                                          cpt.channel_id);
+//                                    }
+//                                }
+//                                head_client_write = head_client_write->next;
+//                            }
+//                        }
+//
+//
+//                        // login
+////                        if (cpt.command == 2) {
+////                            function_response = cpt_login_response(client, cpt.channel_id, client_fd, cpt.msg);
+////                            cpt_send_response(head_client->fd, function_response, 0, "", cpt.channel_id);
+////                            print_client_list(client);
+////                        }
+//
+//                        // join channel
+//                        if (cpt.command == 5) {
+//                            function_response = cpt_join_channel_response(NULL, client, &client, cpt.channel_id,
+//                                                                          client_fd);
+//                            cpt_send_response(head_client->fd, function_response, 0, "", cpt.channel_id);
+//                            print_client_list(client);
+//                        }
+//
+//                        //LEAVE_CHANNEL
+//                        if (cpt.command == 6) {
+//                            function_response = cpt_leave_channel_response(NULL, client, &client, cpt.channel_id,
+//                                                                           client_fd);
+//                            cpt_send_response(head_client->fd, function_response, 0, "", cpt.channel_id);
+//                            print_client_list(client);
+//                        }
                     }
                 }
                 head_client = head_client->next;
@@ -388,11 +392,11 @@ int cpt_send_response(int fd, int code, int msg_length, char *msg, int chan_id) 
     size_t packet_size;
 
     struct CptResponse response;
-    response.code = code;
-    response.data_size = msg_length;
+    response.code = (uint8_t) code;
+    response.data_size = (uint16_t) msg_length;
     response.data = msg;
 
-    packet_size = pack(buf, "CHs", (uint8_t) response.code, (uint16_t) chan_id, response.data);
+    packet_size = pack(buf, "CHs", (uint8_t) response.code, (uint16_t) msg_length, response.data);
 
     send(fd, buf, packet_size, 0);
 

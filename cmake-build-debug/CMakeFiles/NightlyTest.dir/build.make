@@ -44,19 +44,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /home/fadi/Downloads/CLion-2021.3.2/clion-2021.3.2/bin/cmake/linux/bin/cmake
+CMAKE_COMMAND = /home/charlie/work/clion-2021.2.3/bin/cmake/linux/bin/cmake
 
 # The command to remove a file.
-RM = /home/fadi/Downloads/CLion-2021.3.2/clion-2021.3.2/bin/cmake/linux/bin/cmake -E rm -f
+RM = /home/charlie/work/clion-2021.2.3/bin/cmake/linux/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/fadi/work/chat_assignment
+CMAKE_SOURCE_DIR = /home/charlie/work/Term2/Assignment_4
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/fadi/work/chat_assignment/cmake-build-debug
+CMAKE_BINARY_DIR = /home/charlie/work/Term2/Assignment_4/cmake-build-debug
 
 # Utility rule file for NightlyTest.
 
@@ -67,7 +67,7 @@ include CMakeFiles/NightlyTest.dir/compiler_depend.make
 include CMakeFiles/NightlyTest.dir/progress.make
 
 CMakeFiles/NightlyTest:
-	/home/fadi/Downloads/CLion-2021.3.2/clion-2021.3.2/bin/cmake/linux/bin/ctest -D NightlyTest
+	/home/charlie/work/clion-2021.2.3/bin/cmake/linux/bin/ctest -D NightlyTest
 
 NightlyTest: CMakeFiles/NightlyTest
 NightlyTest: CMakeFiles/NightlyTest.dir/build.make
@@ -82,6 +82,6 @@ CMakeFiles/NightlyTest.dir/clean:
 .PHONY : CMakeFiles/NightlyTest.dir/clean
 
 CMakeFiles/NightlyTest.dir/depend:
-	cd /home/fadi/work/chat_assignment/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/fadi/work/chat_assignment /home/fadi/work/chat_assignment /home/fadi/work/chat_assignment/cmake-build-debug /home/fadi/work/chat_assignment/cmake-build-debug /home/fadi/work/chat_assignment/cmake-build-debug/CMakeFiles/NightlyTest.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/charlie/work/Term2/Assignment_4 /home/charlie/work/Term2/Assignment_4 /home/charlie/work/Term2/Assignment_4/cmake-build-debug /home/charlie/work/Term2/Assignment_4/cmake-build-debug /home/charlie/work/Term2/Assignment_4/cmake-build-debug/CMakeFiles/NightlyTest.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/NightlyTest.dir/depend
 

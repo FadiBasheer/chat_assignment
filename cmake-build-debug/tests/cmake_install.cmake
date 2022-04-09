@@ -1,4 +1,4 @@
-# Install script for directory: /home/fadi/work/chat_assignment/tests
+# Install script for directory: /home/charlie/work/Term2/Assignment_4/tests
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

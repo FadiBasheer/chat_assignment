@@ -1,0 +1,1 @@
+/usr/bin/cc -g CMakeFiles/user_menu.dir/user_menu.c.o -o user_menu 

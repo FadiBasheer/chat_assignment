@@ -14,6 +14,14 @@
 #define BUFSIZE 1024
 #define SA struct sockaddr
 
+
+enum command {SEND = 1, LOGOUT, GET_USERS, CREATE_CHANNEL, JOIN_CHANNEL, LEAVE_CHANNEL, LOGIN, FAILED = 22};
+enum res_code {SUCCESS = 1, MESSAGE, USER_CONNECTED, USER_DISCONNECTED, MESSAGE_FAILED, CHANNEL_CREATED,
+    CHANNEL_CREATION_ERROR, CHANNEL_DESTROYED, USER_JOINED_CHANNEL, USER_LEFT_CHANNEL, USER_LIST,
+    UNKNOWN_CMD, LOGIN_FAILED, UNKNOWN_CHANNEL, BAD_VERSION, SEND_FAILED, CHAN_ID_OVERFLOW,
+    MSG_OVERFLOW, MSG_LEN_OVERFLOW, CHAN_EMPTY, INVALID_ID, FAILURE, UNAUTH_ACCESS, SERVERFULL};
+
+
 /**
  * Client linked-list, data structure to manage clients connecting to the server
  * in different channels.
@@ -58,7 +66,7 @@ int cpt_login_response(struct Client *node, struct Client **head, int fd, char *
 int cpt_create_channel_response(struct Client *node, struct Client **ref_node, uint16_t channel_id, int msg_len,
                                 int fd, const char *message, char *name);
 
-int get_uesrs_list(struct Client *node);
+int get_users_list(struct Client *node);
 
 int cpt_logout_response(struct Client **head, int fd);
 
@@ -272,7 +280,7 @@ int cpt_send_response(int fd, int code, int msg_length, char *msg, int chan_id);
 //
 //                        //get users
 //                        if (cpt.command == 3) {
-//                            function_response = get_uesrs_list(client);
+//                            function_response = get_users_list(client);
 //                            cpt_send_response(head_client->fd, function_response, 0, "", cpt.channel_id);
 //                            print_client_list(client);
 //                        }
@@ -382,25 +390,24 @@ void push(struct Client **head_ref, int chan_id, int fd, char *name) {
  */
 ///////////////////////////////////////// co ///////////////////////////////////////////////
 int cpt_login_response(struct Client *node, struct Client **head, int fd, char *name) {
-    int flag = 0;
     while (node != NULL) {
         if (node->fd == fd) {
             printf("user already exist\n");
-            flag = 1;
+            return FAILED;
         }
         node = node->next;
     }
-    if (flag == 0) {
-        //Add client FD to main channel (0) linked-list
-        push(head, 0, fd, name);
-    }
-    return 0;
+
+    //Add client FD to main channel (0) linked-list
+    push(head, 0, fd, name);
+
+    return LOGIN;
 }
 
 ///////////////////////////////////////////////////////////////co //////////////////////////////////
 int cpt_logout_response(struct Client **head, int fd) {
     delete_client(head, -1, fd);
-    return 0;
+    return LOGOUT;
 }
 
 /**
@@ -417,8 +424,7 @@ void print_client_list(struct Client *node) {
     }
 }
 
-
-int get_uesrs_list(struct Client *node) {
+int get_users_list(struct Client *node) {
 //    printf("------ Clients Currently Connected! ------\n");
 //    printf("Client list:\n");
 //    while (node != NULL) {
@@ -427,6 +433,7 @@ int get_uesrs_list(struct Client *node) {
 //    }
 //    return 0;
 }
+
 
 /**
  * Takes the client channel_id and fd to creates a new node in the client linked-list.
@@ -452,7 +459,7 @@ int cpt_join_channel_response(struct Client *node, struct Client **ref_node, uin
     }
     if (flag == 0) {
         printf("You need to login first: %s\n", name);
-        return 0;
+        return FAILED;
     }
 
     flag = 0;
@@ -460,6 +467,7 @@ int cpt_join_channel_response(struct Client *node, struct Client **ref_node, uin
         if (node->fd == fd && node->chan_id == channel_id) {
             flag = 1;
             printf("You are a member of this channel\n");
+            return FAILED;
         }
         node = node->next;
     }
@@ -467,9 +475,8 @@ int cpt_join_channel_response(struct Client *node, struct Client **ref_node, uin
     if (flag == 0) {
         push(ref_node, channel_id, fd, name);
     }
-    return 9;
+    return JOIN_CHANNEL;
 }
-
 
 int cpt_create_channel_response(struct Client *node, struct Client **ref_node, uint16_t channel_id, int msg_len,
                                 int fd, const char *message, char *name) {
@@ -487,7 +494,7 @@ int cpt_create_channel_response(struct Client *node, struct Client **ref_node, u
     }
     if (flag == 0) {
         printf("You need to login first\n");
-        return 0;
+        return FAILED;
     }
 
     // Check if the Channel exist
@@ -496,7 +503,7 @@ int cpt_create_channel_response(struct Client *node, struct Client **ref_node, u
         if (node2->chan_id == channel_id) {
             flag = 1;
             printf("Channel already exist\n");
-            return 0;
+            return FAILED;
         }
         node2 = node2->next;
     }
@@ -524,7 +531,7 @@ int cpt_create_channel_response(struct Client *node, struct Client **ref_node, u
             }
         }
     }
-    return 9;
+    return CREATE_CHANNEL;
 }
 
 /**
@@ -572,7 +579,7 @@ int cpt_leave_channel_response(void *server_info, struct Client *node, struct Cl
     if (flag == 1) {
         delete_client(ref_node, channel_id, fd);
     }
-    return 10;
+    return LEAVE_CHANNEL;
 }
 
 int cpt_send_response(int fd, int code, int msg_length, char *msg, int chan_id) {
@@ -589,5 +596,5 @@ int cpt_send_response(int fd, int code, int msg_length, char *msg, int chan_id) 
 
     send(fd, buf, packet_size, 0);
 
-    return 0;
+    return SEND;
 }

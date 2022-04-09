@@ -1,11 +1,4 @@
-/home/fadi/Downloads/CLion-2021.3.2/clion-2021.3.2/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles" /home/fadi/work/chat_assignment
--- The C compiler identification is GNU 9.4.0
--- Detecting C compiler ABI info
--- Detecting C compiler ABI info - done
--- Check for working C compiler: /usr/bin/cc - skipped
--- Detecting C compile features
--- Detecting C compile features - done
--- Found Doxygen: /usr/bin/doxygen (found version "1.8.17") found components: doxygen dot 
+/home/charlie/work/clion-2021.2.3/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/charlie/work/Term2/Assignment_4
 -- Configuring done
 -- Generating done
--- Build files have been written to: /home/fadi/work/chat_assignment/cmake-build-debug
+-- Build files have been written to: /home/charlie/work/Term2/Assignment_4/cmake-build-debug
