@@ -295,6 +295,21 @@
 		{
 			"isCMake" : true,
 			"isExternal" : true,
+			"path" : "/home/fadi/Downloads/CLion-2021.3.2/clion-2021.3.2/bin/cmake/linux/share/cmake-3.21/Modules/CMakeFindCodeBlocks.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/fadi/Downloads/CLion-2021.3.2/clion-2021.3.2/bin/cmake/linux/share/cmake-3.21/Modules/CMakeExtraGeneratorDetermineCompilerMacrosAndIncludeDirs.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/fadi/Downloads/CLion-2021.3.2/clion-2021.3.2/bin/cmake/linux/share/cmake-3.21/Modules/ProcessorCount.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
 			"path" : "/home/fadi/Downloads/CLion-2021.3.2/clion-2021.3.2/bin/cmake/linux/share/cmake-3.21/Modules/CMakeCInformation.cmake"
 		},
 		{
