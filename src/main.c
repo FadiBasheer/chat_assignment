@@ -385,18 +385,17 @@ void push(struct Client **head_ref, int chan_id, int fd, char *name) {
  */
 ///////////////////////////////////////// co ///////////////////////////////////////////////
 int cpt_login_response(struct Client *node, struct Client **head, int fd, char *name) {
-    int flag = 0;
     while (node != NULL) {
         if (node->fd == fd) {
-            printf("user already exist\n");
-            flag = 1;
+            printf("User already exist\n");
+            return 0;
         }
         node = node->next;
     }
-    if (flag == 0) {
-        //Add client FD to main channel (0) linked-list
-        push(head, 0, fd, name);
-    }
+
+    //Add client FD to main channel (0) linked-list
+    push(head, 0, fd, name);
+
     return 0;
 }
 
@@ -460,19 +459,19 @@ int cpt_join_channel_response(struct Client *node, struct Client **ref_node, uin
         return 0;
     }
 
-    flag = 0;
+    //Check if the user is a member of this channel.
     while (node != NULL) {
         if (node->fd == fd && node->chan_id == channel_id) {
-            flag = 1;
             printf("You are a member of this channel\n");
+            return 0;
         }
         node = node->next;
     }
 
-    if (flag == 0) {
-        push(ref_node, channel_id, fd, name);
-    }
-    return 9;
+    //IF not, add it.
+    push(ref_node, channel_id, fd, name);
+
+    return 5;
 }
 
 
@@ -491,7 +490,7 @@ int cpt_create_channel_response(struct Client *node, struct Client **ref_node, u
         node1 = node1->next;
     }
     if (flag == 0) {
-        printf("You need to login first\n");
+        printf("You need to login first: %s\n", name);
         return 0;
     }
 
@@ -500,7 +499,7 @@ int cpt_create_channel_response(struct Client *node, struct Client **ref_node, u
         push(ref_node, channel_id, fd, name);
     }
 
-    //Creating a channel for yourself and with users in message (Find all fd's in the message and add them to the new channel).
+        //Creating a channel for yourself and with users in message (Find all fd's in the message and add them to the new channel).
     else {
         push(ref_node, channel_id, fd, name);
         for (int i = 0; i < msg_len; i += 2) {
@@ -516,7 +515,7 @@ int cpt_create_channel_response(struct Client *node, struct Client **ref_node, u
             }
         }
     }
-    return 9;
+    return 4;
 }
 
 /**
@@ -553,6 +552,7 @@ void delete_client(struct Client **head_ref, int chan_id, int fd_key) {
 int cpt_leave_channel_response(void *server_info, struct Client *node, struct Client **ref_node, uint16_t channel_id,
                                int fd) {
     int flag = 0;
+    //Check if the
     while (node != NULL) {
         if (node->fd == fd && node->chan_id == channel_id) {
             flag = 1;
@@ -564,7 +564,7 @@ int cpt_leave_channel_response(void *server_info, struct Client *node, struct Cl
     if (flag == 1) {
         delete_client(ref_node, channel_id, fd);
     }
-    return 10;
+    return 6;
 }
 
 int cpt_send_response(int fd, int code, int msg_length, char *msg, int chan_id) {
