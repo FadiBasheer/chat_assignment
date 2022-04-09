@@ -219,11 +219,7 @@ int main(void) {
 
                 fcntl(client_fd, F_SETFL, flags | O_NONBLOCK);
 
-//                //Add client FD to main channel (0) linked-list
-//                         push(&client, 0, client_fd);
-//
-//                print_client_list(client);
-
+                //add the fd to fd_set for select.
                 FD_SET(client_fd, &fd_read_set);
             }
         }
@@ -257,15 +253,17 @@ int main(void) {
                         unpack(client_buffer, "CCHCs", &cpt.version, &cpt.command, &cpt.channel_id, &cpt.msg_len,
                                &msg_rcv);
 
-                        char buf[255];
-                        snprintf(buf, sizeof(buf), "%s %d: ", "From channel", cpt.channel_id);
-                        cpt.msg_len += strlen(buf);
-                        cpt.msg = malloc(cpt.msg_len * sizeof(char));
-                        strncpy(cpt.msg, buf, strlen(buf));
-                        strcat(cpt.msg, msg_rcv);
-
                         // If command is send
                         if (cpt.command == 1) {
+
+                            //Adding "From channel <channel_id>" to the message.
+                            char buf[255];
+                            snprintf(buf, sizeof(buf), "%s %d: ", "From channel", cpt.channel_id);
+                            cpt.msg_len += strlen(buf);
+                            cpt.msg = malloc(cpt.msg_len * sizeof(char));
+                            strncpy(cpt.msg, buf, strlen(buf));
+                            strcat(cpt.msg, msg_rcv);
+
                             struct Client *head_client_write = client;
 
                             while (head_client_write != NULL) {
@@ -275,6 +273,9 @@ int main(void) {
                                 }
                                 head_client_write = head_client_write->next;
                             }
+                        } else {
+                            cpt.msg = malloc(cpt.msg_len * sizeof(char));
+                            strncpy(cpt.msg, msg_rcv, cpt.msg_len);
                         }
 
                         // logout
