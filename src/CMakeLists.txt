@@ -13,8 +13,6 @@ ENDIF ()
 add_executable(server ${COMMON_SOURCE_LIST}  ${SERVER_SOURCE_LIST} ${SERVER_MAIN_SOURCE} ${HEADER_LIST})
 add_executable(client ${COMMON_SOURCE_LIST}  ${CLIENT_SOURCE_LIST} ${CLIENT_MAIN_SOURCE} ${HEADER_LIST})
 add_executable(main main.c)
-add_executable(client_test client_test.c)
-add_executable(user_menu user_menu.c)
 
 # We need this directory, and users of our library will need it too
 target_include_directories(server PRIVATE ../include)

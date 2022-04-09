@@ -1,4 +1,36 @@
-/home/charlie/work/clion-2021.2.3/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/charlie/work/Term2/Assignment_4
+/home/charlie/work/clion-2021.2.3/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/charlie/work/Term2/Assignment_4_v2
+-- The C compiler identification is GNU 9.4.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Found Doxygen: /usr/bin/doxygen (found version "1.8.17") found components: doxygen dot 
 -- Configuring done
--- Generating done
--- Build files have been written to: /home/charlie/work/Term2/Assignment_4/cmake-build-debug
+CMake Error at src/CMakeLists.txt:16 (add_executable):
+  Cannot find source file:
+
+    client_test.c
+
+  Tried extensions .c .C .c++ .cc .cpp .cxx .cu .mpp .m .M .mm .ixx .cppm .h
+  .hh .h++ .hm .hpp .hxx .in .txx .f .F .for .f77 .f90 .f95 .f03 .hip .ispc
+
+
+CMake Error at src/CMakeLists.txt:17 (add_executable):
+  Cannot find source file:
+
+    user_menu.c
+
+  Tried extensions .c .C .c++ .cc .cpp .cxx .cu .mpp .m .M .mm .ixx .cppm .h
+  .hh .h++ .hm .hpp .hxx .in .txx .f .F .for .f77 .f90 .f95 .f03 .hip .ispc
+
+
+CMake Error at src/CMakeLists.txt:16 (add_executable):
+  No SOURCES given to target: client_test
+
+
+CMake Error at src/CMakeLists.txt:17 (add_executable):
+  No SOURCES given to target: user_menu
+
+
+CMake Generate step failed.  Build files cannot be regenerated correctly.

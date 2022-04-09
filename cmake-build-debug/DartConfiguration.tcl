@@ -4,8 +4,8 @@
 
 
 # Configuration directories and files
-SourceDirectory: /home/charlie/work/Term2/Assignment_4
-BuildDirectory: /home/charlie/work/Term2/Assignment_4/cmake-build-debug
+SourceDirectory: /home/charlie/work/Term2/Assignment_4_v2
+BuildDirectory: /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug
 
 # Where to place the cost data store
 CostDataFile: 
@@ -26,7 +26,7 @@ SubmitURL: http://
 NightlyStartTime: 00:00:00 EDT
 
 # Commands for the build/test/submit cycle
-ConfigureCommand: "/home/charlie/work/clion-2021.2.3/bin/cmake/linux/bin/cmake" "/home/charlie/work/Term2/Assignment_4"
+ConfigureCommand: "/home/charlie/work/clion-2021.2.3/bin/cmake/linux/bin/cmake" "/home/charlie/work/Term2/Assignment_4_v2"
 MakeCommand: /home/charlie/work/clion-2021.2.3/bin/cmake/linux/bin/cmake --build . --config "${CTEST_CONFIGURATION_TYPE}"
 DefaultCTestConfigurationType: Release
 
