@@ -8,8 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/charlie/work/Term2/Assignment_4/src/common.c" "tests/CMakeFiles/template2_test.dir/__/src/common.c.o" "gcc" "tests/CMakeFiles/template2_test.dir/__/src/common.c.o.d"
-  "/home/charlie/work/Term2/Assignment_4/tests/main.c" "tests/CMakeFiles/template2_test.dir/main.c.o" "gcc" "tests/CMakeFiles/template2_test.dir/main.c.o.d"
+  "/home/fadi/work/chat_assignment/src/common.c" "tests/CMakeFiles/template2_test.dir/__/src/common.c.o" "gcc" "tests/CMakeFiles/template2_test.dir/__/src/common.c.o.d"
+  "/home/fadi/work/chat_assignment/tests/main.c" "tests/CMakeFiles/template2_test.dir/main.c.o" "gcc" "tests/CMakeFiles/template2_test.dir/main.c.o.d"
   )
 
 # Targets to which this target links.

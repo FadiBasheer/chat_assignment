@@ -14,11 +14,15 @@
 #define BUFSIZE 1024
 #define SA struct sockaddr
 
-enum command {SEND = 1, LOGOUT, GET_USERS, CREATE_CHANNEL, JOIN_CHANNEL, LEAVE_CHANNEL, LOGIN, FAILED = 22};
-enum res_code {SUCCESS = 1, MESSAGE, USER_CONNECTED, USER_DISCONNECTED, MESSAGE_FAILED, CHANNEL_CREATED,
+enum command {
+    SEND = 1, LOGOUT = 2, GET_USERS = 3, CREATE_CHANNEL = 4, JOIN_CHANNEL = 5, LEAVE_CHANNEL = 6, LOGIN = 7, FAILED = 22
+};
+enum res_code {
+    SUCCESS = 1, MESSAGE, USER_CONNECTED, USER_DISCONNECTED, MESSAGE_FAILED, CHANNEL_CREATED,
     CHANNEL_CREATION_ERROR, CHANNEL_DESTROYED, USER_JOINED_CHANNEL, USER_LEFT_CHANNEL, USER_LIST,
     UNKNOWN_CMD, LOGIN_FAILED, UNKNOWN_CHANNEL, BAD_VERSION, SEND_FAILED, CHAN_ID_OVERFLOW,
-    MSG_OVERFLOW, MSG_LEN_OVERFLOW, CHAN_EMPTY, INVALID_ID, FAILURE, UNAUTH_ACCESS, SERVERFULL};
+    MSG_OVERFLOW, MSG_LEN_OVERFLOW, CHAN_EMPTY, INVALID_ID, FAILURE, UNAUTH_ACCESS, SERVERFULL
+};
 
 uint16_t channelId = 0;
 /**
@@ -65,7 +69,7 @@ int cpt_login_response(struct Client *node, struct Client **head, int fd, char *
 int cpt_create_channel_response(struct Client *node, struct Client **ref_node, uint16_t channel_id, int msg_len,
                                 int fd, const char *message, char *name);
 
-int get_uesrs_list(struct Client *node, uint16_t channel_id);
+int get_uesrs_list(struct Client *node, uint16_t channel_id, uint8_t *msg_len, char **msg);
 
 int cpt_logout_response(struct Client **head, int fd);
 
@@ -103,7 +107,7 @@ int cpt_join_channel_response(struct Client *node, struct Client **ref_node, uin
  * @param fd file descriptor of new client.
  * @return 10 if successful 5 if failure.
  */
-int cpt_leave_channel_response(void *server_info, struct Client *node, struct Client **ref_node,
+int cpt_leave_channel_response(struct Client *node, struct Client **ref_node,
                                uint16_t channel_id, int fd);
 
 /**
@@ -115,7 +119,7 @@ int cpt_leave_channel_response(void *server_info, struct Client *node, struct Cl
  * @param chan_id channel id of client.
  * @return 0 if successful.
  */
-int cpt_send_response(int fd, int code, int msg_length, char *msg, int chan_id);
+int cpt_send_response(int fd, int code, int msg_length, char *msg);
 
 /**
  * Main entry point to the program.
@@ -252,8 +256,13 @@ int main(void) {
 
                         unpack(client_buffer, "CCHCs", &cpt.version, &cpt.command, &cpt.channel_id, &cpt.msg_len,
                                &msg_rcv);
+
+                        char buf[255];
+                        snprintf(buf, sizeof(buf), "%s %d: ", "From channel", cpt.channel_id);
+                        cpt.msg_len += strlen(buf);
                         cpt.msg = malloc(cpt.msg_len * sizeof(char));
-                        strncpy(cpt.msg, msg_rcv, cpt.msg_len);
+                        strncpy(cpt.msg, buf, strlen(buf));
+                        strcat(cpt.msg, msg_rcv);
 
                         // If command is send
                         if (cpt.command == 1) {
@@ -262,8 +271,7 @@ int main(void) {
                             while (head_client_write != NULL) {
                                 if (head_client_write->chan_id == cpt.channel_id &&
                                     head_client_write->fd != head_client->fd) {
-                                    cpt_send_response(head_client_write->fd, 1, cpt.msg_len, cpt.msg,
-                                                      cpt.channel_id);
+                                    cpt_send_response(head_client_write->fd, SEND, cpt.msg_len, cpt.msg);
                                 }
                                 head_client_write = head_client_write->next;
                             }
@@ -272,14 +280,14 @@ int main(void) {
                         // logout
                         if (cpt.command == 2) {
                             function_response = cpt_logout_response(&client, client_fd);
-                            cpt_send_response(head_client->fd, function_response, 0, "", cpt.channel_id);
+                            cpt_send_response(head_client->fd, function_response, 0, "");
                             print_client_list(client);
                         }
 
                         //get users
                         if (cpt.command == 3) {
-                            function_response = get_uesrs_list(client, cpt.channel_id);
-                            cpt_send_response(head_client->fd, function_response, 0, "", cpt.channel_id);
+                            function_response = get_uesrs_list(client, cpt.channel_id, &cpt.msg_len, &cpt.msg);
+                            cpt_send_response(head_client->fd, function_response, cpt.msg_len, cpt.msg);
                             print_client_list(client);
                         }
 
@@ -289,7 +297,7 @@ int main(void) {
                             function_response = cpt_create_channel_response(client, &client, channelId,
                                                                             cpt.msg_len,
                                                                             client_fd, cpt.msg, client->name);
-                            cpt_send_response(head_client->fd, function_response, 0, "", cpt.channel_id);
+                            cpt_send_response(head_client->fd, function_response, 0, "");
                             print_client_list(client);
                         }
 
@@ -297,22 +305,22 @@ int main(void) {
                         if (cpt.command == 5) {
                             function_response = cpt_join_channel_response(client, &client, cpt.channel_id,
                                                                           client_fd, client->name);
-                            cpt_send_response(head_client->fd, function_response, 0, "", cpt.channel_id);
+                            cpt_send_response(head_client->fd, function_response, 0, "");
                             print_client_list(client);
                         }
 
                         //LEAVE_CHANNEL
                         if (cpt.command == 6) {
-                            function_response = cpt_leave_channel_response(NULL, client, &client, cpt.channel_id,
+                            function_response = cpt_leave_channel_response(client, &client, cpt.channel_id,
                                                                            client_fd);
-                            cpt_send_response(head_client->fd, function_response, 0, "", cpt.channel_id);
+                            cpt_send_response(head_client->fd, function_response, 0, "");
                             print_client_list(client);
                         }
 
                         // login
                         if (cpt.command == 7) {
                             function_response = cpt_login_response(client, &client, client_fd, cpt.msg);
-                            cpt_send_response(head_client->fd, function_response, 0, "", cpt.channel_id);
+                            cpt_send_response(head_client->fd, function_response, 0, "");
                             print_client_list(client);
                         }
                     }
@@ -325,6 +333,8 @@ int main(void) {
 
 
 //int main() {
+//    struct cpt cpt;
+//    char msg_rcv[] = "hello";
 //
 //    struct Client *client2 = NULL;
 //
@@ -341,31 +351,44 @@ int main(void) {
 //    cpt_join_channel_response(client2, &client2, 5, 1, "fadi");
 //    cpt_join_channel_response(client2, &client2, 0, 5, "Jon");
 //    print_client_list(client2);
+////
+////    get_uesrs_list(client2, cpt.channel_id, &cpt.msg_len, &cpt.msg);
+////    printf("\ncpt.msg: %s\n", cpt.msg);
 //
-//    printf("\n---------- After leave channel -------------\n");
-//    cpt_leave_channel_response(NULL, client2, &client2, 5, 1);
-//    print_client_list(client2);
 //
-//    printf("\n---------- After logout-------------\n");
-//    cpt_logout_response(&client2, 1);
-//    print_client_list(client2);
+//    char buf[255];
+//    snprintf(buf, sizeof(buf), "%s %d: ", "From channel", cpt.channel_id);
 //
-
-//    printf("\n---------- After create channel-------------\n");
-//    cpt_create_channel_response(client2, &client2, 5, 0, 1, "", "fadi");
-//    print_client_list(client2);
+//    cpt.msg_len += strlen(buf);
+//    cpt.msg = malloc(cpt.msg_len * sizeof(char));
+//    strncpy(cpt.msg, buf, strlen(buf));
 //
-//    printf("\n---------- After create channel with existing channel-------------\n");
-//    cpt_create_channel_response(client2, &client2, 0, 0, 2, "", "hey");
-//    print_client_list(client2);
+//    strcat(cpt.msg, msg_rcv);
+//   printf("\ncpt.msg final: %s\n", cpt.msg);
 //
-//    printf("\n---------- After create channel with existing channel-------------\n");
-//    cpt_login_response(client2, &client2, 1, "fadi");
-//    cpt_create_channel_response(client2, &client2, 5, 2, 1, "3", "fadi");
-//    print_client_list(client2);
 //
-//    get_uesrs_list(client2, 8);
 //
+////    printf("\n---------- After leave channel -------------\n");
+////    cpt_leave_channel_response(client2, &client2, 5, 1);
+////    print_client_list(client2);
+////
+////    printf("\n---------- After logout-------------\n");
+////    cpt_logout_response(&client2, 1);
+////    print_client_list(client2);
+////
+////
+////    printf("\n---------- After create channel-------------\n");
+////    cpt_create_channel_response(client2, &client2, 5, 0, 1, "", "fadi");
+////    print_client_list(client2);
+////
+////    printf("\n---------- After create channel with existing channel-------------\n");
+////    cpt_create_channel_response(client2, &client2, 0, 0, 2, "", "hey");
+////    print_client_list(client2);
+////
+////    printf("\n---------- After create channel with existing channel-------------\n");
+////    cpt_login_response(client2, &client2, 1, "fadi");
+////    cpt_create_channel_response(client2, &client2, 5, 2, 1, "3", "fadi");
+////    print_client_list(client2);
 //}
 
 
@@ -428,12 +451,15 @@ void print_client_list(struct Client *node) {
 }
 
 
-int get_uesrs_list(struct Client *node, uint16_t channel_id) {
-    printf("------ Clients Currently Connected! ------\n");
-    printf("Client list:\n");
+int get_uesrs_list(struct Client *node, uint16_t channel_id, uint8_t *msg_len, char **msg) {
+
+    char buf[256];
     while (node != NULL) {
         if (node->chan_id == channel_id) {
-            printf("chan_id: %d, fd: %d, name: %s\n", node->chan_id, node->fd, node->name);
+            snprintf(buf, sizeof(buf), "%d %s\n", node->fd, node->name);
+            *msg_len += strlen(buf);
+            *msg = (char *) realloc(*msg, (strlen(buf) * sizeof(char)));
+            strcat(*msg, buf);
         }
         node = node->next;
     }
@@ -484,9 +510,8 @@ int cpt_join_channel_response(struct Client *node, struct Client **ref_node, uin
 
 int cpt_create_channel_response(struct Client *node, struct Client **ref_node, uint16_t channel_id, int msg_len,
                                 int fd, const char *message, char *name) {
-    struct Client *node1, *node2, *node3;
+    struct Client *node1, *node3;
     node1 = node;
-    node2 = node;
 
     // Check if the client who is asking to create the channel has logged in or not.
     int flag = 0;
@@ -556,7 +581,7 @@ void delete_client(struct Client **head_ref, int chan_id, int fd_key) {
 }
 
 /////////////////////////////////////////////////////////co//////////////////////////////////////////////////////////
-int cpt_leave_channel_response(void *server_info, struct Client *node, struct Client **ref_node, uint16_t channel_id,
+int cpt_leave_channel_response(struct Client *node, struct Client **ref_node, uint16_t channel_id,
                                int fd) {
     int flag = 0;
     //Check if the
@@ -574,9 +599,8 @@ int cpt_leave_channel_response(void *server_info, struct Client *node, struct Cl
     return LEAVE_CHANNEL;
 }
 
-int cpt_send_response(int fd, int code, int msg_length, char *msg, int chan_id) {
+int cpt_send_response(int fd, int code, int msg_length, char *msg) {
     unsigned char buf[1024];
-    unsigned char data[1024];
     size_t packet_size;
 
     struct CptResponse response;

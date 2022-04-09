@@ -44,19 +44,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /home/charlie/work/clion-2021.2.3/bin/cmake/linux/bin/cmake
+CMAKE_COMMAND = /home/fadi/Downloads/CLion-2021.3.2/clion-2021.3.2/bin/cmake/linux/bin/cmake
 
 # The command to remove a file.
-RM = /home/charlie/work/clion-2021.2.3/bin/cmake/linux/bin/cmake -E rm -f
+RM = /home/fadi/Downloads/CLion-2021.3.2/clion-2021.3.2/bin/cmake/linux/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/charlie/work/Term2/Assignment_4
+CMAKE_SOURCE_DIR = /home/fadi/work/chat_assignment
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/charlie/work/Term2/Assignment_4/cmake-build-debug
+CMAKE_BINARY_DIR = /home/fadi/work/chat_assignment/cmake-build-debug
 
 # Utility rule file for format.
 
@@ -67,7 +67,7 @@ include src/CMakeFiles/format.dir/compiler_depend.make
 include src/CMakeFiles/format.dir/progress.make
 
 src/CMakeFiles/format:
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug/src && clang-format -i /home/charlie/work/Term2/Assignment_4/include/common.h /home/charlie/work/Term2/Assignment_4/src/common.c /home/charlie/work/Term2/Assignment_4/src/server.c /home/charlie/work/Term2/Assignment_4/src/client.c
+	cd /home/fadi/work/chat_assignment/cmake-build-debug/src && clang-format -i /home/fadi/work/chat_assignment/include/common.h /home/fadi/work/chat_assignment/src/common.c /home/fadi/work/chat_assignment/src/server.c /home/fadi/work/chat_assignment/src/client.c
 
 format: src/CMakeFiles/format
 format: src/CMakeFiles/format.dir/build.make
@@ -78,10 +78,10 @@ src/CMakeFiles/format.dir/build: format
 .PHONY : src/CMakeFiles/format.dir/build
 
 src/CMakeFiles/format.dir/clean:
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug/src && $(CMAKE_COMMAND) -P CMakeFiles/format.dir/cmake_clean.cmake
+	cd /home/fadi/work/chat_assignment/cmake-build-debug/src && $(CMAKE_COMMAND) -P CMakeFiles/format.dir/cmake_clean.cmake
 .PHONY : src/CMakeFiles/format.dir/clean
 
 src/CMakeFiles/format.dir/depend:
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/charlie/work/Term2/Assignment_4 /home/charlie/work/Term2/Assignment_4/src /home/charlie/work/Term2/Assignment_4/cmake-build-debug /home/charlie/work/Term2/Assignment_4/cmake-build-debug/src /home/charlie/work/Term2/Assignment_4/cmake-build-debug/src/CMakeFiles/format.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/fadi/work/chat_assignment/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/fadi/work/chat_assignment /home/fadi/work/chat_assignment/src /home/fadi/work/chat_assignment/cmake-build-debug /home/fadi/work/chat_assignment/cmake-build-debug/src /home/fadi/work/chat_assignment/cmake-build-debug/src/CMakeFiles/format.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : src/CMakeFiles/format.dir/depend
 
