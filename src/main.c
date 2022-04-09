@@ -280,7 +280,7 @@ int main(void) {
                         if (cpt.command == 4) {
                             function_response = cpt_create_channel_response(client, &client, cpt.channel_id,
                                                                             cpt.msg_len,
-                                                                            client_fd, cpt.msg, "fadi");
+                                                                            client_fd, cpt.msg, client->name);
                             cpt_send_response(head_client->fd, function_response, 0, "", cpt.channel_id);
                             print_client_list(client);
                         }
