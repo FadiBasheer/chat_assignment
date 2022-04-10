@@ -53,10 +53,10 @@ RM = /home/charlie/work/clion-2021.2.3/bin/cmake/linux/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/charlie/work/Term2/Assignment_4
+CMAKE_SOURCE_DIR = /home/charlie/work/Term2/Assignment_4_v2
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/charlie/work/Term2/Assignment_4/cmake-build-debug
+CMAKE_BINARY_DIR = /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug
 
 # Include any dependencies generated for this target.
 include src/CMakeFiles/client.dir/depend.make
@@ -72,30 +72,30 @@ include src/CMakeFiles/client.dir/flags.make
 src/CMakeFiles/client.dir/common.c.o: src/CMakeFiles/client.dir/flags.make
 src/CMakeFiles/client.dir/common.c.o: ../src/common.c
 src/CMakeFiles/client.dir/common.c.o: src/CMakeFiles/client.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/charlie/work/Term2/Assignment_4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object src/CMakeFiles/client.dir/common.c.o"
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug/src && $(CMAKE_COMMAND) -E __run_co_compile --tidy="clang-tidy;-checks=*,-llvmlibc-restrict-system-libc-headers,-cppcoreguidelines-init-variables,-clang-analyzer-security.insecureAPI.strcpy,-concurrency-mt-unsafe,-android-cloexec-accept,-android-cloexec-dup,-google-readability-todo,-cppcoreguidelines-avoid-magic-numbers,-readability-magic-numbers,-cert-dcl03-c,-hicpp-static-assert,-misc-static-assert,-altera-struct-pack-align,-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling;--quiet;--extra-arg-before=--driver-mode=gcc" --source=/home/charlie/work/Term2/Assignment_4/src/common.c -- /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT src/CMakeFiles/client.dir/common.c.o -MF CMakeFiles/client.dir/common.c.o.d -o CMakeFiles/client.dir/common.c.o -c /home/charlie/work/Term2/Assignment_4/src/common.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object src/CMakeFiles/client.dir/common.c.o"
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/src && $(CMAKE_COMMAND) -E __run_co_compile --tidy="clang-tidy;-checks=*,-llvmlibc-restrict-system-libc-headers,-cppcoreguidelines-init-variables,-clang-analyzer-security.insecureAPI.strcpy,-concurrency-mt-unsafe,-android-cloexec-accept,-android-cloexec-dup,-google-readability-todo,-cppcoreguidelines-avoid-magic-numbers,-readability-magic-numbers,-cert-dcl03-c,-hicpp-static-assert,-misc-static-assert,-altera-struct-pack-align,-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling;--quiet;--extra-arg-before=--driver-mode=gcc" --source=/home/charlie/work/Term2/Assignment_4_v2/src/common.c -- /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT src/CMakeFiles/client.dir/common.c.o -MF CMakeFiles/client.dir/common.c.o.d -o CMakeFiles/client.dir/common.c.o -c /home/charlie/work/Term2/Assignment_4_v2/src/common.c
 
 src/CMakeFiles/client.dir/common.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/client.dir/common.c.i"
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/charlie/work/Term2/Assignment_4/src/common.c > CMakeFiles/client.dir/common.c.i
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/charlie/work/Term2/Assignment_4_v2/src/common.c > CMakeFiles/client.dir/common.c.i
 
 src/CMakeFiles/client.dir/common.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/client.dir/common.c.s"
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/charlie/work/Term2/Assignment_4/src/common.c -o CMakeFiles/client.dir/common.c.s
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/charlie/work/Term2/Assignment_4_v2/src/common.c -o CMakeFiles/client.dir/common.c.s
 
 src/CMakeFiles/client.dir/client.c.o: src/CMakeFiles/client.dir/flags.make
 src/CMakeFiles/client.dir/client.c.o: ../src/client.c
 src/CMakeFiles/client.dir/client.c.o: src/CMakeFiles/client.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/charlie/work/Term2/Assignment_4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object src/CMakeFiles/client.dir/client.c.o"
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug/src && $(CMAKE_COMMAND) -E __run_co_compile --tidy="clang-tidy;-checks=*,-llvmlibc-restrict-system-libc-headers,-cppcoreguidelines-init-variables,-clang-analyzer-security.insecureAPI.strcpy,-concurrency-mt-unsafe,-android-cloexec-accept,-android-cloexec-dup,-google-readability-todo,-cppcoreguidelines-avoid-magic-numbers,-readability-magic-numbers,-cert-dcl03-c,-hicpp-static-assert,-misc-static-assert,-altera-struct-pack-align,-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling;--quiet;--extra-arg-before=--driver-mode=gcc" --source=/home/charlie/work/Term2/Assignment_4/src/client.c -- /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT src/CMakeFiles/client.dir/client.c.o -MF CMakeFiles/client.dir/client.c.o.d -o CMakeFiles/client.dir/client.c.o -c /home/charlie/work/Term2/Assignment_4/src/client.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object src/CMakeFiles/client.dir/client.c.o"
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/src && $(CMAKE_COMMAND) -E __run_co_compile --tidy="clang-tidy;-checks=*,-llvmlibc-restrict-system-libc-headers,-cppcoreguidelines-init-variables,-clang-analyzer-security.insecureAPI.strcpy,-concurrency-mt-unsafe,-android-cloexec-accept,-android-cloexec-dup,-google-readability-todo,-cppcoreguidelines-avoid-magic-numbers,-readability-magic-numbers,-cert-dcl03-c,-hicpp-static-assert,-misc-static-assert,-altera-struct-pack-align,-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling;--quiet;--extra-arg-before=--driver-mode=gcc" --source=/home/charlie/work/Term2/Assignment_4_v2/src/client.c -- /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT src/CMakeFiles/client.dir/client.c.o -MF CMakeFiles/client.dir/client.c.o.d -o CMakeFiles/client.dir/client.c.o -c /home/charlie/work/Term2/Assignment_4_v2/src/client.c
 
 src/CMakeFiles/client.dir/client.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/client.dir/client.c.i"
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/charlie/work/Term2/Assignment_4/src/client.c > CMakeFiles/client.dir/client.c.i
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/charlie/work/Term2/Assignment_4_v2/src/client.c > CMakeFiles/client.dir/client.c.i
 
 src/CMakeFiles/client.dir/client.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/client.dir/client.c.s"
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/charlie/work/Term2/Assignment_4/src/client.c -o CMakeFiles/client.dir/client.c.s
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/charlie/work/Term2/Assignment_4_v2/src/client.c -o CMakeFiles/client.dir/client.c.s
 
 # Object files for target client
 client_OBJECTS = \
@@ -116,18 +116,18 @@ src/client: /usr/local/lib/libdc_fsm.so
 src/client: /usr/local/lib/libdc_application.so
 src/client: /usr/lib/x86_64-linux-gnu/libncurses.so
 src/client: src/CMakeFiles/client.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/charlie/work/Term2/Assignment_4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C executable client"
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/client.dir/link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C executable client"
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/client.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 src/CMakeFiles/client.dir/build: src/client
 .PHONY : src/CMakeFiles/client.dir/build
 
 src/CMakeFiles/client.dir/clean:
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug/src && $(CMAKE_COMMAND) -P CMakeFiles/client.dir/cmake_clean.cmake
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/src && $(CMAKE_COMMAND) -P CMakeFiles/client.dir/cmake_clean.cmake
 .PHONY : src/CMakeFiles/client.dir/clean
 
 src/CMakeFiles/client.dir/depend:
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/charlie/work/Term2/Assignment_4 /home/charlie/work/Term2/Assignment_4/src /home/charlie/work/Term2/Assignment_4/cmake-build-debug /home/charlie/work/Term2/Assignment_4/cmake-build-debug/src /home/charlie/work/Term2/Assignment_4/cmake-build-debug/src/CMakeFiles/client.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/charlie/work/Term2/Assignment_4_v2 /home/charlie/work/Term2/Assignment_4_v2/src /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/src /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/src/CMakeFiles/client.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : src/CMakeFiles/client.dir/depend
 

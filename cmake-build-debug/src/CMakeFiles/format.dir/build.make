@@ -53,10 +53,10 @@ RM = /home/charlie/work/clion-2021.2.3/bin/cmake/linux/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/charlie/work/Term2/Assignment_4
+CMAKE_SOURCE_DIR = /home/charlie/work/Term2/Assignment_4_v2
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/charlie/work/Term2/Assignment_4/cmake-build-debug
+CMAKE_BINARY_DIR = /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug
 
 # Utility rule file for format.
 
@@ -67,7 +67,7 @@ include src/CMakeFiles/format.dir/compiler_depend.make
 include src/CMakeFiles/format.dir/progress.make
 
 src/CMakeFiles/format:
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug/src && clang-format -i /home/charlie/work/Term2/Assignment_4/include/common.h /home/charlie/work/Term2/Assignment_4/src/common.c /home/charlie/work/Term2/Assignment_4/src/server.c /home/charlie/work/Term2/Assignment_4/src/client.c
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/src && clang-format -i /home/charlie/work/Term2/Assignment_4_v2/include/common.h /home/charlie/work/Term2/Assignment_4_v2/src/common.c /home/charlie/work/Term2/Assignment_4_v2/src/server.c /home/charlie/work/Term2/Assignment_4_v2/src/client.c
 
 format: src/CMakeFiles/format
 format: src/CMakeFiles/format.dir/build.make
@@ -78,10 +78,10 @@ src/CMakeFiles/format.dir/build: format
 .PHONY : src/CMakeFiles/format.dir/build
 
 src/CMakeFiles/format.dir/clean:
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug/src && $(CMAKE_COMMAND) -P CMakeFiles/format.dir/cmake_clean.cmake
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/src && $(CMAKE_COMMAND) -P CMakeFiles/format.dir/cmake_clean.cmake
 .PHONY : src/CMakeFiles/format.dir/clean
 
 src/CMakeFiles/format.dir/depend:
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/charlie/work/Term2/Assignment_4 /home/charlie/work/Term2/Assignment_4/src /home/charlie/work/Term2/Assignment_4/cmake-build-debug /home/charlie/work/Term2/Assignment_4/cmake-build-debug/src /home/charlie/work/Term2/Assignment_4/cmake-build-debug/src/CMakeFiles/format.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/charlie/work/Term2/Assignment_4_v2 /home/charlie/work/Term2/Assignment_4_v2/src /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/src /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/src/CMakeFiles/format.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : src/CMakeFiles/format.dir/depend
 

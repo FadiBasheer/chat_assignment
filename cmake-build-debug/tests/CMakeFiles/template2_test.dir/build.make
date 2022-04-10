@@ -53,10 +53,10 @@ RM = /home/charlie/work/clion-2021.2.3/bin/cmake/linux/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/charlie/work/Term2/Assignment_4
+CMAKE_SOURCE_DIR = /home/charlie/work/Term2/Assignment_4_v2
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/charlie/work/Term2/Assignment_4/cmake-build-debug
+CMAKE_BINARY_DIR = /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug
 
 # Include any dependencies generated for this target.
 include tests/CMakeFiles/template2_test.dir/depend.make
@@ -72,30 +72,30 @@ include tests/CMakeFiles/template2_test.dir/flags.make
 tests/CMakeFiles/template2_test.dir/main.c.o: tests/CMakeFiles/template2_test.dir/flags.make
 tests/CMakeFiles/template2_test.dir/main.c.o: ../tests/main.c
 tests/CMakeFiles/template2_test.dir/main.c.o: tests/CMakeFiles/template2_test.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/charlie/work/Term2/Assignment_4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object tests/CMakeFiles/template2_test.dir/main.c.o"
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug/tests && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT tests/CMakeFiles/template2_test.dir/main.c.o -MF CMakeFiles/template2_test.dir/main.c.o.d -o CMakeFiles/template2_test.dir/main.c.o -c /home/charlie/work/Term2/Assignment_4/tests/main.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object tests/CMakeFiles/template2_test.dir/main.c.o"
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/tests && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT tests/CMakeFiles/template2_test.dir/main.c.o -MF CMakeFiles/template2_test.dir/main.c.o.d -o CMakeFiles/template2_test.dir/main.c.o -c /home/charlie/work/Term2/Assignment_4_v2/tests/main.c
 
 tests/CMakeFiles/template2_test.dir/main.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/template2_test.dir/main.c.i"
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug/tests && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/charlie/work/Term2/Assignment_4/tests/main.c > CMakeFiles/template2_test.dir/main.c.i
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/tests && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/charlie/work/Term2/Assignment_4_v2/tests/main.c > CMakeFiles/template2_test.dir/main.c.i
 
 tests/CMakeFiles/template2_test.dir/main.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/template2_test.dir/main.c.s"
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug/tests && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/charlie/work/Term2/Assignment_4/tests/main.c -o CMakeFiles/template2_test.dir/main.c.s
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/tests && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/charlie/work/Term2/Assignment_4_v2/tests/main.c -o CMakeFiles/template2_test.dir/main.c.s
 
 tests/CMakeFiles/template2_test.dir/__/src/common.c.o: tests/CMakeFiles/template2_test.dir/flags.make
 tests/CMakeFiles/template2_test.dir/__/src/common.c.o: ../src/common.c
 tests/CMakeFiles/template2_test.dir/__/src/common.c.o: tests/CMakeFiles/template2_test.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/charlie/work/Term2/Assignment_4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object tests/CMakeFiles/template2_test.dir/__/src/common.c.o"
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug/tests && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT tests/CMakeFiles/template2_test.dir/__/src/common.c.o -MF CMakeFiles/template2_test.dir/__/src/common.c.o.d -o CMakeFiles/template2_test.dir/__/src/common.c.o -c /home/charlie/work/Term2/Assignment_4/src/common.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object tests/CMakeFiles/template2_test.dir/__/src/common.c.o"
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/tests && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT tests/CMakeFiles/template2_test.dir/__/src/common.c.o -MF CMakeFiles/template2_test.dir/__/src/common.c.o.d -o CMakeFiles/template2_test.dir/__/src/common.c.o -c /home/charlie/work/Term2/Assignment_4_v2/src/common.c
 
 tests/CMakeFiles/template2_test.dir/__/src/common.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/template2_test.dir/__/src/common.c.i"
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug/tests && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/charlie/work/Term2/Assignment_4/src/common.c > CMakeFiles/template2_test.dir/__/src/common.c.i
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/tests && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/charlie/work/Term2/Assignment_4_v2/src/common.c > CMakeFiles/template2_test.dir/__/src/common.c.i
 
 tests/CMakeFiles/template2_test.dir/__/src/common.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/template2_test.dir/__/src/common.c.s"
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug/tests && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/charlie/work/Term2/Assignment_4/src/common.c -o CMakeFiles/template2_test.dir/__/src/common.c.s
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/tests && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/charlie/work/Term2/Assignment_4_v2/src/common.c -o CMakeFiles/template2_test.dir/__/src/common.c.s
 
 # Object files for target template2_test
 template2_test_OBJECTS = \
@@ -112,18 +112,18 @@ tests/template2_test: /usr/local/lib/libcgreen.so
 tests/template2_test: /usr/local/lib/libdc_error.so
 tests/template2_test: /usr/local/lib/libdc_posix.so
 tests/template2_test: tests/CMakeFiles/template2_test.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/charlie/work/Term2/Assignment_4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C executable template2_test"
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug/tests && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/template2_test.dir/link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C executable template2_test"
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/tests && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/template2_test.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 tests/CMakeFiles/template2_test.dir/build: tests/template2_test
 .PHONY : tests/CMakeFiles/template2_test.dir/build
 
 tests/CMakeFiles/template2_test.dir/clean:
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug/tests && $(CMAKE_COMMAND) -P CMakeFiles/template2_test.dir/cmake_clean.cmake
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/tests && $(CMAKE_COMMAND) -P CMakeFiles/template2_test.dir/cmake_clean.cmake
 .PHONY : tests/CMakeFiles/template2_test.dir/clean
 
 tests/CMakeFiles/template2_test.dir/depend:
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/charlie/work/Term2/Assignment_4 /home/charlie/work/Term2/Assignment_4/tests /home/charlie/work/Term2/Assignment_4/cmake-build-debug /home/charlie/work/Term2/Assignment_4/cmake-build-debug/tests /home/charlie/work/Term2/Assignment_4/cmake-build-debug/tests/CMakeFiles/template2_test.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/charlie/work/Term2/Assignment_4_v2 /home/charlie/work/Term2/Assignment_4_v2/tests /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/tests /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/tests/CMakeFiles/template2_test.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : tests/CMakeFiles/template2_test.dir/depend
 

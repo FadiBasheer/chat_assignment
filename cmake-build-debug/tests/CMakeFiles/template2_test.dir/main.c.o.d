@@ -1,7 +1,7 @@
 tests/CMakeFiles/template2_test.dir/main.c.o: \
- /home/charlie/work/Term2/Assignment_4/tests/main.c \
+ /home/charlie/work/Term2/Assignment_4_v2/tests/main.c \
  /usr/include/stdc-predef.h \
- /home/charlie/work/Term2/Assignment_4/tests/tests.h \
+ /home/charlie/work/Term2/Assignment_4_v2/tests/tests.h \
  /usr/local/include/cgreen/cgreen.h /usr/include/stdlib.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/x86_64-linux-gnu/sys/cdefs.h \

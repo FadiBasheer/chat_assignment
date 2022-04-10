@@ -57,10 +57,10 @@ RM = /home/charlie/work/clion-2021.2.3/bin/cmake/linux/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/charlie/work/Term2/Assignment_4
+CMAKE_SOURCE_DIR = /home/charlie/work/Term2/Assignment_4_v2
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/charlie/work/Term2/Assignment_4/cmake-build-debug
+CMAKE_BINARY_DIR = /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -123,11 +123,7 @@ test/fast: test
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-<<<<<<< HEAD
 	/home/charlie/work/clion-2021.2.3/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
-=======
-	/home/fadi/Downloads/CLion-2021.3.2/clion-2021.3.2/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
->>>>>>> 57869366bae94b76783f73c9c9995951cb618618
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -146,14 +142,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_progress_start /home/charlie/work/Term2/Assignment_4/cmake-build-debug/CMakeFiles /home/charlie/work/Term2/Assignment_4/cmake-build-debug/docs//CMakeFiles/progress.marks
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 docs/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/charlie/work/Term2/Assignment_4/cmake-build-debug/CMakeFiles 0
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_progress_start /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/CMakeFiles /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/docs//CMakeFiles/progress.marks
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 docs/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 docs/clean
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 docs/clean
 .PHONY : clean
 
 # The main clean target
@@ -162,22 +158,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 docs/preinstall
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 docs/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 docs/preinstall
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 docs/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 docs/CMakeFiles/docs.dir/rule:
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 docs/CMakeFiles/docs.dir/rule
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 docs/CMakeFiles/docs.dir/rule
 .PHONY : docs/CMakeFiles/docs.dir/rule
 
 # Convenience name for target.
@@ -186,7 +182,7 @@ docs: docs/CMakeFiles/docs.dir/rule
 
 # fast build rule for target.
 docs/fast:
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug && $(MAKE) $(MAKESILENT) -f docs/CMakeFiles/docs.dir/build.make docs/CMakeFiles/docs.dir/build
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug && $(MAKE) $(MAKESILENT) -f docs/CMakeFiles/docs.dir/build.make docs/CMakeFiles/docs.dir/build
 .PHONY : docs/fast
 
 # Help Target
@@ -214,6 +210,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

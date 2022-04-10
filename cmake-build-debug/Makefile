@@ -57,10 +57,10 @@ RM = /home/charlie/work/clion-2021.2.3/bin/cmake/linux/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/charlie/work/Term2/Assignment_4
+CMAKE_SOURCE_DIR = /home/charlie/work/Term2/Assignment_4_v2
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/charlie/work/Term2/Assignment_4/cmake-build-debug
+CMAKE_BINARY_DIR = /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -111,11 +111,7 @@ rebuild_cache/fast: rebuild_cache
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-<<<<<<< HEAD
 	/home/charlie/work/clion-2021.2.3/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
-=======
-	/home/fadi/Downloads/CLion-2021.3.2/clion-2021.3.2/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
->>>>>>> 57869366bae94b76783f73c9c9995951cb618618
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -146,9 +142,9 @@ test/fast: test
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/charlie/work/Term2/Assignment_4/cmake-build-debug/CMakeFiles /home/charlie/work/Term2/Assignment_4/cmake-build-debug//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/CMakeFiles /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/charlie/work/Term2/Assignment_4/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -553,6 +549,19 @@ docs/fast:
 .PHONY : docs/fast
 
 #=============================================================================
+# Target rules for targets named format
+
+# Build rule for target.
+format: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 format
+.PHONY : format
+
+# fast build rule for target.
+format/fast:
+	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/format.dir/build.make src/CMakeFiles/format.dir/build
+.PHONY : format/fast
+
+#=============================================================================
 # Target rules for targets named main
 
 # Build rule for target.
@@ -590,45 +599,6 @@ server: cmake_check_build_system
 server/fast:
 	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/server.dir/build.make src/CMakeFiles/server.dir/build
 .PHONY : server/fast
-
-#=============================================================================
-# Target rules for targets named client_test
-
-# Build rule for target.
-client_test: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 client_test
-.PHONY : client_test
-
-# fast build rule for target.
-client_test/fast:
-	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/client_test.dir/build.make src/CMakeFiles/client_test.dir/build
-.PHONY : client_test/fast
-
-#=============================================================================
-# Target rules for targets named user_menu
-
-# Build rule for target.
-user_menu: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user_menu
-.PHONY : user_menu
-
-# fast build rule for target.
-user_menu/fast:
-	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/user_menu.dir/build.make src/CMakeFiles/user_menu.dir/build
-.PHONY : user_menu/fast
-
-#=============================================================================
-# Target rules for targets named format
-
-# Build rule for target.
-format: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 format
-.PHONY : format
-
-# fast build rule for target.
-format/fast:
-	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/format.dir/build.make src/CMakeFiles/format.dir/build
-.PHONY : format/fast
 
 #=============================================================================
 # Target rules for targets named template2_test
@@ -687,11 +657,9 @@ help:
 	@echo "... docs"
 	@echo "... format"
 	@echo "... client"
-	@echo "... client_test"
 	@echo "... main"
 	@echo "... server"
 	@echo "... template2_test"
-	@echo "... user_menu"
 .PHONY : help
 
 

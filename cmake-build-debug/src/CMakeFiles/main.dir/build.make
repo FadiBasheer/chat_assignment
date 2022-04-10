@@ -53,10 +53,10 @@ RM = /home/charlie/work/clion-2021.2.3/bin/cmake/linux/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/charlie/work/Term2/Assignment_4
+CMAKE_SOURCE_DIR = /home/charlie/work/Term2/Assignment_4_v2
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/charlie/work/Term2/Assignment_4/cmake-build-debug
+CMAKE_BINARY_DIR = /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug
 
 # Include any dependencies generated for this target.
 include src/CMakeFiles/main.dir/depend.make
@@ -72,16 +72,16 @@ include src/CMakeFiles/main.dir/flags.make
 src/CMakeFiles/main.dir/main.c.o: src/CMakeFiles/main.dir/flags.make
 src/CMakeFiles/main.dir/main.c.o: ../src/main.c
 src/CMakeFiles/main.dir/main.c.o: src/CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/charlie/work/Term2/Assignment_4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object src/CMakeFiles/main.dir/main.c.o"
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug/src && $(CMAKE_COMMAND) -E __run_co_compile --tidy="clang-tidy;-checks=*,-llvmlibc-restrict-system-libc-headers,-cppcoreguidelines-init-variables,-clang-analyzer-security.insecureAPI.strcpy,-concurrency-mt-unsafe,-android-cloexec-accept,-android-cloexec-dup,-google-readability-todo,-cppcoreguidelines-avoid-magic-numbers,-readability-magic-numbers,-cert-dcl03-c,-hicpp-static-assert,-misc-static-assert,-altera-struct-pack-align,-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling;--quiet;--extra-arg-before=--driver-mode=gcc" --source=/home/charlie/work/Term2/Assignment_4/src/main.c -- /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT src/CMakeFiles/main.dir/main.c.o -MF CMakeFiles/main.dir/main.c.o.d -o CMakeFiles/main.dir/main.c.o -c /home/charlie/work/Term2/Assignment_4/src/main.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object src/CMakeFiles/main.dir/main.c.o"
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/src && $(CMAKE_COMMAND) -E __run_co_compile --tidy="clang-tidy;-checks=*,-llvmlibc-restrict-system-libc-headers,-cppcoreguidelines-init-variables,-clang-analyzer-security.insecureAPI.strcpy,-concurrency-mt-unsafe,-android-cloexec-accept,-android-cloexec-dup,-google-readability-todo,-cppcoreguidelines-avoid-magic-numbers,-readability-magic-numbers,-cert-dcl03-c,-hicpp-static-assert,-misc-static-assert,-altera-struct-pack-align,-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling;--quiet;--extra-arg-before=--driver-mode=gcc" --source=/home/charlie/work/Term2/Assignment_4_v2/src/main.c -- /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT src/CMakeFiles/main.dir/main.c.o -MF CMakeFiles/main.dir/main.c.o.d -o CMakeFiles/main.dir/main.c.o -c /home/charlie/work/Term2/Assignment_4_v2/src/main.c
 
 src/CMakeFiles/main.dir/main.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/main.dir/main.c.i"
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/charlie/work/Term2/Assignment_4/src/main.c > CMakeFiles/main.dir/main.c.i
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/charlie/work/Term2/Assignment_4_v2/src/main.c > CMakeFiles/main.dir/main.c.i
 
 src/CMakeFiles/main.dir/main.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/main.dir/main.c.s"
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/charlie/work/Term2/Assignment_4/src/main.c -o CMakeFiles/main.dir/main.c.s
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/charlie/work/Term2/Assignment_4_v2/src/main.c -o CMakeFiles/main.dir/main.c.s
 
 # Object files for target main
 main_OBJECTS = \
@@ -93,18 +93,18 @@ main_EXTERNAL_OBJECTS =
 src/main: src/CMakeFiles/main.dir/main.c.o
 src/main: src/CMakeFiles/main.dir/build.make
 src/main: src/CMakeFiles/main.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/charlie/work/Term2/Assignment_4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C executable main"
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/main.dir/link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C executable main"
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/main.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 src/CMakeFiles/main.dir/build: src/main
 .PHONY : src/CMakeFiles/main.dir/build
 
 src/CMakeFiles/main.dir/clean:
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug/src && $(CMAKE_COMMAND) -P CMakeFiles/main.dir/cmake_clean.cmake
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/src && $(CMAKE_COMMAND) -P CMakeFiles/main.dir/cmake_clean.cmake
 .PHONY : src/CMakeFiles/main.dir/clean
 
 src/CMakeFiles/main.dir/depend:
-	cd /home/charlie/work/Term2/Assignment_4/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/charlie/work/Term2/Assignment_4 /home/charlie/work/Term2/Assignment_4/src /home/charlie/work/Term2/Assignment_4/cmake-build-debug /home/charlie/work/Term2/Assignment_4/cmake-build-debug/src /home/charlie/work/Term2/Assignment_4/cmake-build-debug/src/CMakeFiles/main.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/charlie/work/Term2/Assignment_4_v2 /home/charlie/work/Term2/Assignment_4_v2/src /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/src /home/charlie/work/Term2/Assignment_4_v2/cmake-build-debug/src/CMakeFiles/main.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : src/CMakeFiles/main.dir/depend
 

@@ -8,8 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/charlie/work/Term2/Assignment_4/src/client.c" "src/CMakeFiles/client.dir/client.c.o" "gcc" "src/CMakeFiles/client.dir/client.c.o.d"
-  "/home/charlie/work/Term2/Assignment_4/src/common.c" "src/CMakeFiles/client.dir/common.c.o" "gcc" "src/CMakeFiles/client.dir/common.c.o.d"
+  "/home/charlie/work/Term2/Assignment_4_v2/src/client.c" "src/CMakeFiles/client.dir/client.c.o" "gcc" "src/CMakeFiles/client.dir/client.c.o.d"
+  "/home/charlie/work/Term2/Assignment_4_v2/src/common.c" "src/CMakeFiles/client.dir/common.c.o" "gcc" "src/CMakeFiles/client.dir/common.c.o.d"
   )
 
 # Targets to which this target links.

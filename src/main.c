@@ -215,10 +215,10 @@ int main(void) {
 
                 fcntl(client_fd, F_SETFL, flags | O_NONBLOCK);
 
-//                //Add client FD to main channel (0) linked-list
-//                         push(&client, 0, client_fd);
-//
-//                print_client_list(client);
+                //Add client FD to main channel (0) linked-list
+                push(&client, 0, client_fd, "");
+
+                print_client_list(client);
 
                 FD_SET(client_fd, &fd_read_set);
             }
@@ -255,14 +255,19 @@ int main(void) {
                         cpt.msg = malloc(cpt.msg_len * sizeof(char));
                         strncpy(cpt.msg, msg_rcv, cpt.msg_len);
 
+                        printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n",
+                               cpt.version, cpt.command, cpt.channel_id, cpt.msg_len, msg_rcv);
+
                         // If command is send
-                        if (cpt.command == 1) {
+                        if (cpt.command == SEND) {
                             struct Client *head_client_write = client;
+                            printf("Client fd: %d\n", head_client->fd);
+                            printf("Client fd: %d\n", head_client_write->fd);
 
                             while (head_client_write != NULL) {
                                 if (head_client_write->chan_id == cpt.channel_id &&
                                     head_client_write->fd != head_client->fd) {
-                                    cpt_send_response(head_client_write->fd, 1, cpt.msg_len, cpt.msg,
+                                    cpt_send_response(head_client_write->fd, SEND, cpt.msg_len, msg_rcv,
                                                       cpt.channel_id);
                                 }
                                 head_client_write = head_client_write->next;
@@ -311,7 +316,8 @@ int main(void) {
 
                         // login
                         if (cpt.command == 7) {
-                            function_response = cpt_login_response(client, &client, client_fd, cpt.msg);
+                            printf("Login\n");
+                            function_response = cpt_login_response(client, &client, client_fd, msg_rcv);
                             cpt_send_response(head_client->fd, function_response, 0, "", cpt.channel_id);
                             print_client_list(client);
                         }
@@ -393,18 +399,22 @@ void push(struct Client **head_ref, int chan_id, int fd, char *name) {
  */
 ///////////////////////////////////////// co ///////////////////////////////////////////////
 int cpt_login_response(struct Client *node, struct Client **head, int fd, char *name) {
-    while (node != NULL) {
-        if (node->fd == fd) {
-            printf("user already exist\n");
-            return FAILED;
+    int exit_code = FAILED;
+    printf("User name: %s\n", name);
+
+    while (*head) {
+        if ((*head)->fd == fd) {
+            exit_code = LOGIN;
+            break;
+
         }
-        node = node->next;
+        head = &(*head)->next;
     }
 
-    //Add client FD to main channel (0) linked-list
-    push(head, 0, fd, name);
+    (*head)->name = malloc(strlen(name) * sizeof(char));
+    strncpy((*head)->name, name, strlen(name));
 
-    return LOGIN;
+    return exit_code;
 }
 
 ///////////////////////////////////////////////////////////////co //////////////////////////////////
@@ -575,6 +585,8 @@ int cpt_leave_channel_response(void *server_info, struct Client *node, struct Cl
 }
 
 int cpt_send_response(int fd, int code, int msg_length, char *msg, int chan_id) {
+    printf("Send\n");
+
     unsigned char buf[1024];
     unsigned char data[1024];
     size_t packet_size;

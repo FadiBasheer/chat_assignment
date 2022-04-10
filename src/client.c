@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/select.h>
+#include <stdbool.h>
 #include "serialization.c"
 
 #define SERVER_PORT 8000
@@ -45,6 +46,11 @@ struct CPTResponse {
     char *data;
 };
 
+struct ClientState {
+    int current_channel;
+    bool is_logged_in;
+};
+
 
 enum command {SEND = 1, LOGOUT, GET_USERS, CREATE_CHANNEL, JOIN_CHANNEL, LEAVE_CHANNEL, LOGIN, FAILED = 22};
 
@@ -52,7 +58,7 @@ enum command {SEND = 1, LOGOUT, GET_USERS, CREATE_CHANNEL, JOIN_CHANNEL, LEAVE_C
  * Prints a menu for the user to interact with.
  */
 static void print_menu(void);
-size_t process_client_input(int *exit_code, char *user_input, unsigned char *cpt_serialized_buf);
+size_t process_client_input(int *exit_code, char *user_input, unsigned char *cpt_serialized_buf, int current_channel);
 
 size_t cpt_login(struct CPT * cpt, uint8_t * serial_buf, char * name);
 size_t cpt_logout(struct CPT *cpt, uint8_t *serial_buf);
@@ -60,7 +66,7 @@ size_t cpt_get_users(struct CPT *cpt, uint8_t *serial_buf, uint16_t channel_id);
 size_t cpt_create_channel(struct CPT *cpt, uint8_t *serial_buf, char *user_list);
 size_t cpt_join_channel(struct CPT *cpt, uint8_t *serial_buf, uint16_t channel_id);
 size_t cpt_leave_channel(struct CPT *cpt, uint8_t *serial_buf, uint16_t channel_id);
-size_t cpt_send(struct CPT *cpt, uint8_t *serial_buf, char *msg);
+size_t cpt_send(struct CPT *cpt, uint8_t *serial_buf, char *msg, int current_channel);
 
 void cpt_process_response(struct CPTResponse cpt_response);
 void cpt_packet_destroy(struct CPTResponse cpt_response);
@@ -130,6 +136,10 @@ int main(void) {
     uint16_t data_size;
     unsigned char all_client_data[READ_BUFFER_SIZE];
 
+    struct ClientState client_state;
+    client_state.current_channel = 0;
+    client_state.is_logged_in = 0;
+
     int flags = fcntl(socket_fd, F_GETFL);
     fcntl(socket_fd, F_SETFL, flags | O_NONBLOCK);
     fcntl(1, F_SETFL, flags | O_NONBLOCK);
@@ -178,7 +188,7 @@ int main(void) {
                 nread = read(STDOUT_FILENO, user_input, READ_BUFFER_SIZE);
 
                 if (nread > 0) {
-                    packet_size = process_client_input(&exit_code, user_input, cpt_serialized_buf);
+                    packet_size = process_client_input(&exit_code, user_input, cpt_serialized_buf, client_state.current_channel );
 
                     if (packet_size) {
                         send(socket_fd, cpt_serialized_buf, packet_size, 0);
@@ -209,7 +219,7 @@ static void print_menu() {
     printf("9) Exit Chat (eg. &exit)\n\n");
 }
 
-size_t process_client_input(int *exit_code, char *user_input, unsigned char *cpt_serialized_buf)
+size_t process_client_input(int *exit_code, char *user_input, unsigned char *cpt_serialized_buf, int current_channel)
 {
     struct CPT cpt_packet;
     size_t packet_size;
@@ -315,7 +325,7 @@ size_t process_client_input(int *exit_code, char *user_input, unsigned char *cpt
         printf("Invalid Command.\n");
         return 0;
     }
-    packet_size = cpt_send(&cpt_packet, cpt_serialized_buf, user_input);
+    packet_size = cpt_send(&cpt_packet, cpt_serialized_buf, user_input, current_channel);
 
     printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n",
            cpt_packet.cpt_version, cpt_packet.command, cpt_packet.channel_id, cpt_packet.msg_len, cpt_packet.msg);
@@ -383,13 +393,13 @@ void cpt_packet_destroy(struct CPTResponse cpt_response)
  * @param msg            Intended chat message.
  * @return Size of the resulting serialized packet in <serial_buf>.
 */
-size_t cpt_send(struct CPT *cpt, uint8_t *serial_buf, char *msg)
+size_t cpt_send(struct CPT *cpt, uint8_t *serial_buf, char *msg, int current_channel)
 {
     size_t packet_size;
 
     cpt->cpt_version = 1;
     cpt->command = SEND;
-    cpt->channel_id = 5;
+    cpt->channel_id = (uint16_t) current_channel;
     cpt->msg_len = strlen(msg) + 1;
     cpt->msg = malloc((strlen(msg) + 1) * sizeof(char));
     strcpy(cpt->msg, msg);
