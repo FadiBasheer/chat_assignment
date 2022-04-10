@@ -202,13 +202,13 @@ int main(void) {
                                                        client_state.current_channel);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    char msg_rcv[1024];
+                    char msg_r[1024];
 
                     unpack(cpt_serialized_buf, "CCHCs", &cptTemp.cpt_version, &cptTemp.command, &cptTemp.channel_id,
                            &cptTemp.msg_len,
-                           &msg_rcv);
-                    printf("unpack: %u %u %u %u %s\n", cpt.cpt_version, cpt.command, cpt.channel_id, cpt.msg_len,
-                           msg_rcv);
+                           &msg_r);
+                    printf("unpack: %u %u %u %u %s\n", cptTemp.cpt_version, cptTemp.command, cptTemp.channel_id, cptTemp.msg_len,
+                           msg_r);
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
                     if (packet_size) {
@@ -359,7 +359,7 @@ void cpt_process_response(struct CPTResponse cpt_response) {
             cpt_packet_destroy(cpt_response);
             break;
         case LOGOUT:
-            printf("Login Successful.\n");
+            printf("Logout Successful.\n");
             cpt_packet_destroy(cpt_response);
             break;
         case CREATE_CHANNEL:

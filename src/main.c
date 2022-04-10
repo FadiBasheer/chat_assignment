@@ -219,43 +219,66 @@ int main(void) {
 
                 fcntl(client_fd, F_SETFL, flags | O_NONBLOCK);
 
+                //Add client FD to main channel (0) linked-list
+               // push(&client, 0, client_fd, "");
+
                 //add the fd to fd_set for select.
+                if (client_fd > max_fd) {
+                    max_fd = client_fd;
+                    printf("max_fd: %d\n", max_fd);
+                }
+
                 FD_SET(client_fd, &fd_read_set);
+                // printf("client_fd: %d\n", client_fd);
+
             }
         }
 
         struct Client *head_client = client;
 
         // Find max file descriptor in main channel
-        while (head_client != NULL) {
-            FD_SET(head_client->fd, &fd_read_set);
-            if (head_client->fd > 0 && max_fd < head_client->fd) {
-                max_fd = head_client->fd;
-            }
-            head_client = head_client->next;
-        }
+//        while (head_client != NULL) {
+//            FD_SET(head_client->fd, &fd_read_set);
+//
+//            printf("\n\nclient_fd: %d\n\n\n", head_client->fd);
+//
+//            if (head_client->fd > 0 && max_fd < head_client->fd) {
+//                max_fd = head_client->fd;
+//            }
+//            head_client = head_client->next;
+//        }
 
         unsigned char client_buffer[BUFSIZE];
         timer.tv_sec = 1;
         timer.tv_usec = 0;
 
+        // max_fd = 4;
+        // printf("client_fd: %d\n", max_fd);
+
+        FD_SET(max_fd, &fd_read_set);
+
         fds_selected = select(max_fd + 1, &fd_read_set, NULL, NULL, &timer);
+
+        //printf("fds_selected: %d\n", fds_selected);
+
 
         if (fds_selected > 0) {
             head_client = client;
-            while (head_client != NULL) {
-                if (FD_ISSET(head_client->fd, &fd_read_set) != 0) {
+            int temp = 0;
+            //while (head_client != NULL) {
+            //head_client->fd=temp
+            while (temp != (max_fd + 1)) {
+
+                if (FD_ISSET(temp, &fd_read_set) != 0) {
                     memset(client_buffer, 0, BUFSIZE);
-                    ssize_t nread = read(head_client->fd, &client_buffer, BUFSIZE);
+                    ssize_t nread = read(temp, &client_buffer, BUFSIZE);
 
                     if (nread != 0) {
-                        printf("unpack:%s\n", client_buffer);
+
                         unpack(client_buffer, "CCHCs", &cpt.version, &cpt.command, &cpt.channel_id, &cpt.msg_len,
                                &msg_rcv);
-
-                        printf("unpack: %c %c %d %c %s\n", cpt.version, cpt.command, cpt.channel_id, cpt.msg_len,
+                        printf("unpack: %u %u %u %u %s\n", cpt.version, cpt.command, cpt.channel_id, cpt.msg_len,
                                msg_rcv);
-
 
                         // If command is send
                         if (cpt.command == 1) {
@@ -272,7 +295,7 @@ int main(void) {
 
                             while (head_client_write != NULL) {
                                 if (head_client_write->chan_id == cpt.channel_id &&
-                                    head_client_write->fd != head_client->fd) {
+                                    head_client_write->fd != temp) {
                                     cpt_send_response(head_client_write->fd, SEND, cpt.msg_len, cpt.msg);
                                 }
                                 head_client_write = head_client_write->next;
@@ -285,14 +308,14 @@ int main(void) {
                         // logout
                         if (cpt.command == 2) {
                             function_response = cpt_logout_response(&client, client_fd);
-                            cpt_send_response(head_client->fd, function_response, 0, "");
+                            cpt_send_response(temp, function_response, 0, "");
                             print_client_list(client);
                         }
 
                         //get users
                         if (cpt.command == 3) {
                             function_response = get_uesrs_list(client, cpt.channel_id, &cpt.msg_len, &cpt.msg);
-                            cpt_send_response(head_client->fd, function_response, cpt.msg_len, cpt.msg);
+                            cpt_send_response(temp, function_response, cpt.msg_len, cpt.msg);
                             print_client_list(client);
                         }
 
@@ -302,7 +325,7 @@ int main(void) {
                             function_response = cpt_create_channel_response(client, &client, channelId,
                                                                             cpt.msg_len,
                                                                             client_fd, cpt.msg, client->name);
-                            cpt_send_response(head_client->fd, function_response, 0, "");
+                            cpt_send_response(temp, function_response, 0, "");
                             print_client_list(client);
                         }
 
@@ -310,7 +333,7 @@ int main(void) {
                         if (cpt.command == 5) {
                             function_response = cpt_join_channel_response(client, &client, cpt.channel_id,
                                                                           client_fd, client->name);
-                            cpt_send_response(head_client->fd, function_response, 0, "");
+                            cpt_send_response(temp, function_response, 0, "");
                             print_client_list(client);
                         }
 
@@ -318,20 +341,20 @@ int main(void) {
                         if (cpt.command == 6) {
                             function_response = cpt_leave_channel_response(client, &client, cpt.channel_id,
                                                                            client_fd);
-                            cpt_send_response(head_client->fd, function_response, 0, "");
+                            cpt_send_response(temp, function_response, 0, "");
                             print_client_list(client);
                         }
 
                         // login
                         if (cpt.command == 7) {
-                            printf("login");
                             function_response = cpt_login_response(client, &client, client_fd, cpt.msg);
-                            cpt_send_response(head_client->fd, function_response, 0, "");
+                            cpt_send_response(temp, function_response, 0, "");
                             print_client_list(client);
                         }
                     }
                 }
-                head_client = head_client->next;
+                // head_client = head_client->next;
+                temp++;
             }
         }
     }
@@ -344,8 +367,11 @@ int main(void) {
 //
 //    struct Client *client2 = NULL;
 //
+//    push(&client2, 0, 1, "fadi");
+//    push(&client2, 0, 2, "hey");
+//    //print_client_list(client2);
 //    cpt_login_response(client2, &client2, 1, "fadi");
-//    cpt_login_response(client2, &client2, 3, "Jordan");
+//    cpt_login_response(client2, &client2, 3, "mina");
 //
 //    printf("\n---------- Normal print -------------\n");
 //    print_client_list(client2);
@@ -354,10 +380,10 @@ int main(void) {
 //    cpt_join_channel_response(client2, &client2, 5, 1, "fadi");
 //    cpt_join_channel_response(client2, &client2, 0, 5, "Jon");
 //    print_client_list(client2);
+////
+////    get_uesrs_list(client2, cpt.channel_id, &cpt.msg_len, &cpt.msg);
+////    printf("\ncpt.msg: %s\n", cpt.msg);
 //
-//    get_uesrs_list(client2, cpt.channel_id, &cpt.msg_len, &cpt.msg);
-//    printf("\ncpt.msg: %s\n", cpt.msg);
-
 //
 //    char buf[255];
 //    snprintf(buf, sizeof(buf), "%s %d: ", "From channel", cpt.channel_id);
@@ -368,30 +394,30 @@ int main(void) {
 //
 //    strcat(cpt.msg, msg_rcv);
 //   printf("\ncpt.msg final: %s\n", cpt.msg);
-
-
-
-//    printf("\n---------- After leave channel -------------\n");
-//    cpt_leave_channel_response(client2, &client2, 5, 1);
-//    print_client_list(client2);
-//
-//    printf("\n---------- After logout-------------\n");
-//    cpt_logout_response(&client2, 1);
-//    print_client_list(client2);
 //
 //
-//    printf("\n---------- After create channel-------------\n");
-//    cpt_create_channel_response(client2, &client2, 5, 0, 1, "", "fadi");
-//    print_client_list(client2);
 //
-//    printf("\n---------- After create channel with existing channel-------------\n");
-//    cpt_create_channel_response(client2, &client2, 0, 0, 2, "", "hey");
-//    print_client_list(client2);
-//
-//    printf("\n---------- After create channel with existing channel-------------\n");
-//    cpt_login_response(client2, &client2, 1, "fadi");
-//    cpt_create_channel_response(client2, &client2, 5, 2, 1, "3", "fadi");
-//    print_client_list(client2);
+////    printf("\n---------- After leave channel -------------\n");
+////    cpt_leave_channel_response(client2, &client2, 5, 1);
+////    print_client_list(client2);
+////
+////    printf("\n---------- After logout-------------\n");
+////    cpt_logout_response(&client2, 1);
+////    print_client_list(client2);
+////
+////
+////    printf("\n---------- After create channel-------------\n");
+////    cpt_create_channel_response(client2, &client2, 5, 0, 1, "", "fadi");
+////    print_client_list(client2);
+////
+////    printf("\n---------- After create channel with existing channel-------------\n");
+////    cpt_create_channel_response(client2, &client2, 0, 0, 2, "", "hey");
+////    print_client_list(client2);
+////
+////    printf("\n---------- After create channel with existing channel-------------\n");
+////    cpt_login_response(client2, &client2, 1, "fadi");
+////    cpt_create_channel_response(client2, &client2, 5, 2, 1, "3", "fadi");
+////    print_client_list(client2);
 //}
 
 
