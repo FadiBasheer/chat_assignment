@@ -138,7 +138,7 @@ int main(void) {
 
     memset(&server_addr, 0, sizeof(server_addr));
     server_addr.sin_family = AF_INET;
-    server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    server_addr.sin_addr.s_addr = inet_addr("192.168.0.16");
     server_addr.sin_port = htons(SERVER_PORT);
 
     if ((bind(server_fd, (SA *) &server_addr, sizeof(server_addr))) < 0) {
@@ -220,7 +220,7 @@ int main(void) {
                 fcntl(client_fd, F_SETFL, flags | O_NONBLOCK);
 
                 //Add client FD to main channel (0) linked-list
-               // push(&client, 0, client_fd, "");
+                // push(&client, 0, client_fd, "");
 
                 //add the fd to fd_set for select.
                 if (client_fd > max_fd) {
