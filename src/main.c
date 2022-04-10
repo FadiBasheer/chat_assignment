@@ -303,6 +303,7 @@ int main(void) {
                         } else {
                             cpt.msg = malloc(cpt.msg_len * sizeof(char));
                             strncpy(cpt.msg, msg_rcv, cpt.msg_len);
+                            printf("cpt.msg: %s", cpt.msg);
                         }
 
                         // logout
