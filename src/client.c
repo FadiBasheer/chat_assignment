@@ -47,8 +47,8 @@ struct CPTResponse {
 };
 
 struct ClientState {
-    long *previous_channel;
-    long *current_channel;
+    int *previous_channel;
+    int *current_channel;
     int *is_logged_in;
 };
 
@@ -322,7 +322,7 @@ size_t process_client_input(int *exit_code, char *user_input, unsigned char *cpt
             printf("Invalid Command.\n");
             return 0;
         }
-        packet_size = cpt_send(&cpt_packet,cpt_serialized_buf,user_input,clientState->current_channel);
+        packet_size = cpt_send(&cpt_packet,cpt_serialized_buf,user_input,*clientState->current_channel);
 
         printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n",
                cpt_packet.cpt_version, cpt_packet.command, cpt_packet.channel_id, cpt_packet.msg_len, cpt_packet.msg);
