@@ -77,6 +77,7 @@ src/CMakeFiles/client.dir/client.c.o: ../src/client.c \
   /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h \
+  /usr/lib/gcc/x86_64-linux-gnu/9/include/stdbool.h \
   ../src/serialization.c \
   /usr/include/ctype.h
 
@@ -134,6 +135,8 @@ src/CMakeFiles/client.dir/common.c.o: ../src/common.c \
 /usr/include/x86_64-linux-gnu/bits/waitstatus.h:
 
 /usr/include/x86_64-linux-gnu/bits/waitflags.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/9/include/stdbool.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h:
 

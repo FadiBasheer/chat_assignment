@@ -47,18 +47,19 @@ struct CPTResponse {
 };
 
 struct ClientState {
-    int current_channel;
-    bool is_logged_in;
+    long *previous_channel;
+    long *current_channel;
+    int *is_logged_in;
 };
 
 
-enum command {SEND = 1, LOGOUT, GET_USERS, CREATE_CHANNEL, JOIN_CHANNEL, LEAVE_CHANNEL, LOGIN, FAILED = 22};
+enum command {SEND = 1, LOGOUT, GET_USERS, CREATE_CHANNEL, JOIN_CHANNEL, LEAVE_CHANNEL, LOGIN, JOIN_CHANNEL_FAILURE = 22};
 
 /**
  * Prints a menu for the user to interact with.
  */
 static void print_menu(void);
-size_t process_client_input(int *exit_code, char *user_input, unsigned char *cpt_serialized_buf, int current_channel);
+size_t process_client_input(int *exit_code, char *user_input, unsigned char *cpt_serialized_buf, struct ClientState *clientState);
 
 size_t cpt_login(struct CPT * cpt, uint8_t * serial_buf, char * name);
 size_t cpt_logout(struct CPT *cpt, uint8_t *serial_buf);
@@ -68,7 +69,7 @@ size_t cpt_join_channel(struct CPT *cpt, uint8_t *serial_buf, uint16_t channel_i
 size_t cpt_leave_channel(struct CPT *cpt, uint8_t *serial_buf, uint16_t channel_id);
 size_t cpt_send(struct CPT *cpt, uint8_t *serial_buf, char *msg, int current_channel);
 
-void cpt_process_response(struct CPTResponse cpt_response);
+void cpt_process_response(struct CPTResponse cpt_response, struct ClientState *clientState);
 void cpt_packet_destroy(struct CPTResponse cpt_response);
 
 // DELETE
@@ -137,8 +138,13 @@ int main(void) {
     unsigned char all_client_data[READ_BUFFER_SIZE];
 
     struct ClientState client_state;
+    client_state.current_channel = malloc(sizeof(client_state.current_channel));
     client_state.current_channel = 0;
-    client_state.is_logged_in = 0;
+    client_state.previous_channel = malloc(sizeof(client_state.previous_channel));
+    client_state.previous_channel = 0;
+    client_state.is_logged_in = malloc(sizeof(client_state.is_logged_in));
+    *client_state.is_logged_in = 0;
+
 
     int flags = fcntl(socket_fd, F_GETFL);
     fcntl(socket_fd, F_SETFL, flags | O_NONBLOCK);
@@ -177,7 +183,7 @@ int main(void) {
                     printf("res_code: %d, data_size: %d, msg: %s\n", cpt_response_packet.code,
                            cpt_response_packet.data_size, cpt_response_packet.data);
 
-                    cpt_process_response(cpt_response_packet);
+                    cpt_process_response(cpt_response_packet, &client_state);
                 }
             }
 
@@ -188,7 +194,7 @@ int main(void) {
                 nread = read(STDOUT_FILENO, user_input, READ_BUFFER_SIZE);
 
                 if (nread > 0) {
-                    packet_size = process_client_input(&exit_code, user_input, cpt_serialized_buf, client_state.current_channel );
+                    packet_size = process_client_input(&exit_code, user_input, cpt_serialized_buf, &client_state);
 
                     if (packet_size) {
                         send(socket_fd, cpt_serialized_buf, packet_size, 0);
@@ -197,7 +203,6 @@ int main(void) {
             }
         }
     }
-
     return EXIT_FAILURE;
 }
 
@@ -219,13 +224,110 @@ static void print_menu() {
     printf("9) Exit Chat (eg. &exit)\n\n");
 }
 
-size_t process_client_input(int *exit_code, char *user_input, unsigned char *cpt_serialized_buf, int current_channel)
+size_t process_client_input(int *exit_code, char *user_input, unsigned char *cpt_serialized_buf, struct ClientState *clientState)
 {
     struct CPT cpt_packet;
     size_t packet_size;
 
-    if (!strncmp(user_input, COMMAND_SYMBOL, 1))
+    if (*clientState->is_logged_in == 1)
     {
+        if (!strncmp(user_input, COMMAND_SYMBOL, 1))
+        {
+            if (!strncmp(user_input, LOGOUT_COMMAND, strlen(LOGOUT_COMMAND)))
+            {
+                packet_size = cpt_logout(&cpt_packet, cpt_serialized_buf);
+
+                printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n",
+                       cpt_packet.cpt_version, cpt_packet.command, cpt_packet.channel_id, cpt_packet.msg_len, cpt_packet.msg);
+
+                return packet_size;
+            }
+
+            if (!strncmp(user_input, USERS_COMMAND, strlen(USERS_COMMAND)))
+            {
+                char chan_id[COMMAND_INPUT_SIZE];
+                long int_chan_id;
+
+                strncpy(chan_id, user_input + strlen(USERS_COMMAND) + 1, strlen(user_input));
+                int_chan_id = strtol(chan_id, NULL, 10);
+                packet_size = cpt_get_users(&cpt_packet, cpt_serialized_buf, (uint16_t) int_chan_id);
+
+                printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n",
+                       cpt_packet.cpt_version, cpt_packet.command, cpt_packet.channel_id, cpt_packet.msg_len, cpt_packet.msg);
+
+                return packet_size;
+            }
+
+            if (!strncmp(user_input, CREATE_CHAN_COMMAND, strlen(CREATE_CHAN_COMMAND)))
+            {
+                char chan_ids[COMMAND_INPUT_SIZE];
+
+                strncpy(chan_ids, user_input + strlen(CREATE_CHAN_COMMAND) + 1, strlen(user_input));
+                packet_size = cpt_create_channel(&cpt_packet, cpt_serialized_buf, chan_ids);
+
+                printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n",
+                       cpt_packet.cpt_version, cpt_packet.command, cpt_packet.channel_id, cpt_packet.msg_len, cpt_packet.msg);
+
+                return packet_size;
+            }
+
+            if (!strncmp(user_input, JOIN_CHAN_COMMAND, strlen(JOIN_CHAN_COMMAND)))
+            {
+                char chan_id[COMMAND_INPUT_SIZE];
+                long int_chan_id;
+
+                strncpy(chan_id, user_input + strlen(JOIN_CHAN_COMMAND) + 1, strlen(user_input));
+                int_chan_id = strtol(chan_id, NULL, 10);
+                packet_size = cpt_join_channel(&cpt_packet, cpt_serialized_buf, (uint16_t) int_chan_id);
+
+                printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n",
+                       cpt_packet.cpt_version, cpt_packet.command, cpt_packet.channel_id, cpt_packet.msg_len, cpt_packet.msg);
+
+                *clientState->previous_channel = *clientState->current_channel;
+                *clientState->current_channel = int_chan_id;
+
+                return packet_size;
+            }
+
+            if (!strncmp(user_input, LEAVE_CHAN_COMMAND, strlen(LEAVE_CHAN_COMMAND)))
+            {
+                char chan_id[COMMAND_INPUT_SIZE];
+                long int_chan_id;
+
+                strncpy(chan_id, user_input + strlen(LEAVE_CHAN_COMMAND) + 1, strlen(user_input));
+                int_chan_id = strtol(chan_id, NULL, 10);
+                packet_size = cpt_leave_channel(&cpt_packet, cpt_serialized_buf, (uint16_t) int_chan_id);
+
+                printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n",
+                       cpt_packet.cpt_version, cpt_packet.command, cpt_packet.channel_id, cpt_packet.msg_len, cpt_packet.msg);
+
+                return packet_size;
+            }
+
+            if (!strncmp(user_input, MENU_COMMAND, strlen(MENU_COMMAND)))
+            {
+                print_menu();
+
+                return 0;
+            }
+
+            if (!strncmp(user_input, EXIT_COMMAND, strlen(EXIT_COMMAND)))
+            {
+                printf("GoodBye!\n");
+                *exit_code = 0;
+
+                return 0;
+            }
+
+            printf("Invalid Command.\n");
+            return 0;
+        }
+        packet_size = cpt_send(&cpt_packet,cpt_serialized_buf,user_input,clientState->current_channel);
+
+        printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n",
+               cpt_packet.cpt_version, cpt_packet.command, cpt_packet.channel_id, cpt_packet.msg_len, cpt_packet.msg);
+    }
+    else {
         if (!strncmp(user_input, LOGIN_COMMAND, strlen(LOGIN_COMMAND)))
         {
             char name[COMMAND_INPUT_SIZE];
@@ -238,102 +340,19 @@ size_t process_client_input(int *exit_code, char *user_input, unsigned char *cpt
 
             return packet_size;
         }
-
-        if (!strncmp(user_input, LOGOUT_COMMAND, strlen(LOGOUT_COMMAND)))
+        else
         {
-            packet_size = cpt_logout(&cpt_packet, cpt_serialized_buf);
-
-            printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n",
-                   cpt_packet.cpt_version, cpt_packet.command, cpt_packet.channel_id, cpt_packet.msg_len, cpt_packet.msg);
+            printf("Please Login First.\n");
+            packet_size = 0;
 
             return packet_size;
         }
-
-        if (!strncmp(user_input, USERS_COMMAND, strlen(USERS_COMMAND)))
-        {
-            char chan_id[COMMAND_INPUT_SIZE];
-            long int_chan_id;
-
-            strncpy(chan_id, user_input + strlen(USERS_COMMAND) + 1, strlen(user_input));
-            int_chan_id = strtol(chan_id, NULL, 10);
-            packet_size = cpt_get_users(&cpt_packet, cpt_serialized_buf, (uint16_t) int_chan_id);
-
-            printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n",
-                   cpt_packet.cpt_version, cpt_packet.command, cpt_packet.channel_id, cpt_packet.msg_len, cpt_packet.msg);
-
-            return packet_size;
-        }
-
-        if (!strncmp(user_input, CREATE_CHAN_COMMAND, strlen(CREATE_CHAN_COMMAND)))
-        {
-            char chan_ids[COMMAND_INPUT_SIZE];
-
-            strncpy(chan_ids, user_input + strlen(CREATE_CHAN_COMMAND) + 1, strlen(user_input));
-            packet_size = cpt_create_channel(&cpt_packet, cpt_serialized_buf, chan_ids);
-
-            printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n",
-                   cpt_packet.cpt_version, cpt_packet.command, cpt_packet.channel_id, cpt_packet.msg_len, cpt_packet.msg);
-
-            return packet_size;
-        }
-
-        if (!strncmp(user_input, JOIN_CHAN_COMMAND, strlen(JOIN_CHAN_COMMAND)))
-        {
-            char chan_id[COMMAND_INPUT_SIZE];
-            long int_chan_id;
-
-            strncpy(chan_id, user_input + strlen(JOIN_CHAN_COMMAND) + 1, strlen(user_input));
-            int_chan_id = strtol(chan_id, NULL, 10);
-            packet_size = cpt_join_channel(&cpt_packet, cpt_serialized_buf, (uint16_t) int_chan_id);
-
-            printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n",
-                   cpt_packet.cpt_version, cpt_packet.command, cpt_packet.channel_id, cpt_packet.msg_len, cpt_packet.msg);
-
-            return packet_size;
-        }
-
-        if (!strncmp(user_input, LEAVE_CHAN_COMMAND, strlen(LEAVE_CHAN_COMMAND)))
-        {
-            char chan_id[COMMAND_INPUT_SIZE];
-            long int_chan_id;
-
-            strncpy(chan_id, user_input + strlen(LEAVE_CHAN_COMMAND) + 1, strlen(user_input));
-            int_chan_id = strtol(chan_id, NULL, 10);
-            packet_size = cpt_leave_channel(&cpt_packet, cpt_serialized_buf, (uint16_t) int_chan_id);
-
-            printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n",
-                   cpt_packet.cpt_version, cpt_packet.command, cpt_packet.channel_id, cpt_packet.msg_len, cpt_packet.msg);
-
-            return packet_size;
-        }
-
-        if (!strncmp(user_input, MENU_COMMAND, strlen(MENU_COMMAND)))
-        {
-            print_menu();
-
-            return 0;
-        }
-
-        if (!strncmp(user_input, EXIT_COMMAND, strlen(EXIT_COMMAND)))
-        {
-            printf("GoodBye!\n");
-            *exit_code = 0;
-
-            return 0;
-        }
-
-        printf("Invalid Command.\n");
-        return 0;
     }
-    packet_size = cpt_send(&cpt_packet, cpt_serialized_buf, user_input, current_channel);
-
-    printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n",
-           cpt_packet.cpt_version, cpt_packet.command, cpt_packet.channel_id, cpt_packet.msg_len, cpt_packet.msg);
 
     return packet_size;
 }
 
-void cpt_process_response(struct CPTResponse cpt_response)
+void cpt_process_response(struct CPTResponse cpt_response, struct ClientState *clientState)
 {
     switch (cpt_response.code)
     {
@@ -342,7 +361,8 @@ void cpt_process_response(struct CPTResponse cpt_response)
             cpt_packet_destroy(cpt_response);
             break;
         case LOGOUT:
-            printf("Login Successful.\n");
+            printf("Logout Successful.\n");
+            *clientState->is_logged_in = 0;
             cpt_packet_destroy(cpt_response);
             break;
         case CREATE_CHANNEL:
@@ -359,9 +379,11 @@ void cpt_process_response(struct CPTResponse cpt_response)
             break;
         case LOGIN:
             printf("Login Successful.\n");
+            *clientState->is_logged_in = 1;
             cpt_packet_destroy(cpt_response);
             break;
-        case FAILED:
+        case JOIN_CHANNEL_FAILURE:
+            *clientState->current_channel = *clientState->previous_channel;
             printf("Server: Client Command Failed!\n");
             cpt_packet_destroy(cpt_response);
             break;
