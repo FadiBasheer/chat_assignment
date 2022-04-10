@@ -249,9 +249,13 @@ int main(void) {
                     ssize_t nread = read(head_client->fd, &client_buffer, BUFSIZE);
 
                     if (nread != 0) {
-
+                        printf("unpack:%s\n", client_buffer);
                         unpack(client_buffer, "CCHCs", &cpt.version, &cpt.command, &cpt.channel_id, &cpt.msg_len,
                                &msg_rcv);
+
+                        printf("unpack: %c %c %d %c %s\n", cpt.version, cpt.command, cpt.channel_id, cpt.msg_len,
+                               msg_rcv);
+
 
                         // If command is send
                         if (cpt.command == 1) {
@@ -320,6 +324,7 @@ int main(void) {
 
                         // login
                         if (cpt.command == 7) {
+                            printf("login");
                             function_response = cpt_login_response(client, &client, client_fd, cpt.msg);
                             cpt_send_response(head_client->fd, function_response, 0, "");
                             print_client_list(client);
@@ -339,11 +344,8 @@ int main(void) {
 //
 //    struct Client *client2 = NULL;
 //
-//    push(&client2, 0, 1, "fadi");
-//    push(&client2, 0, 2, "hey");
-//    //print_client_list(client2);
 //    cpt_login_response(client2, &client2, 1, "fadi");
-//    cpt_login_response(client2, &client2, 3, "mina");
+//    cpt_login_response(client2, &client2, 3, "Jordan");
 //
 //    printf("\n---------- Normal print -------------\n");
 //    print_client_list(client2);
@@ -352,10 +354,10 @@ int main(void) {
 //    cpt_join_channel_response(client2, &client2, 5, 1, "fadi");
 //    cpt_join_channel_response(client2, &client2, 0, 5, "Jon");
 //    print_client_list(client2);
-////
-////    get_uesrs_list(client2, cpt.channel_id, &cpt.msg_len, &cpt.msg);
-////    printf("\ncpt.msg: %s\n", cpt.msg);
 //
+//    get_uesrs_list(client2, cpt.channel_id, &cpt.msg_len, &cpt.msg);
+//    printf("\ncpt.msg: %s\n", cpt.msg);
+
 //
 //    char buf[255];
 //    snprintf(buf, sizeof(buf), "%s %d: ", "From channel", cpt.channel_id);
@@ -366,30 +368,30 @@ int main(void) {
 //
 //    strcat(cpt.msg, msg_rcv);
 //   printf("\ncpt.msg final: %s\n", cpt.msg);
+
+
+
+//    printf("\n---------- After leave channel -------------\n");
+//    cpt_leave_channel_response(client2, &client2, 5, 1);
+//    print_client_list(client2);
+//
+//    printf("\n---------- After logout-------------\n");
+//    cpt_logout_response(&client2, 1);
+//    print_client_list(client2);
 //
 //
+//    printf("\n---------- After create channel-------------\n");
+//    cpt_create_channel_response(client2, &client2, 5, 0, 1, "", "fadi");
+//    print_client_list(client2);
 //
-////    printf("\n---------- After leave channel -------------\n");
-////    cpt_leave_channel_response(client2, &client2, 5, 1);
-////    print_client_list(client2);
-////
-////    printf("\n---------- After logout-------------\n");
-////    cpt_logout_response(&client2, 1);
-////    print_client_list(client2);
-////
-////
-////    printf("\n---------- After create channel-------------\n");
-////    cpt_create_channel_response(client2, &client2, 5, 0, 1, "", "fadi");
-////    print_client_list(client2);
-////
-////    printf("\n---------- After create channel with existing channel-------------\n");
-////    cpt_create_channel_response(client2, &client2, 0, 0, 2, "", "hey");
-////    print_client_list(client2);
-////
-////    printf("\n---------- After create channel with existing channel-------------\n");
-////    cpt_login_response(client2, &client2, 1, "fadi");
-////    cpt_create_channel_response(client2, &client2, 5, 2, 1, "3", "fadi");
-////    print_client_list(client2);
+//    printf("\n---------- After create channel with existing channel-------------\n");
+//    cpt_create_channel_response(client2, &client2, 0, 0, 2, "", "hey");
+//    print_client_list(client2);
+//
+//    printf("\n---------- After create channel with existing channel-------------\n");
+//    cpt_login_response(client2, &client2, 1, "fadi");
+//    cpt_create_channel_response(client2, &client2, 5, 2, 1, "3", "fadi");
+//    print_client_list(client2);
 //}
 
 
