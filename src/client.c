@@ -106,7 +106,7 @@ int main(void) {
 
     memset(&server_addr, 0, sizeof(server_addr));
     server_addr.sin_family = AF_INET;
-    server_addr.sin_addr.s_addr = inet_addr("192.168.0.16");
+    server_addr.sin_addr.s_addr = inet_addr("10.65.104.252");
     server_addr.sin_port = htons(SERVER_PORT);
 
     if (connect(socket_fd, (SA *) &server_addr, sizeof(server_addr)) < 0) {
@@ -208,6 +208,7 @@ int main(void) {
                     unpack(cpt_serialized_buf, "CCHCs", &cptTemp.cpt_version, &cptTemp.command, &cptTemp.channel_id,
                            &cptTemp.msg_len,
                            &msg_r);
+
                     printf("unpack: %u %u %u %u %s\n", cptTemp.cpt_version, cptTemp.command, cptTemp.channel_id, cptTemp.msg_len,
                            msg_r);
 //////////////////////////////////////////////////////////////////////////////////////////////////////
