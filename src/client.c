@@ -139,9 +139,9 @@ int main(void) {
 
     struct ClientState client_state;
     client_state.current_channel = malloc(sizeof(client_state.current_channel));
-    client_state.current_channel = 0;
+    *client_state.current_channel = 0;
     client_state.previous_channel = malloc(sizeof(client_state.previous_channel));
-    client_state.previous_channel = 0;
+    *client_state.previous_channel = 0;
     client_state.is_logged_in = malloc(sizeof(client_state.is_logged_in));
     *client_state.is_logged_in = 0;
 
@@ -284,7 +284,7 @@ size_t process_client_input(int *exit_code, char *user_input, unsigned char *cpt
                        cpt_packet.cpt_version, cpt_packet.command, cpt_packet.channel_id, cpt_packet.msg_len, cpt_packet.msg);
 
                 *clientState->previous_channel = *clientState->current_channel;
-                *clientState->current_channel = int_chan_id;
+                *clientState->current_channel = (int)int_chan_id;
 
                 return packet_size;
             }
@@ -362,7 +362,7 @@ void cpt_process_response(struct CPTResponse cpt_response, struct ClientState *c
             break;
         case LOGOUT:
             printf("Logout Successful.\n");
-            *clientState->is_logged_in = 0;
+//            *clientState->is_logged_in = 0;
             cpt_packet_destroy(cpt_response);
             break;
         case CREATE_CHANNEL:
@@ -417,6 +417,9 @@ void cpt_packet_destroy(struct CPTResponse cpt_response)
 */
 size_t cpt_send(struct CPT *cpt, uint8_t *serial_buf, char *msg, int current_channel)
 {
+    printf("#################\n");
+    printf("%d\n", current_channel);
+
     size_t packet_size;
 
     cpt->cpt_version = 1;
