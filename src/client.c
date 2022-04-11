@@ -77,7 +77,7 @@ size_t cpt_join_channel(struct CPT *cpt, uint8_t *serial_buf, uint16_t channel_i
 
 size_t cpt_leave_channel(struct CPT *cpt, uint8_t *serial_buf, uint16_t channel_id);
 
-size_t cpt_send(struct CPT *cpt, uint8_t *serial_buf, char *msg, const int *current_channel);
+size_t cpt_send(struct CPT *cpt, uint8_t *serial_buf, char *msg, int current_channel);
 
 void cpt_process_response(struct CPTResponse cpt_response, struct ClientState *clientState);
 
@@ -151,9 +151,9 @@ int main(void) {
 
     struct ClientState client_state;
     client_state.current_channel = malloc(sizeof(client_state.current_channel));
-    client_state.current_channel = 0;
+    *client_state.current_channel = 0;
     client_state.previous_channel = malloc(sizeof(client_state.previous_channel));
-    client_state.previous_channel = 0;
+    *client_state.previous_channel = 0;
     client_state.is_logged_in = malloc(sizeof(client_state.is_logged_in));
     *client_state.is_logged_in = 0;
 
@@ -307,7 +307,7 @@ size_t process_client_input(int *exit_code, char *user_input, unsigned char *cpt
                        cpt_packet.msg);
 
                 *clientState->previous_channel = *clientState->current_channel;
-                *clientState->current_channel = int_chan_id;
+                *clientState->current_channel = (int) int_chan_id;
 
                 return packet_size;
             }
@@ -323,6 +323,8 @@ size_t process_client_input(int *exit_code, char *user_input, unsigned char *cpt
                 printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n",
                        cpt_packet.cpt_version, cpt_packet.command, cpt_packet.channel_id, cpt_packet.msg_len,
                        cpt_packet.msg);
+
+                *clientState->current_channel = 0;
 
                 return packet_size;
             }
@@ -431,12 +433,15 @@ void cpt_packet_destroy(struct CPTResponse cpt_response) {
  * @param msg            Intended chat message.
  * @return Size of the resulting serialized packet in <serial_buf>.
 */
-size_t cpt_send(struct CPT *cpt, uint8_t *serial_buf, char *msg, const int *current_channel) {
+size_t cpt_send(struct CPT *cpt, uint8_t *serial_buf, char *msg, int current_channel) {
+    printf("#################\n");
+    printf("%d\n", current_channel);
+
     size_t packet_size;
 
     cpt->cpt_version = 1;
     cpt->command = SEND;
-    cpt->channel_id = (uint16_t) *current_channel;
+    cpt->channel_id = (uint16_t) current_channel;
     cpt->msg_len = strlen(msg) + 1;
     cpt->msg = malloc((strlen(msg) + 1) * sizeof(char));
     strcpy(cpt->msg, msg);
