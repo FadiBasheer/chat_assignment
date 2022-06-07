@@ -354,7 +354,7 @@
 				{
 					"directoryIndex" : 2,
 					"id" : "client::@145eef247bfb46b6828c",
-					"jsonFile" : "target-client-Debug-988f0fb017a17ac2144b.json",
+					"jsonFile" : "target-client-Debug-a165e51a12bafd2eca77.json",
 					"name" : "client",
 					"projectIndex" : 0
 				},
@@ -382,14 +382,14 @@
 				{
 					"directoryIndex" : 2,
 					"id" : "server::@145eef247bfb46b6828c",
-					"jsonFile" : "target-server-Debug-aeb280cb6005794b405b.json",
+					"jsonFile" : "target-server-Debug-f6942bb838aab653cc07.json",
 					"name" : "server",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 3,
 					"id" : "template2_test::@a44f0ac069e85531cdee",
-					"jsonFile" : "target-template2_test-Debug-5d9f2450582f672fff9e.json",
+					"jsonFile" : "target-template2_test-Debug-9e6a0a6b813ee15d6d16.json",
 					"name" : "template2_test",
 					"projectIndex" : 0
 				}
@@ -399,8 +399,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/home/fadi/work/chat_assignment/cmake-build-debug",
-		"source" : "/home/fadi/work/chat_assignment"
+		"build" : "/home/fadi/work/chat_assignment_github/ch/cmake-build-debug",
+		"source" : "/home/fadi/work/chat_assignment_github/ch"
 	},
 	"version" : 
 	{

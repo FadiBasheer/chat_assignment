@@ -138,7 +138,7 @@ int main(void) {
 
     memset(&server_addr, 0, sizeof(server_addr));
     server_addr.sin_family = AF_INET;
-    server_addr.sin_addr.s_addr = inet_addr("10.65.104.252");
+    server_addr.sin_addr.s_addr = inet_addr("192.168.0.23");
     server_addr.sin_port = htons(SERVER_PORT);
 
     if ((bind(server_fd, (SA *) &server_addr, sizeof(server_addr))) < 0) {
@@ -239,7 +239,7 @@ int main(void) {
         // Find max file descriptor in main channel
         while (head_client != NULL) {
             FD_SET(head_client->fd, &fd_read_set);
-          //  printf("\n\nclient_fd: %d\n\n\n", head_client->fd);
+            //  printf("\n\nclient_fd: %d\n\n\n", head_client->fd);
             if (head_client->fd > 0 && max_fd < head_client->fd) {
                 max_fd = head_client->fd;
             }
@@ -252,8 +252,6 @@ int main(void) {
 
 
         fds_selected = select(max_fd + 1, &fd_read_set, NULL, NULL, &timer);
-
-        printf("fds_selected: %d\n", fds_selected);
 
 
         if (fds_selected > 0) {
@@ -634,5 +632,3 @@ int cpt_send_response(int fd, int code, int msg_length, char *msg) {
 
     return SEND;
 }
-
-

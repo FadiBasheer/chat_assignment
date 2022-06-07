@@ -1,4 +1,4 @@
-# Install script for directory: /home/fadi/work/chat_assignment/docs
+# Install script for directory: /home/fadi/work/chat_assignment_github/ch/docs
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

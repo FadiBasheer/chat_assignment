@@ -53,10 +53,10 @@ RM = /home/fadi/Downloads/CLion-2021.3.2/clion-2021.3.2/bin/cmake/linux/bin/cmak
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/fadi/work/chat_assignment
+CMAKE_SOURCE_DIR = /home/fadi/work/chat_assignment_github/ch
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/fadi/work/chat_assignment/cmake-build-debug
+CMAKE_BINARY_DIR = /home/fadi/work/chat_assignment_github/ch/cmake-build-debug
 
 # Utility rule file for docs.
 
@@ -68,9 +68,9 @@ include docs/CMakeFiles/docs.dir/progress.make
 
 docs/CMakeFiles/docs: docs/Doxyfile.docs
 docs/CMakeFiles/docs: ../docs/mainpage.md
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/fadi/work/chat_assignment/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generate API documentation for docs"
-	cd /home/fadi/work/chat_assignment/docs && /home/fadi/Downloads/CLion-2021.3.2/clion-2021.3.2/bin/cmake/linux/bin/cmake -E make_directory /home/fadi/work/chat_assignment/cmake-build-debug/docs
-	cd /home/fadi/work/chat_assignment/docs && /usr/bin/doxygen /home/fadi/work/chat_assignment/cmake-build-debug/docs/Doxyfile.docs
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/fadi/work/chat_assignment_github/ch/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generate API documentation for docs"
+	cd /home/fadi/work/chat_assignment_github/ch/docs && /home/fadi/Downloads/CLion-2021.3.2/clion-2021.3.2/bin/cmake/linux/bin/cmake -E make_directory /home/fadi/work/chat_assignment_github/ch/cmake-build-debug/docs
+	cd /home/fadi/work/chat_assignment_github/ch/docs && /usr/bin/doxygen /home/fadi/work/chat_assignment_github/ch/cmake-build-debug/docs/Doxyfile.docs
 
 docs: docs/CMakeFiles/docs
 docs: docs/CMakeFiles/docs.dir/build.make
@@ -81,10 +81,10 @@ docs/CMakeFiles/docs.dir/build: docs
 .PHONY : docs/CMakeFiles/docs.dir/build
 
 docs/CMakeFiles/docs.dir/clean:
-	cd /home/fadi/work/chat_assignment/cmake-build-debug/docs && $(CMAKE_COMMAND) -P CMakeFiles/docs.dir/cmake_clean.cmake
+	cd /home/fadi/work/chat_assignment_github/ch/cmake-build-debug/docs && $(CMAKE_COMMAND) -P CMakeFiles/docs.dir/cmake_clean.cmake
 .PHONY : docs/CMakeFiles/docs.dir/clean
 
 docs/CMakeFiles/docs.dir/depend:
-	cd /home/fadi/work/chat_assignment/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/fadi/work/chat_assignment /home/fadi/work/chat_assignment/docs /home/fadi/work/chat_assignment/cmake-build-debug /home/fadi/work/chat_assignment/cmake-build-debug/docs /home/fadi/work/chat_assignment/cmake-build-debug/docs/CMakeFiles/docs.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/fadi/work/chat_assignment_github/ch/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/fadi/work/chat_assignment_github/ch /home/fadi/work/chat_assignment_github/ch/docs /home/fadi/work/chat_assignment_github/ch/cmake-build-debug /home/fadi/work/chat_assignment_github/ch/cmake-build-debug/docs /home/fadi/work/chat_assignment_github/ch/cmake-build-debug/docs/CMakeFiles/docs.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : docs/CMakeFiles/docs.dir/depend
 

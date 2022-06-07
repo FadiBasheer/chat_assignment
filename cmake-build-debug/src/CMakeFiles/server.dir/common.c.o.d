@@ -1,4 +1,4 @@
-src/CMakeFiles/client.dir/common.c.o: \
+src/CMakeFiles/server.dir/common.c.o: \
  /home/fadi/work/chat_assignment_github/ch/src/common.c \
  /usr/include/stdc-predef.h \
  /home/fadi/work/chat_assignment_github/ch/src/../include/common.h \

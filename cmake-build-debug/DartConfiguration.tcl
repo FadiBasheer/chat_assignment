@@ -4,8 +4,8 @@
 
 
 # Configuration directories and files
-SourceDirectory: /home/fadi/work/chat_assignment
-BuildDirectory: /home/fadi/work/chat_assignment/cmake-build-debug
+SourceDirectory: /home/fadi/work/chat_assignment_github/ch
+BuildDirectory: /home/fadi/work/chat_assignment_github/ch/cmake-build-debug
 
 # Where to place the cost data store
 CostDataFile: 
@@ -26,7 +26,7 @@ SubmitURL: http://
 NightlyStartTime: 00:00:00 EDT
 
 # Commands for the build/test/submit cycle
-ConfigureCommand: "/home/fadi/Downloads/CLion-2021.3.2/clion-2021.3.2/bin/cmake/linux/bin/cmake" "/home/fadi/work/chat_assignment"
+ConfigureCommand: "/home/fadi/Downloads/CLion-2021.3.2/clion-2021.3.2/bin/cmake/linux/bin/cmake" "/home/fadi/work/chat_assignment_github/ch"
 MakeCommand: /home/fadi/Downloads/CLion-2021.3.2/clion-2021.3.2/bin/cmake/linux/bin/cmake --build . --config "${CTEST_CONFIGURATION_TYPE}"
 DefaultCTestConfigurationType: Release
 

@@ -1,6 +1,6 @@
 src/CMakeFiles/client.dir/client.c.o: \
- /home/fadi/work/chat_assignment/src/client.c /usr/include/stdc-predef.h \
- /usr/include/fcntl.h /usr/include/features.h \
+ /home/fadi/work/chat_assignment_github/ch/src/client.c \
+ /usr/include/stdc-predef.h /usr/include/fcntl.h /usr/include/features.h \
  /usr/include/x86_64-linux-gnu/sys/cdefs.h \
  /usr/include/x86_64-linux-gnu/bits/wordsize.h \
  /usr/include/x86_64-linux-gnu/bits/long-double.h \
@@ -69,4 +69,5 @@ src/CMakeFiles/client.dir/client.c.o: \
  /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h \
  /usr/lib/gcc/x86_64-linux-gnu/9/include/stdbool.h \
- /home/fadi/work/chat_assignment/src/serialization.c /usr/include/ctype.h
+ /home/fadi/work/chat_assignment_github/ch/src/serialization.c \
+ /usr/include/ctype.h

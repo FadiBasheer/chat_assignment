@@ -53,10 +53,10 @@ RM = /home/fadi/Downloads/CLion-2021.3.2/clion-2021.3.2/bin/cmake/linux/bin/cmak
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/fadi/work/chat_assignment
+CMAKE_SOURCE_DIR = /home/fadi/work/chat_assignment_github/ch
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/fadi/work/chat_assignment/cmake-build-debug
+CMAKE_BINARY_DIR = /home/fadi/work/chat_assignment_github/ch/cmake-build-debug
 
 # Utility rule file for format.
 
@@ -67,7 +67,7 @@ include src/CMakeFiles/format.dir/compiler_depend.make
 include src/CMakeFiles/format.dir/progress.make
 
 src/CMakeFiles/format:
-	cd /home/fadi/work/chat_assignment/cmake-build-debug/src && clang-format -i /home/fadi/work/chat_assignment/include/common.h /home/fadi/work/chat_assignment/src/common.c /home/fadi/work/chat_assignment/src/server.c /home/fadi/work/chat_assignment/src/client.c
+	cd /home/fadi/work/chat_assignment_github/ch/cmake-build-debug/src && clang-format -i /home/fadi/work/chat_assignment_github/ch/include/common.h /home/fadi/work/chat_assignment_github/ch/src/common.c /home/fadi/work/chat_assignment_github/ch/src/server.c /home/fadi/work/chat_assignment_github/ch/src/client.c
 
 format: src/CMakeFiles/format
 format: src/CMakeFiles/format.dir/build.make
@@ -78,10 +78,10 @@ src/CMakeFiles/format.dir/build: format
 .PHONY : src/CMakeFiles/format.dir/build
 
 src/CMakeFiles/format.dir/clean:
-	cd /home/fadi/work/chat_assignment/cmake-build-debug/src && $(CMAKE_COMMAND) -P CMakeFiles/format.dir/cmake_clean.cmake
+	cd /home/fadi/work/chat_assignment_github/ch/cmake-build-debug/src && $(CMAKE_COMMAND) -P CMakeFiles/format.dir/cmake_clean.cmake
 .PHONY : src/CMakeFiles/format.dir/clean
 
 src/CMakeFiles/format.dir/depend:
-	cd /home/fadi/work/chat_assignment/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/fadi/work/chat_assignment /home/fadi/work/chat_assignment/src /home/fadi/work/chat_assignment/cmake-build-debug /home/fadi/work/chat_assignment/cmake-build-debug/src /home/fadi/work/chat_assignment/cmake-build-debug/src/CMakeFiles/format.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/fadi/work/chat_assignment_github/ch/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/fadi/work/chat_assignment_github/ch /home/fadi/work/chat_assignment_github/ch/src /home/fadi/work/chat_assignment_github/ch/cmake-build-debug /home/fadi/work/chat_assignment_github/ch/cmake-build-debug/src /home/fadi/work/chat_assignment_github/ch/cmake-build-debug/src/CMakeFiles/format.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : src/CMakeFiles/format.dir/depend
 

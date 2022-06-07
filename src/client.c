@@ -108,7 +108,7 @@ int main(void) {
 
     memset(&server_addr, 0, sizeof(server_addr));
     server_addr.sin_family = AF_INET;
-    server_addr.sin_addr.s_addr = inet_addr("10.65.104.252");
+    server_addr.sin_addr.s_addr = inet_addr("192.168.0.23");
     server_addr.sin_port = htons(SERVER_PORT);
 
     if (connect(socket_fd, (SA *) &server_addr, sizeof(server_addr)) < 0) {
@@ -192,8 +192,8 @@ int main(void) {
                     cpt_response_packet.data_size = data_size;
                     strcpy(cpt_response_packet.data, all_client_data);
 
-                    printf("res_code: %d, data_size: %d, msg: %s\n", cpt_response_packet.code,
-                           cpt_response_packet.data_size, cpt_response_packet.data);
+//                    printf("res_code: %d, data_size: %d, msg: %s\n", cpt_response_packet.code,
+//                           cpt_response_packet.data_size, cpt_response_packet.data);
 
                     cpt_process_response(cpt_response_packet, &client_state);
                 }
@@ -210,15 +210,15 @@ int main(void) {
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    char msg_r[1024];
-
-                    unpack(cpt_serialized_buf, "CCHCs", &cptTemp.cpt_version, &cptTemp.command, &cptTemp.channel_id,
-                           &cptTemp.msg_len,
-                           &msg_r);
-
-                    printf("unpack: %u %u %u %u %s\n", cptTemp.cpt_version, cptTemp.command, cptTemp.channel_id,
-                           cptTemp.msg_len,
-                           msg_r);
+//                    char msg_r[1024];
+//
+//                    unpack(cpt_serialized_buf, "CCHCs", &cptTemp.cpt_version, &cptTemp.command, &cptTemp.channel_id,
+//                           &cptTemp.msg_len,
+//                           &msg_r);
+//
+//                    printf("unpack: %u %u %u %u %s\n", cptTemp.cpt_version, cptTemp.command, cptTemp.channel_id,
+//                           cptTemp.msg_len,
+//                           msg_r);
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
                     if (packet_size) {
@@ -259,9 +259,9 @@ size_t process_client_input(int *exit_code, char *user_input, unsigned char *cpt
             if (!strncmp(user_input, LOGOUT_COMMAND, strlen(LOGOUT_COMMAND))) {
                 packet_size = cpt_logout(&cpt_packet, cpt_serialized_buf);
 
-                printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n",
-                       cpt_packet.cpt_version, cpt_packet.command, cpt_packet.channel_id, cpt_packet.msg_len,
-                       cpt_packet.msg);
+//                printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n",
+//                       cpt_packet.cpt_version, cpt_packet.command, cpt_packet.channel_id, cpt_packet.msg_len,
+//                       cpt_packet.msg);
 
                 return packet_size;
             }
@@ -274,9 +274,9 @@ size_t process_client_input(int *exit_code, char *user_input, unsigned char *cpt
                 int_chan_id = strtol(chan_id, NULL, 10);
                 packet_size = cpt_get_users(&cpt_packet, cpt_serialized_buf, (uint16_t) int_chan_id);
 
-                printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n",
-                       cpt_packet.cpt_version, cpt_packet.command, cpt_packet.channel_id, cpt_packet.msg_len,
-                       cpt_packet.msg);
+//                printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n",
+//                       cpt_packet.cpt_version, cpt_packet.command, cpt_packet.channel_id, cpt_packet.msg_len,
+//                       cpt_packet.msg);
 
                 return packet_size;
             }
@@ -287,9 +287,9 @@ size_t process_client_input(int *exit_code, char *user_input, unsigned char *cpt
                 strncpy(chan_ids, user_input + strlen(CREATE_CHAN_COMMAND) + 1, strlen(user_input));
                 packet_size = cpt_create_channel(&cpt_packet, cpt_serialized_buf, chan_ids);
 
-                printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n",
-                       cpt_packet.cpt_version, cpt_packet.command, cpt_packet.channel_id, cpt_packet.msg_len,
-                       cpt_packet.msg);
+//                printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n",
+//                       cpt_packet.cpt_version, cpt_packet.command, cpt_packet.channel_id, cpt_packet.msg_len,
+//                       cpt_packet.msg);
 
                 return packet_size;
             }
@@ -302,9 +302,9 @@ size_t process_client_input(int *exit_code, char *user_input, unsigned char *cpt
                 int_chan_id = strtol(chan_id, NULL, 10);
                 packet_size = cpt_join_channel(&cpt_packet, cpt_serialized_buf, (uint16_t) int_chan_id);
 
-                printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n",
-                       cpt_packet.cpt_version, cpt_packet.command, cpt_packet.channel_id, cpt_packet.msg_len,
-                       cpt_packet.msg);
+//                printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n",
+//                       cpt_packet.cpt_version, cpt_packet.command, cpt_packet.channel_id, cpt_packet.msg_len,
+//                       cpt_packet.msg);
 
                 *clientState->previous_channel = *clientState->current_channel;
                 *clientState->current_channel = (int) int_chan_id;
@@ -320,9 +320,9 @@ size_t process_client_input(int *exit_code, char *user_input, unsigned char *cpt
                 int_chan_id = strtol(chan_id, NULL, 10);
                 packet_size = cpt_leave_channel(&cpt_packet, cpt_serialized_buf, (uint16_t) int_chan_id);
 
-                printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n",
-                       cpt_packet.cpt_version, cpt_packet.command, cpt_packet.channel_id, cpt_packet.msg_len,
-                       cpt_packet.msg);
+//                printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n",
+//                       cpt_packet.cpt_version, cpt_packet.command, cpt_packet.channel_id, cpt_packet.msg_len,
+//                       cpt_packet.msg);
 
                 *clientState->current_channel = 0;
 
@@ -356,9 +356,9 @@ size_t process_client_input(int *exit_code, char *user_input, unsigned char *cpt
             strncpy(name, user_input + strlen(LOGIN_COMMAND) + 1, strlen(user_input));
             packet_size = cpt_login(&cpt_packet, cpt_serialized_buf, name);
 
-            printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n",
-                   cpt_packet.cpt_version, cpt_packet.command, cpt_packet.channel_id, cpt_packet.msg_len,
-                   cpt_packet.msg);
+//            printf("Version: %ul, Command: %ul, channel_id: %ul, msg_len: %ul, msg: %s\n",
+//                   cpt_packet.cpt_version, cpt_packet.command, cpt_packet.channel_id, cpt_packet.msg_len,
+//                   cpt_packet.msg);
 
             return packet_size;
         } else {

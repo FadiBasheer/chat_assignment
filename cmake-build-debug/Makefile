@@ -57,10 +57,10 @@ RM = /home/fadi/Downloads/CLion-2021.3.2/clion-2021.3.2/bin/cmake/linux/bin/cmak
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/fadi/work/chat_assignment
+CMAKE_SOURCE_DIR = /home/fadi/work/chat_assignment_github/ch
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/fadi/work/chat_assignment/cmake-build-debug
+CMAKE_BINARY_DIR = /home/fadi/work/chat_assignment_github/ch/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -110,8 +110,8 @@ rebuild_cache/fast: rebuild_cache
 
 # Special rule for the target edit_cache
 edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	/home/fadi/Downloads/CLion-2021.3.2/clion-2021.3.2/bin/cmake/linux/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
+	/home/fadi/Downloads/CLion-2021.3.2/clion-2021.3.2/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -142,9 +142,9 @@ test/fast: test
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/fadi/work/chat_assignment/cmake-build-debug/CMakeFiles /home/fadi/work/chat_assignment/cmake-build-debug//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/fadi/work/chat_assignment_github/ch/cmake-build-debug/CMakeFiles /home/fadi/work/chat_assignment_github/ch/cmake-build-debug//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/fadi/work/chat_assignment/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/fadi/work/chat_assignment_github/ch/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target

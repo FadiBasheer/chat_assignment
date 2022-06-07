@@ -336,11 +336,11 @@
 			[
 				{
 					"backtrace" : 10,
-					"path" : "/home/fadi/work/chat_assignment/cmake-build-debug"
+					"path" : "/home/fadi/work/chat_assignment_github/ch/cmake-build-debug"
 				},
 				{
 					"backtrace" : 11,
-					"path" : "/home/fadi/work/chat_assignment/tests/../include"
+					"path" : "/home/fadi/work/chat_assignment_github/ch/tests/../include"
 				}
 			],
 			"language" : "C",

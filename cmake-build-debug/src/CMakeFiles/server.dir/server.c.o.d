@@ -1,5 +1,5 @@
-src/CMakeFiles/main.dir/main.c.o: \
- /home/fadi/work/chat_assignment_github/ch/src/main.c \
+src/CMakeFiles/server.dir/server.c.o: \
+ /home/fadi/work/chat_assignment_github/ch/src/server.c \
  /usr/include/stdc-predef.h /usr/include/fcntl.h /usr/include/features.h \
  /usr/include/x86_64-linux-gnu/sys/cdefs.h \
  /usr/include/x86_64-linux-gnu/bits/wordsize.h \

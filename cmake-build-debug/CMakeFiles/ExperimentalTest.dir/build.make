@@ -53,10 +53,10 @@ RM = /home/fadi/Downloads/CLion-2021.3.2/clion-2021.3.2/bin/cmake/linux/bin/cmak
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/fadi/work/chat_assignment
+CMAKE_SOURCE_DIR = /home/fadi/work/chat_assignment_github/ch
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/fadi/work/chat_assignment/cmake-build-debug
+CMAKE_BINARY_DIR = /home/fadi/work/chat_assignment_github/ch/cmake-build-debug
 
 # Utility rule file for ExperimentalTest.
 
@@ -82,6 +82,6 @@ CMakeFiles/ExperimentalTest.dir/clean:
 .PHONY : CMakeFiles/ExperimentalTest.dir/clean
 
 CMakeFiles/ExperimentalTest.dir/depend:
-	cd /home/fadi/work/chat_assignment/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/fadi/work/chat_assignment /home/fadi/work/chat_assignment /home/fadi/work/chat_assignment/cmake-build-debug /home/fadi/work/chat_assignment/cmake-build-debug /home/fadi/work/chat_assignment/cmake-build-debug/CMakeFiles/ExperimentalTest.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/fadi/work/chat_assignment_github/ch/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/fadi/work/chat_assignment_github/ch /home/fadi/work/chat_assignment_github/ch /home/fadi/work/chat_assignment_github/ch/cmake-build-debug /home/fadi/work/chat_assignment_github/ch/cmake-build-debug /home/fadi/work/chat_assignment_github/ch/cmake-build-debug/CMakeFiles/ExperimentalTest.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/ExperimentalTest.dir/depend
 
