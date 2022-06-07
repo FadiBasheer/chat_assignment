@@ -1,0 +1,4 @@
+/home/fadi/Downloads/CLion-2021.3.2/clion-2021.3.2/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/fadi/work/chat_assignment_github/ch
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/fadi/work/chat_assignment_github/ch/cmake-build-debug
